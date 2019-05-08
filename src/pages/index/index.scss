@@ -1,0 +1,39 @@
+@import '../../styles/theme';
+
+.at-tabs__item {
+    font-size: 32px;
+    font-weight: bold;
+    color: rgba(18,18,18,1);
+    box-sizing: border-box;
+}
+
+.at-tabs__item--active {
+    color : $btn-color-base;
+}
+
+.at-tabs__item-underline {
+    width: 85%;
+    height: 8px;
+    background-color : $btn-color-base;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    margin: 0 auto;
+    border-radius: 4px;
+}
+
+.at-tabs__underline {
+    display: none;
+}
+
+.at-modal__content {
+    min-height :114px;
+}
+
+.content-simple {
+    width: 300px;
+    margin : 0 auto;
+    text-align: center;
+    color:#C59B73;
+    white-space: pre-line;
+}

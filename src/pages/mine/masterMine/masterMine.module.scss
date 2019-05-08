@@ -1,0 +1,78 @@
+@import '../../../styles/flex.scss';
+
+.masterMineWrap{
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    margin: auto;
+    background: #F1F1F1;
+    .background{
+        width: 100%;
+        height: 386px;
+        background: url('https://mingli.szmonster.com/uploads/21.png') no-repeat center center / 100% 100%;
+    }
+    .userCart{
+        width: 710px;
+        height: 287px;
+        margin: -143px auto 0;
+        border-radius: 15px;
+        background: #fff;
+        text-align: center;
+        font-size: 0;
+        .avatar{
+            display: inline-block;
+            width: 226px;
+            height: 226px;
+            margin-top: -113px;
+        }
+        .nickName{
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            font-size: 40px;
+            color: rgba(18,18,18,1);
+        }
+        .hot{
+            .hotIco{
+                width: 20px;
+                height: 30px;
+                vertical-align: middle;
+            }
+            .hotNum{
+                font-size: 26px;
+                font-weight: bold;
+                color: rgba(255,202,90,1);
+                vertical-align: middle;
+                margin-left: 10px;
+            }
+        }
+        .serverNum{
+            width: 230px;
+            height: 50px;
+            margin: 10px auto 0 auto;
+            font-size: 24px;
+            line-height: 50px;
+            background: rgba(255,202,90,1);
+            color: #fff;
+            border-radius: 25px;
+        }
+    }
+    .logout{
+        width: 100%;
+        height: 100px;
+        line-height: 100px;
+        padding: 0 20px;
+        box-sizing: border-box;
+        background-color: #F1F1F1;
+        margin: 0 auto;
+        .logoutBtn{
+            height: 100%;
+            background: rgba(255,255,255,1);
+            font-size: 30px;
+            box-shadow: 0px -1px 2px 0px rgba(238,238,238,1), 0px 1px 2px 0px rgba(238,238,238,1);
+            border-radius: 15px;
+        }
+    }
+}

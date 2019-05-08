@@ -1,0 +1,94 @@
+@import '../../styles/flex.scss';
+
+.orderCartWrap{
+    position: relative;
+    width: 690px;
+    height: 350px;
+    background: rgba(255,255,255,1);
+    box-shadow: 0px 2px 6px rgba(0,0,0,0.16);
+    border-radius: 10px;
+    padding: 0 30px;
+    box-sizing: border-box;
+    .orderHead{
+        @include flex-between;
+        width: 100%;
+        font-size: 30px;
+        padding: 20px 0 13px;
+        box-sizing: border-box;
+        border-bottom: 1PX dashed #707070;
+        .copyBtn{
+            display: block;
+            width: 70px;
+            height: 32px;
+            line-height: 32px;
+            font-size: 20px;
+            color: #BD8144;
+            border: 1PX solid #BD8144;
+            background: #fff;
+        }  
+    }
+    .userInfo{
+        @include flex-between;
+        width: 100%;
+        padding: 20px 0;
+        .userInfoLeft{
+            @include flex-start;
+            .customerAvatar{
+                width: 85px;
+                height: 85px;
+                border-radius: 50px;
+            }
+            .customerName{
+                margin-left: 43px;
+                font-size: 34px;
+                font-weight: normal;
+                line-height: 48px;
+                color:rgba(48,48,48,1);
+            }
+        }
+        .detailBtn{
+            width: 108px;
+            height: 36px;
+            font-size: 24px;
+            color: #BD8144;
+            background:#fff;
+            line-height: 36px;
+            border: 1PX solid rgba(189,129,68,1);
+            border-radius: 18px;
+        }
+    }
+    .problemContent{
+        font-size: 30px;
+        color: rgba(112,112,112,1);
+        .serverIco{
+            width: 32px;
+            height: 32px;
+            vertical-align: middle;
+            margin: 0 9px 0 30px;
+        }
+    }
+    .dateTime{
+        font-size: 30px;
+        font-weight: 400;
+        line-height: 42px;
+        color: rgba(112,112,112,1);
+        .time{
+            margin-left: 30px;
+            color: rgba(17,17,17,1);
+        }
+    }
+    .process{
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        height: 34px;
+        line-height: 34px;
+        background: #E12929;
+        box-shadow: 0px 2px 6px rgba(0,0,0,0.16);
+        text-align: center;
+        border-radius:  0 0 10px 10px;
+        font-size: 24px;
+        color: #fff;
+    }
+}

@@ -1,0 +1,46 @@
+@import '../../styles/theme.scss';
+
+.header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 999;
+    width: 100%;
+    height: 132px;
+    text-align: center;
+    font-size: 38px;
+    padding: 44px 20px 0 20px;
+    box-sizing: border-box;
+    line-height: 88px;
+    color : $color-brand;
+    background-color: #fff;
+    display: flex;
+    justify-content: space-between;
+    align-items : center;
+    border-bottom: 1px solid #eee;
+    .headerIcon {
+        width: 86px;
+        height: 86px;
+        text-align: left;
+        line-height: 86px;
+    }
+    .rightIcon{
+        display: flex;
+        justify-content: end;
+        align-items: center;
+        line-height: 0;
+        width: 86px;
+        height: 86px;
+    }
+
+    .img {
+        width : 23px;
+        height: 40px;
+        display: inline-block;
+    }
+}
+
+.h5Header {
+    @extend .header;
+    height: 132px;
+}
