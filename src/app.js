@@ -25,6 +25,9 @@ class App extends Component {
             "pages/mine/mine",
             "pages/forgetPassword/forgetPassword",
             "pages/login/login",
+            "pages/myOrder/myOrder",
+            "pages/fileSetting/fileSetting",
+            "pages/accountSecurity/accountSecurity",
         ],
         window: {
             backgroundTextStyle: 'light',

@@ -37,8 +37,10 @@ class Index extends Taro.Component {
                 />
 				<AtTabs current={this.state.current} tabList={tabList} onClick={this.handleClick.bind(this)}>
 					<AtTabsPane current={this.state.current} index={0} >
-						<View>
-							<OrderCart/>
+						<View className={style.orderList}>
+							<View className={style.orderCattItem}>
+								<OrderCart/>
+							</View>
 						</View>
 					</AtTabsPane>
 					<AtTabsPane current={this.state.current} index={1}>

@@ -1,4 +1,7 @@
+@import '../../styles/theme.scss';
 @import '../../styles/flex.scss';
+
+    
 .orderList{
     width: 100%;
     padding-top: 22px;
@@ -8,3 +11,12 @@
         @include flex-center;
     }
 }
+.searchBox{
+    position: fixed;
+    width: 100%;
+    margin-top: -6px;
+    top: 136px;
+    left: 0;
+    z-index: 999;
+}
+

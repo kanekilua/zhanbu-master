@@ -13,7 +13,13 @@ class MenuList extends Taro.Component {
     render() {
         return (
             <View className={style.wrapper}>
-                <View className={style.menuItem}>
+                <View className={style.menuItem}
+                    onClick={()=>{
+                        Taro.navigateTo({
+                            url: '/pages/myOrder/myOrder'
+                        })
+                    }}
+                >
                     <MenuItem 
                         icon={orderIco}
                         title='订单管理'
@@ -21,7 +27,13 @@ class MenuList extends Taro.Component {
                         iconStyle={style[`icon${1}`]}
                     />
                 </View>
-                <View className={style.menuItem}>
+                <View className={style.menuItem}
+                    onClick={()=>{
+                        Taro.navigateTo({
+                            url: '/pages/fileSetting/fileSetting'
+                        })
+                    }}
+                >
                     <MenuItem 
                         icon={userFile}
                         title='个人资料'
@@ -29,7 +41,13 @@ class MenuList extends Taro.Component {
                         iconStyle={style[`icon${2}`]}
                     />
                 </View>
-                <View className={style.menuItem}>
+                <View className={style.menuItem}
+                    onClick={()=>{
+                        Taro.navigateTo({
+                            url: '/pages/accountSecurity/accountSecurity'
+                        })
+                    }}
+                >
                     <MenuItem 
                         icon={accountSecurity}
                         title='账户安全'

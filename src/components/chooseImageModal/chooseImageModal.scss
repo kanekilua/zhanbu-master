@@ -1,0 +1,30 @@
+.chooseImageModalWrap{
+    .at-action-sheet__container {
+        width: 95%;
+        left: 0;
+        right: 0;
+        bottom: 8px;
+        margin: 0 auto;
+        background-color: transparent;
+    }
+    .at-action-sheet__header {
+        border-radius: 15px 15px 0 0;
+        background: #fff;
+        border-bottom: 1PX solid #ddd;
+    }
+    .at-action-sheet__body {
+        background: #fff;
+        border-radius: 0 0 15px 15px;
+    }
+    .at-action-sheet__footer {
+        margin-top: 8px;
+        background: #fff;
+        font-size: 34px;
+        border: none;
+        border-radius: 15px;
+    }
+    .at-action-sheet__header::after {
+        border : 0 solid #ddd;
+    }
+}
+

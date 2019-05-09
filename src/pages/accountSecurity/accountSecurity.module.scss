@@ -1,0 +1,16 @@
+@import '../../styles/flex.scss';
+
+.accountSecurityWrap{
+    padding-top: 142px;
+    box-sizing: border-box;
+    overflow: hidden;
+    .at-list__item{
+        margin-bottom: 10px;
+        background: #fff;
+    }
+    .settingItem{
+        width: 100%;
+        margin-bottom: 10px;
+    }
+    
+}

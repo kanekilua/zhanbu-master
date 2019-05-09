@@ -1,0 +1,30 @@
+@import '../../styles/flex.scss';
+
+.fileSettingWrap{
+    padding-top: 142px;
+    box-sizing: border-box;
+    overflow: hidden;
+    .at-list__item{
+        margin-bottom: 10px;
+        background: #fff;
+    }
+    .settingItem{
+        width: 100%;
+        margin-bottom: 10px;
+    }
+
+    .at-modal__container{
+        width: 440px;
+    }
+    .at-modal__content{
+        min-height: auto;
+        padding-bottom: 10px;
+        text-align: center;
+    }
+    .inputName{
+        margin: auto;
+        width: 340px;
+        padding-bottom: 10px;
+        border-bottom: 1PX solid #dddddd;
+    }
+}

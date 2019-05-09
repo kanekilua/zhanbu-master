@@ -1,0 +1,12 @@
+@import '../../styles/theme.scss';
+@import '../../styles/flex.scss';
+
+.orderList{
+    width: 100%;
+    padding-top: 22px;
+    box-sizing: border-box;
+    .orderCattItem{
+        width: 100%;
+        @include flex-center;
+    }
+}

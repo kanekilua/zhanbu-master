@@ -23,7 +23,7 @@ class Mine extends Taro.Component {
             _fetch({url:'/app/checkToken',payload: {},method: 'POST',autoLogin: false}) //判断登录有没有过期
                 .then(res => {
                     if(!res.status) {
-                        this.clearMasterInfo();            
+                        this.clearMasterInfo(); 
                     }
                 })
                 .catch(err=>console.log('token过期',err))
