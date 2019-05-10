@@ -59,7 +59,7 @@ class App extends Component {
               pagePath: "pages/mine/mine",
               iconPath: "assets/mine.png",
               selectedIconPath: "assets/mine-active.png",
-              text: "我的"
+              text: "管理"
             }]
           }
         }

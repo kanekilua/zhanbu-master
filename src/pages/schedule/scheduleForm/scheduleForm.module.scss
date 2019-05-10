@@ -1,0 +1,20 @@
+@import '../../../styles/flex.scss';
+
+.scheduleFormWrap{
+    .tabItem{
+        position: relative;
+        width: 20%;
+        height: 100px;
+        display: inline-block;
+        text-align: center;
+        color: #303030;
+        font-size: 0;
+        border-bottom: 1PX solid rgba(233,233,233,1);
+        .h1{
+            font-size: 30px;
+        }
+        .h2{
+            font-size: 22px;
+        }
+    }
+}

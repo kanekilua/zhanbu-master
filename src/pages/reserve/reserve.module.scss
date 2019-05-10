@@ -1,6 +1,10 @@
 @import '../../styles/theme.scss';
 @import '../../styles/flex.scss';
-
+.reserveWrap{
+    padding-top: 136px;
+    box-sizing: border-box;
+    width: 100%;
+}
 .orderList{
     width: 100%;
     padding-top: 22px;

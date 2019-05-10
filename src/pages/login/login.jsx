@@ -40,7 +40,7 @@ class Login extends Taro.Component {
             //  获取token并保存
             _fetch({url:'/masterin/master_login',payload: params,method: 'POST',autoLogin:false, showToast: true})
             .then(res=>{
-                // console.log(res)
+                console.log(res)
                 // Taro.getStorage({ key: 'userInfo' })
                     // .then(res => console.log(res))
                     setTimeout(()=>{
