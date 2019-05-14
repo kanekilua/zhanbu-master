@@ -1,0 +1,51 @@
+@import '../../styles/flex.scss';
+
+.wrapper{
+    padding: 139px 0 100px;
+    width: 100%;
+    height: 100%;
+    background: white;
+
+        
+    .communicationBox{
+        @include flex-between;
+        width: 690px;
+        height: 114px;
+        margin: 27px auto;
+        box-shadow: 0px 1px 8px rgba(0,0,0,0.16);
+        border-radius: 10px;
+        
+        .communicationLeft{
+            border-right: 1PX solid rgba(112,112,112,0.3);
+        }
+
+        .communicationLeft,.communicationRight{
+            width: 50%;
+            height: 72px;
+            @include flex-center;
+            color: #707070;
+            .top{
+                font-size: 26px;
+                font-weight: 400;
+                line-height: 37px;
+            }
+            .bottom{
+                font-size: 24px;
+                font-weight: 400;
+                line-height: 28px;
+            }
+        }
+
+        .leftIco{
+            width: 56px;
+            height: 56px;
+        }
+        .rightIco{
+            width: 68px;
+            height: 56px;
+        }
+        .communicationTxt{
+            margin-left: 30px;
+        }
+    }
+}
