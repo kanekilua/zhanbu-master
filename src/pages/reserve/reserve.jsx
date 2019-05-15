@@ -2,6 +2,8 @@ import Taro from '@tarojs/taro'
 import { View } from '@tarojs/components'
 import { AtTabs, AtTabsPane } from 'taro-ui'
 import _fetch from '@/utils/fetch.js'
+import checkLogin from '@/utils/checkLogin.js'
+
 
 import OrderCart from '@/components/orderCart/orderCart'
 import HeaderTitle from '@/components/headerTitle/headerTitle'
@@ -16,6 +18,7 @@ class Reserve extends Taro.Component {
 		super(props)
 		this.state = { 
 			current: 0,
+			orderList: []
         }
 	}
 	
@@ -28,17 +31,22 @@ class Reserve extends Taro.Component {
     init () {
         _fetch({url:'/masterin/reserve_list',payload: null,method: 'POST',autoLogin:false, showToast: false})
         .then(res=>{
-            console.log(res)
+			console.log(res)
+			this.setState({
+				orderList: res
+			})
         })
-    }
-    
+	}
+	
     componentDidMount () {
+        checkLogin();
         this.init();
     }
 
     
 	render () {
 		const tabList = [{ title: '准备服务' }, { title: '暂待联系' }]
+		let { orderList } = this.state 
 		return (
 			<View className={style.reserveWrap}>
                 <HeaderTitle
@@ -47,9 +55,12 @@ class Reserve extends Taro.Component {
 				<AtTabs current={this.state.current} tabList={tabList} onClick={this.handleClick.bind(this)}>
 					<AtTabsPane current={this.state.current} index={0} >
 						<View className={style.orderList}>
-                            <View className={style.orderCattItem}>
-                                <OrderCart/>
-                            </View>
+							{orderList.map((item)=>
+								<View className={style.orderCattItem} key={item.id}>
+									<OrderCart orderInfo={item}/>
+								</View>
+							)}
+                            
                         </View>
 					</AtTabsPane>
 					<AtTabsPane current={this.state.current} index={1}>

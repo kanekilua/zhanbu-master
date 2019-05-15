@@ -10,7 +10,8 @@
     padding-top: 22px;
     box-sizing: border-box;
     .orderCattItem{
-        width: 100%;
+        width: 690px;
+        margin: 0 auto;
         @include flex-center;
     }
 }
