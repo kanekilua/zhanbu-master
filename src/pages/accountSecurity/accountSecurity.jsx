@@ -26,15 +26,21 @@ class AccountSecurity extends Taro.Component {
                 <View className={style.settingItem}>
                     <SettingItem
                         leftText='手机号'
-                        extraText='1371***6892'   
+                        extraText='1371***6892'
                     />
                 </View>
-                <View className={style.settingItem}>
+                <View className={style.settingItem}
+                    onClick={()=>{
+                        Taro.navigateTo({
+                            url: '/pages/forgetPassword/forgetPassword'
+                        })
+                    }}
+                >
                     <SettingItem
                         leftText='修改密码'
                         extraText=''   
                     />
-                 </View>
+                </View>
             </View>
         )
     }

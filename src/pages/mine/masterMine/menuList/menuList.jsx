@@ -42,7 +42,8 @@ class MenuList extends Taro.Component {
                     />
                 </View>
                 <View className={style.menuItem}
-                    onClick={()=>{
+                    onClick={(e)=>{
+                        e.stopPropagation();
                         Taro.navigateTo({
                             url: '/pages/accountSecurity/accountSecurity'
                         })

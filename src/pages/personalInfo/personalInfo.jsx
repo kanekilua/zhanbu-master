@@ -70,14 +70,14 @@ class PersonalInfo extends Taro.Component {
     }
 
     init (order_id){
-        // _fetch({url:'/reserve/detail',payload: {order_id},method: 'POST',autoLogin: true}) //判断登录有没有过期
-        // .then(res => {
-        //     console.log(res)
-        //         this.setState({
-        //             order:res
-        //         })
-        // })
-        // .catch(err=>console.log(err))
+        _fetch({url:'/reserve/detail',payload: {order_id},method: 'POST',autoLogin: true}) //判断登录有没有过期
+        .then(res => {
+            console.log(res)
+                this.setState({
+                    order:res
+                })
+        })
+        .catch(err=>console.log(err))
     }
     
     getSex (flag) {
