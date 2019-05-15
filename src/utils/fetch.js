@@ -14,13 +14,13 @@ function updateStorage(data = {}) {
 /**
  * 简易封装网络请求 
  * 调用示例： 
- * autoLogin为登录权限，showToast为成功反馈模态框。autoLogin和showToast有默认值，可视情况省略。
+ * autoLogin为登录权限，showToast为成功反馈模态框。showStatus为展示状态码和data。
  * _fetch({url:'/app/phoneLogin',payload: params,method: 'POST',autoLogin:false,showToast: false}).then(res=>console.log(res)).catch(err=>console.log(err))
  */
 export default async function _fetch(options) {
     const baseUrl = 'https://mingli.szmonster.com/api';
 
-    const {url, payload, method='GET', autoLogin=false, showToast=false, } = options
+    const {url, payload, method='GET', autoLogin=false, showToast=false, showStatus= false} = options
     const token = Taro.getStorageSync('token') //从缓存获取token
     const header = token ? { 'Authorization': token } : {} //将token放入header
     if (method === 'POST') {
@@ -57,16 +57,21 @@ export default async function _fetch(options) {
                 })
             }
         }
+        //如果需要展示状态码
+        if(showStatus) {
+            return Promise.resolve(res);
+        }
         return data
     })
     // 接收抛出的错误
     .catch((err) => { 
         console.log('catch返回信息',err)
-        // Taro.showToast({
-        //     title: err.msg,
-        //     icon: 'none'
-        // })
+        Taro.showToast({
+            title: err.msg,
+            icon: 'none'
+        })
         if(err.error_num === '10002' && autoLogin){
+            console.log('跳转登录')
             Taro.navigateTo({
                 url: '/pages/login/login'
             })

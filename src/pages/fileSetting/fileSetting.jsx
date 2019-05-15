@@ -2,6 +2,8 @@ import Taro from '@tarojs/taro'
 import { View, Button, Input } from '@tarojs/components'
 import { AtModal, AtModalHeader, AtModalContent, AtModalAction } from "taro-ui"
 import _fetch from '@/utils/fetch.js'
+import checkLogin from '@/utils/checkLogin.js'
+
 
 import Header from '@/components/header/header'
 import SettingItem from '@/components/settingItem/settingItem'
@@ -19,7 +21,7 @@ class FileSetting extends Taro.Component {
 		this.state = { 
             isOpened: false,
             name: '',
-            inputName: '',
+            resetName: '',
             avatar: ''
         }
     }
@@ -40,11 +42,20 @@ class FileSetting extends Taro.Component {
     // 确认修改名字
     handleConfirm() {
         let params = {
-
+            name: this.state.resetName
         }
-        _fetch({url:'/app/userInfo',payload: {},method: 'POST',autoLogin: true})
+        _fetch({url:'/masterin/edit_name',payload: params,method: 'POST',autoLogin: true, showToast: true, showStatus: true })
         .then((res)=>{
-
+            console.log(res)
+            if(res.data.code == 'success') { //修改成功
+                this.setState({
+                    name: this.state.resetName
+                })
+                // 更新storage的name,
+                let master_data = Taro.getStorageSync('master_data');
+                master_data.name = this.state.resetName;
+                Taro.setStorageSync('master_data', master_data);
+            }
         })
         this.setState({
             isOpened: false
@@ -60,7 +71,6 @@ class FileSetting extends Taro.Component {
     init () {
         Taro.getStorage({key: 'master_data'})
         .then((res) => {
-            console.log(res.data)
             this.setState({
                 name: res.data.name,
                 avatar: res.data.avatar
@@ -69,6 +79,7 @@ class FileSetting extends Taro.Component {
     }
 
     componentDidMount () {
+        checkLogin();
         this.init();
     }
     render() {
@@ -99,11 +110,11 @@ class FileSetting extends Taro.Component {
                     isOpened={ this.state.isOpened }
                 >
                     <AtModalContent>
-                        <Input placeholder='请输入您的姓名' className='inputName'
+                        <Input placeholder='请输入您的姓名' className='resetName'
                             onInput={(e)=>{
                                 this.setState({
-                                    inputName: e.detail.value
-                                },()=>console.log(this.state.inputName))
+                                    resetName: e.detail.value
+                                },()=>console.log(this.state.resetName))
                             }}
                         />
                     </AtModalContent>

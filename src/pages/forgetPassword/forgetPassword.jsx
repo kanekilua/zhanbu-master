@@ -91,7 +91,7 @@ class ForgetPassword extends Taro.Component {
             .then(res => {
                 console.log('注册返回信息',res)
                 setTimeout(()=>{
-                    Taro.navigateBack({ delta: 2 })
+                    Taro.navigateBack()
                 },2000)
                 
                 

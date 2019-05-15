@@ -57,6 +57,9 @@ class MasterMine extends Taro.Component {
         )
         this.props.onRefresh(); //刷新父组件数据
     }
+    componentDidMount () {
+        checkLogin();
+    }
 
     
     render() {
