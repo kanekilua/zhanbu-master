@@ -1,13 +1,15 @@
 import Taro from '@tarojs/taro'
 import { View, Image, Text} from '@tarojs/components'
 import _fetch from '@/utils/fetch.js'
-import LineTitle from '@/components/lineTitle/lineTitle'
-import HeaderTitle from '@/components/headerTitle/headerTitle'
+import { AtModal } from 'taro-ui'
 
-import phone from './assets/phone.png'
-import wechat from './assets/wechat.png'
+// import LineTitle from '@/components/lineTitle/lineTitle'
+import Header from '@/components/header/header'
+
+
 
 import OrderInfo from './orderInfo/orderInfo'
+import PhoneWechet from './phoneWechet/phoneWechet';
 import ConsultInfo from './consultInfo/consultInfo'
 import FooterBtn from './footerBtn/footerBtn'
 
@@ -20,8 +22,11 @@ class PersonalInfo extends Taro.Component {
         super(props)
         this.state = {
             order_id:'',
+            showConfirm : false,
+            schedule_id:'',
+
             order: {
-                "id": 6,
+                "id": 19,
                 "order_no": "2019040457545610",
                 "total_price": "100.00",
                 "pay_price": "100.00",
@@ -56,36 +61,60 @@ class PersonalInfo extends Taro.Component {
                     "expire_time": 1554370709,
                     "master_name": "陈大师"
                 },
-                "order_flag": "10"
+                "order_flag": "30",
+                "schedule_flag": "20"
             }
         }
     } 
 
     componentWillMount () {
         this.setState({
-            order_id:this.$router.params.order_id
+            order_id:this.$router.params.order_id,
+            schedule_id:this.$router.params.schedule_id
         },()=>{
             this.init(this.state.order_id)
         })
     }
 
-    init (order_id){
-        // _fetch({url:'/reserve/detail',payload: {order_id},method: 'POST',autoLogin: true}) //判断登录有没有过期
-        // .then(res => {
-        //     console.log(res)
-        //         this.setState({
-        //             order:res
-        //         })
-        // })
-        // .catch(err=>console.log(err))
+    init (id){
+        _fetch({url:'/reserve/detail',payload: {id},method: 'POST',autoLogin: true}) //判断登录有没有过期
+        .then(res => {
+            console.log(res.order)
+            this.setState({
+                order:res.order
+            })
+        })
+        .catch(err=>console.log(err))
     }
     
     getSex (flag) {
         return flag == 0 ? '女' : '男'
     }
 
+    //模态框关闭
+    handleCancel () {
+        this.setState({showConfirm:false})
+    }
+
+    //模态框确认,并设置状态为已完成，再初始化
+    handleConfirm () {
+        this.setState({showConfirm:false})
+        let { order_id } = this.state
+        _fetch({url:'/masterin/order_set',payload: { id: order_id, type: '20' },method: 'POST',autoLogin: true}) //判断登录有没有过期
+        .then(res => {
+            this.init()
+        })
+        .catch(err=>console.log(err))
+        
+    }
+
+    // 展示模态框
+    showModal (id,type) {
+        this.setState({ showConfirm:true })
+    }
+
     render() {
-        let { order, order : { order_status, order_no, reserve : { service_name, schedule_code, name, sex_data, mobile, wx_number } } }= this.state
+        let { showConfirm, schedule_id, order, order : { id, order_flag, schedule_flag, order_no, reserve : { service_name, schedule_code, name, sex_data, mobile, wx_number } } }= this.state
 
         //orderInfo的参数
         let orderInfo = [
@@ -100,38 +129,30 @@ class PersonalInfo extends Taro.Component {
 
         return (
             <View className={style.wrapper}>
-                <HeaderTitle
-                    title='个人信息'
+                <Header
+                    headerTitle='个人信息'    
                 />
 
                 <OrderInfo orderInfo={orderInfo}/>
 
                 {/* <LineTitle>沟通方式</LineTitle> */}
-                <View className={style.communicationBox}>
-                    <View className={style.communicationLeft}>
-                        <Image
-                            className={style.leftIco}
-                            src={phone}
-                        />
-                        <View className={style.communicationTxt}>
-                            <View className={style.top}>电话沟通</View>
-                            <View className={style.bottom}>(90分钟)</View>
-                        </View>
-                    </View>
-                    <View className={style.communicationRight}>
-                        <Image
-                            className={style.rightIco}
-                            src={wechat}
-                        />
-                        <View className={style.communicationTxt}>
-                            <View className={style.top}>微信对话</View>
-                            <View className={style.bottom}>(90分钟)</View>
-                        </View>
-                    </View>
-                </View>
+                <PhoneWechet contectInfo={ { mobile, wx_number } }/>
 
                 <ConsultInfo order={order}/>
-                <FooterBtn order_status={order_status}/>
+                <FooterBtn 
+                    orderInfo={ {init:this.init.bind(this), id, order_flag, schedule_flag, schedule_id } }
+                    showModal={this.showModal.bind(this)}
+                />
+
+
+                <AtModal
+                    isOpened = {showConfirm}
+                    cancelText='取消'
+                    confirmText='确认'
+                    onCancel={ this.handleCancel.bind(this) }
+                    onConfirm={ this.handleConfirm.bind(this) }
+                    content='确定完成服务？'
+                />
             </View>
         )
     }

@@ -138,9 +138,10 @@ class Schedule extends Taro.Component {
         .catch(err=>console.log(err))
     }
 
-    onHandelSchedule (order_id) {
+    //点击待确认预约的item跳转到详情页
+    onHandelSchedule (order_id,schedule_id) {
         Taro.navigateTo({
-            url:`/pages/personalInfo/personalInfo?order_id=${order_id}`
+            url:`/pages/personalInfo/personalInfo?order_id=${order_id}&schedule_id=${schedule_id}`
         })
     }
 
@@ -163,6 +164,7 @@ class Schedule extends Taro.Component {
             params.type=20
         }
 
+        //接口设置 10设置为已确认    20设置为休息   40设置为工作
         this.setState({nextWeekInfo})
         _fetch({url:'/masterin/schedule_set',payload: params,method: 'POST',autoLogin: true}) //判断登录有没有过期
         .then(res => {
@@ -178,7 +180,7 @@ class Schedule extends Taro.Component {
         }
         if(flag == 40){
             params.type = 20
-        }else if(flag == 20){
+        }else if(flag == 10){
             params.type = 40
         }
 

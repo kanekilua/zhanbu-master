@@ -6,7 +6,11 @@ import customerAvatar from '@/assets/reserve.png'
 
  
 class OrderCart extends Taro.Component {
-	constructor (props) {
+    static options = {
+        addGlobalClass: true
+    }
+    
+      constructor (props) {
 		super(props)
 		this.state = { 
 			current: 0,

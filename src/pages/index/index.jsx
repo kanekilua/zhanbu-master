@@ -4,6 +4,7 @@ import { AtTabs, AtTabsPane } from 'taro-ui'
 
 import style from './index.module.scss'
 import './index.scss'
+import GET from './assets/get.png'
 
 import OrderCart from '@/components/orderCart/orderCart'
 import HeaderTitle from '@/components/headerTitle/headerTitle'
@@ -38,8 +39,23 @@ class Index extends Taro.Component {
 				<AtTabs current={this.state.current} tabList={tabList} onClick={this.handleClick.bind(this)}>
 					<AtTabsPane current={this.state.current} index={0} >
 						<View className={style.orderList}>
+							<View className={style.allCheckBox}>
+								<View className={style.boxLeft}>
+									<View className={`${style.radio} ${style.radioChecked}`}>
+										<Image className={style.getImage} src={GET}/>
+									</View>
+									<View className={style.text}>全选</View>
+								</View>
+								<View className={style.boxRight}>知道了</View>
+							</View>
 							<View className={style.orderCattItem}>
-								<OrderCart/>
+								<View className={`${style.radio} ${style.radioChecked}`}>
+									<Image className={style.getImage} src={GET}/>
+								</View>
+								<View className={style.redioContentBox}>
+									<OrderCart/>
+								</View>
+								
 							</View>
 						</View>
 					</AtTabsPane>

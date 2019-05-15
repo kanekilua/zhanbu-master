@@ -75,8 +75,8 @@ class ScheduleConfirm extends Taro.Component {
     }
 
     //订单id
-    onHandelSchedule (order_id) {
-        this.props.onHandelSchedule(order_id)
+    onHandelSchedule (order_id,schedule_id) {
+        this.props.onHandelSchedule(order_id,schedule_id)
     }
 
     onConfirm () {
@@ -108,7 +108,7 @@ class ScheduleConfirm extends Taro.Component {
                                         dayItem.map(item=>
                                             // 10=已休息,20=已确认,30=待确认,40=无预约
                                             item.schedule_flag == 10 ? <View className={`${style.timeItem} ${style.disableItem}`}>休息</View> : 
-                                                item.schedule_flag == 30 ? <View className={`${style.timeItem} ${style.order}`} onClick={this.onHandelSchedule.bind(this,item.order_id)}>{item.time_code}</View> : 
+                                                item.schedule_flag == 30 ? <View className={`${style.timeItem} ${style.order}`} onClick={this.onHandelSchedule.bind(this,item.order_id,item.id)}>{item.time_code}</View> : 
                                                     item.schedule_flag == 40 ? <View className={`${style.timeItem} ${style.nullItem}`}>{item.time_code}</View> : 
                                                         item.schedule_flag == 20 ? <View className={`${style.timeItem} ${style.order}`}>
                                                             {item.time_code}

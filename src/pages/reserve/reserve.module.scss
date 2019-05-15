@@ -12,5 +12,10 @@
     .orderCattItem{
         width: 100%;
         @include flex-center;
+
+        .itemBox{
+            width: 690px;
+            
+        }
     }
 }

@@ -48,7 +48,9 @@ class Reserve extends Taro.Component {
 					<AtTabsPane current={this.state.current} index={0} >
 						<View className={style.orderList}>
                             <View className={style.orderCattItem}>
-                                <OrderCart/>
+								<View className={style.itemBox}>
+                                	<OrderCart/>
+								</View>
                             </View>
                         </View>
 					</AtTabsPane>
