@@ -1,0 +1,35 @@
+  .wrapper{
+    width: 0;
+    height: 0;
+
+    .mask{
+        width: 100vw;
+        height: 100vh;
+        position: fixed;
+        z-index: 999;
+        top: 0;
+        left: 0;
+        background: rgba(0, 0, 0, 0.8);
+
+        transition: all 500ms;
+
+        .imageBox{
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            
+            transition: all 500ms;
+
+            .image{
+                width: 100%;
+
+                transition: all 500ms;
+            }
+
+        }
+    }
+
+    
+}

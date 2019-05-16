@@ -18,7 +18,8 @@ class Reserve extends Taro.Component {
 		super(props)
 		this.state = { 
 			current: 0,
-			orderList: []
+			prepareList: [],
+			waitConnectList: []
         }
 	}
 	
@@ -29,13 +30,24 @@ class Reserve extends Taro.Component {
     }
 
     init () {
+		let prepareList = []
+		let waitConnectList = []
         _fetch({url:'/masterin/reserve_list',payload: null,method: 'POST',autoLogin:false, showToast: false})
         .then(res=>{
-			console.log(res)
+			for(let item of res){
+				item.order_flag == 30
+				?
+				waitConnectList.push(item)
+				:
+				item.order_flag == 50 && prepareList.push(item)
+			}
 			this.setState({
-				orderList: res
+				prepareList,
+				waitConnectList
 			})
-        })
+		})
+        .catch(err=>console.log(err))
+		
 	}
 	
     componentDidMount () {
@@ -46,7 +58,7 @@ class Reserve extends Taro.Component {
     
 	render () {
 		const tabList = [{ title: '准备服务' }, { title: '暂待联系' }]
-		let { orderList } = this.state 
+		let { waitConnectList, prepareList } = this.state 
 		return (
 			<View className={style.reserveWrap}>
                 <HeaderTitle
@@ -55,18 +67,26 @@ class Reserve extends Taro.Component {
 				<AtTabs current={this.state.current} tabList={tabList} onClick={this.handleClick.bind(this)}>
 					<AtTabsPane current={this.state.current} index={0} >
 						<View className={style.orderList}>
-							{orderList.map((item)=>
+							{waitConnectList.map((item)=>
 								<View className={style.orderCattItem} key={item.id}>
 									<View className={style.itemBox}>
 										<OrderCart orderInfo={item}/>
 									</View>
 								</View>
 							)}
-
                         </View>
 					</AtTabsPane>
 					<AtTabsPane current={this.state.current} index={1}>
-						<View>标签页二的内容</View>
+					<View className={style.orderList}>
+							<View className={style.tips}>温馨提示：以下订单暂未处理,请尽快处理。</View>	
+							{prepareList.map((item)=>
+								<View className={style.orderCattItem} key={item.id}>
+									<View className={style.itemBox}>
+										<OrderCart orderInfo={item}/>
+									</View>
+								</View>
+							)}
+                        </View>
 					</AtTabsPane>
 				</AtTabs>
 			</View>

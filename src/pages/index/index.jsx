@@ -53,7 +53,7 @@ class Index extends Taro.Component {
 									<Image className={style.getImage} src={GET}/>
 								</View>
 								<View className={style.redioContentBox}>
-									<OrderCart/>
+									<OrderCart orderInfo={{}}/>
 								</View>
 								
 							</View>

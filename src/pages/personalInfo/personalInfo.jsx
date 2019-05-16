@@ -22,47 +22,46 @@ class PersonalInfo extends Taro.Component {
         super(props)
         this.state = {
             order_id:'',
-            showConfirm : false,
+            isOpened : false,
             schedule_id:'',
 
-            order: {
-                "id": 19,
-                "order_no": "2019040457545610",
-                "total_price": "100.00",
-                "pay_price": "100.00",
+            "order": {
+                "id": 17,
+                "order_no": "2019051351575552",
+                "total_price": "0.01",
+                "pay_price": "0.01",
                 "pay_status": "10",
                 "pay_time": 0,
-                "order_status": "20",
-                "createtime": 1554370649,
+                "order_status": "10",
+                "createtime": 1557732979,
                 "advisory_status": "10",
                 "reserve": {
-                    "id": 6,
-                    "service_id": 1,
-                    "service_name": "财运",
-                    "service_price": "100.00",
-                    "total_price": "100.00",
-                    "order_id": 6,
-                    "user_id": 2,
-                    "createtime": 1554370649,
-                    "updatetime": 1554374967,
-                    "master_id": 1,
-                    "schedule_id": 18,
-                    "schedule_code": "20190403 16:30 周三",
-                    "schedule_time": 1554280200,
-                    "name": "测试人",
-                    "sex_data": "0",
+                    "id": 17,
+                    "service_id": 4,
+                    "service_name": "爱情",
+                    "service_price": "0.01",
+                    "total_price": "0.01",
+                    "order_id": 17,
+                    "user_id": 357,
+                    "createtime": 1557732979,
+                    "updatetime": 1557732979,
+                    "master_id": 3,
+                    "schedule_id": 14,
+                    "schedule_code": "2019-05-16 星期四 10:30",
+                    "schedule_time": 1557973800,
+                    "name": "212",
+                    "sex_data": "1",
                     "birthday": "2019-03-20 11:26:26",
                     "birth_address": "广东",
                     "mobile": "13111111111",
                     "wx_number": "1211131",
-                    "hand_images": "http://gameleyuan.oss-cn-hangzhou.aliyuncs.com/uploads/reserve/20190404/775239f7fc058545a15749dd6ac3d457.jpg",
-                    "face_images": "http://gameleyuan.oss-cn-hangzhou.aliyuncs.com/uploads/reserve/20190404/88ccc4437a5fef24c60635c7cf5bef7c.jpg",
-                    "problem_content": "事业问题",
-                    "expire_time": 1554370709,
-                    "master_name": "陈大师"
+                    "hand_images": "https://gameleyuan.oss-cn-hangzhou.aliyuncs.com/uploads/common/20190510/1c3944ccb26d0fa9af3906352a2ea503.jpg",
+                    "face_images": "https://gameleyuan.oss-cn-hangzhou.aliyuncs.com/uploads/common/20190510/1c3944ccb26d0fa9af3906352a2ea503.jpg",
+                    "problem_content": "事业444问题",
+                    "expire_time": 1557733159,
+                    "master_name": "林大大"
                 },
-                "order_flag": "30",
-                "schedule_flag": "20"
+                "order_flag": "10"
             }
         }
     } 
@@ -77,7 +76,7 @@ class PersonalInfo extends Taro.Component {
     }
 
     init (id){
-        _fetch({url:'/reserve/detail',payload: {id},method: 'POST',autoLogin: true}) //判断登录有没有过期
+        _fetch({url:'/masterin/detail ',payload: {id},method: 'POST',autoLogin: true}) //判断登录有没有过期
         .then(res => {
             console.log(res.order)
             this.setState({
@@ -92,29 +91,30 @@ class PersonalInfo extends Taro.Component {
     }
 
     //模态框关闭
-    handleCancel () {
-        this.setState({showConfirm:false})
+    onHandleCancel () {
+        this.setState({isOpened: false})
     }
 
     //模态框确认,并设置状态为已完成，再初始化
-    handleConfirm () {
-        this.setState({showConfirm:false})
-        let { order_id } = this.state
-        _fetch({url:'/masterin/order_set',payload: { id: order_id, type: '20' },method: 'POST',autoLogin: true}) //判断登录有没有过期
+    onHandleConfirm () {
+        let { id } = this.state.order
+        _fetch({url:'/reserve/finish',payload: { id },method: 'POST',autoLogin: true}) //判断登录有没有过期
         .then(res => {
-            this.init()
+        this.setState({isOpened: false})
+            this.setState({isOpened: false})
+            this.init(id)
         })
         .catch(err=>console.log(err))
         
     }
 
     // 展示模态框
-    showModal (id,type) {
-        this.setState({ showConfirm:true })
+    onShowModal () {
+        this.setState({ isOpened: true })
     }
 
     render() {
-        let { showConfirm, schedule_id, order, order : { id, order_flag, schedule_flag, order_no, reserve : { service_name, schedule_code, name, sex_data, mobile, wx_number } } }= this.state
+        let { schedule_id, isOpened, order, order : { id, order_flag, order_no, reserve : { service_name, schedule_code, name, sex_data, mobile, wx_number } } }= this.state
 
         //orderInfo的参数
         let orderInfo = [
@@ -135,22 +135,22 @@ class PersonalInfo extends Taro.Component {
 
                 <OrderInfo orderInfo={orderInfo}/>
 
-                {/* <LineTitle>沟通方式</LineTitle> */}
                 <PhoneWechet contectInfo={ { mobile, wx_number } }/>
 
                 <ConsultInfo order={order}/>
+
                 <FooterBtn 
-                    orderInfo={ {init:this.init.bind(this), id, order_flag, schedule_flag, schedule_id } }
-                    showModal={this.showModal.bind(this)}
+                    orderInfo={ {init:this.init.bind(this), id, order_flag, schedule_id } }
+                    onHandleConfirm={this.onHandleConfirm.bind(this)}
+                    onShowModal={this.onShowModal.bind(this)}
                 />
 
-
                 <AtModal
-                    isOpened = {showConfirm}
+                    isOpened = {isOpened}
                     cancelText='取消'
                     confirmText='确认'
-                    onCancel={ this.handleCancel.bind(this) }
-                    onConfirm={ this.handleConfirm.bind(this) }
+                    onCancel={ this.onHandleCancel.bind(this) }
+                    onConfirm={ this.onHandleConfirm.bind(this) }
                     content='确定完成服务？'
                 />
             </View>

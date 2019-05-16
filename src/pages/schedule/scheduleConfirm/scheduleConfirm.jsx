@@ -110,7 +110,7 @@ class ScheduleConfirm extends Taro.Component {
                                             item.schedule_flag == 10 ? <View className={`${style.timeItem} ${style.disableItem}`}>休息</View> : 
                                                 item.schedule_flag == 30 ? <View className={`${style.timeItem} ${style.order}`} onClick={this.onHandelSchedule.bind(this,item.order_id,item.id)}>{item.time_code}</View> : 
                                                     item.schedule_flag == 40 ? <View className={`${style.timeItem} ${style.nullItem}`}>{item.time_code}</View> : 
-                                                        item.schedule_flag == 20 ? <View className={`${style.timeItem} ${style.order}`}>
+                                                        item.schedule_flag == 20 ? <View className={`${style.timeItem} ${style.order}`} onClick={this.onHandelSchedule.bind(this,item.order_id,item.id)}>
                                                             {item.time_code}
                                                             {/* √ */}   
                                                             <Image className={style.get} src={GET}/>
