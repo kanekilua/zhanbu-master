@@ -1,6 +1,7 @@
 import Taro from '@tarojs/taro'
 import { View, Image, Text} from '@tarojs/components'
 
+import PreviewImages from '@/components/previewImages/previewImages'
 import calendar from '@/utils/calendar'
 import style from './consultinfo.module.scss'
 import CONSULT from './assets/consult.png'
@@ -11,13 +12,22 @@ class Consultinfo extends Taro.Component {
     constructor (props) {
         super(props)
         this.state = {
-
+            index:0,
+            isOpened:false
         }
     } 
+
+    //切割图片字符串为图片数组
+    splitImages (str) {
+        return (str == '' || str == undefined) ? [] : str.split(',')
+    }
 
     //获得公历和农历日期
     get_Gre_lunner_Calender (birthday) {
         //birthday = 2019-03-20 11:26:26
+        if(birthday == null){
+            return {Gregorian:'',lunar:''}
+        }
         let dateArr = birthday.split(' ')[0].split('-')
 
         let Gregorian = `${dateArr[0]}年 ${dateArr[1]}月 ${dateArr[2]}日`
@@ -28,9 +38,21 @@ class Consultinfo extends Taro.Component {
         return {Gregorian,lunar}
     }
 
+    onOpenImage (index) {
+        this.setState({index:index, isOpened: true})
+    }
+
+    onCloseImage () {
+        this.setState({isOpened: false})
+    }
+
+
+
     render() {
-        let { order : { reserve : { birthday, birth_address, problem_content } } } = this.props
+        let { index, isOpened } = this.state
+        let { order : { reserve : { birthday, birth_address, problem_content, hand_face_images } } } = this.props
         let { Gregorian, lunar } = this.get_Gre_lunner_Calender(birthday)
+        let images = this.splitImages(hand_face_images)
 
 
         return (
@@ -59,24 +81,28 @@ class Consultinfo extends Taro.Component {
                     <View className={style.formItem}>
                         <View className={style.itemTitle} style="margin: 10px 0 10px;">手相面相照片：</View>
                         <View className={style.photoContent}>
-                            <View className={style.imageBox}>
-                                <Image className={style.image} src="http://gameleyuan.oss-cn-hangzhou.aliyuncs.com/uploads/reserve/20190404/775239f7fc058545a15749dd6ac3d457.jpg"/>
-                            </View>
-                            <View className={style.imageBox}>
-                                <Image className={style.image} src="http://gameleyuan.oss-cn-hangzhou.aliyuncs.com/uploads/reserve/20190404/88ccc4437a5fef24c60635c7cf5bef7c.jpg"/>
-                            </View>
-                            <View className={style.imageBox}>
-                                <Image className={style.image} src="http://gameleyuan.oss-cn-hangzhou.aliyuncs.com/uploads/reserve/20190404/88ccc4437a5fef24c60635c7cf5bef7c.jpg"/>
-                            </View>
+                        {
+                            images.map((item,index)=>
+                                <View className={style.imageBox} onClick={this.onOpenImage.bind(this,index)}>
+                                    <Image className={style.image} src={item}/>
+                                </View>
+                            )
+                        }
                         </View>
                     </View>
-
+                    
                     <View className={style.formItem}>
                         <View className={style.itemTitle} style="margin: 10px 0 10px;">咨询问题：</View>
                         <View className={style.itemContent} style="margin-left:5px;">{problem_content}</View>
                     </View>
-                    
                 </View>
+
+                <PreviewImages 
+                    isOpened={isOpened}
+                    images={images}
+                    index={index}
+                    onCloseImage={this.onCloseImage.bind(this)}
+                />
             </View>
         )
     }

@@ -9,6 +9,20 @@
     .waitConfirm{
         width: 100%;
         height: 100%;
+
+        .btnItem{
+            height: 100%;
+            line-height: 100px;
+            text-align: center;
+            font-size: 30px;
+            background: #C3976D;
+            color: white;
+        }
+    }
+
+    .waitConnectBox{
+        width: 100%;
+        height: 100%;
         display: flex; 
 
         .btnItem{
@@ -18,15 +32,34 @@
             text-align: center;
             font-size: 30px;
 
-            &:first-child{
-                background: white;
-                color: #C3976D;
-            }
-
             &:last-child{
                 background: #C3976D;
                 color: white;
             }
+        }
+
+        .waitConnect{
+            background: white;
+            color: #C3976D;
+        }
+
+        .NoneWaitConnect{
+            background: #A4A3A3;
+            color: white;
+        }
+    }
+
+    .over{
+        width: 100%;
+        height: 100%;
+
+        .btnItem{
+            height: 100%;
+            line-height: 100px;
+            text-align: center;
+            font-size: 30px;
+            background: #A4A3A3;
+            color: white;
         }
     }
 }

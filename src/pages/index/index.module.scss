@@ -1,10 +1,80 @@
-@import '../../styles/flex.scss';
-.orderList{
-    width: 100%;
-    padding-top: 22px;
-    box-sizing: border-box;
-    .orderCattItem{
+.wrapper{
+    padding-top: 136px;
+    
+    .orderList{
         width: 100%;
-        @include flex-center;
+        padding-top: 22px;
+        box-sizing: border-box;
+    
+        .allCheckBox{
+            width: 100%;
+            padding: 20px 30px;
+            box-sizing: border-box;
+            display: flex;
+            justify-content: space-between;
+    
+            .boxLeft{
+                display: flex;
+                align-items: center;
+                font-size: 28px;
+                color: #111111;
+
+                .text{
+                    margin-left: 30px;
+                }
+            }
+    
+            .boxRight{
+                font-size: 24px;
+                background: #C3976D;
+                color: white;
+                width: 140px;
+                height: 46px;
+                line-height: 46px;
+                text-align: center;
+                border-radius: 4px;
+            }
+        }
+    
+        .orderCattItem{
+            width: 690px;
+            margin: 20px auto 0;
+            display: flex;
+            justify-content: space-between;
+    
+            .redioContentBox{
+                width: 626px;
+                
+            }
+        }
+    
+        .radio{
+            width: 34px;
+            height: 34px;
+            border-radius:50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+    
+            .getImage{
+                width: 22px;
+                height: 18px;
+            }
+        }
+    
+        .radioNone{
+            border:1PX solid rgba(143,143,143,1);
+        }
+    
+        .radioChecked{
+            background:rgba(195,151,109,1);
+            opacity:1;
+        }
+
+        .itemBox{
+            width: 690px;
+            margin: 0 auto 20px;
+        }
+    
     }
 }
