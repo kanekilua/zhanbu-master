@@ -119,6 +119,7 @@ class Schedule extends Taro.Component {
             }
         }else{
             scheduleInfo= JSON.parse(JSON.stringify(scheduleInfoHistory))
+            ids=' '
         }
 
         this.setState({
@@ -130,6 +131,9 @@ class Schedule extends Taro.Component {
     //一键确认
     onConfirm () {
         let {ids} = this.state
+        if(ids == ''){
+            return
+        }
         let params = {ids,type:10}
         _fetch({url:'/masterin/schedule_set',payload: params,method: 'POST',autoLogin: true}) //判断登录有没有过期
         .then(res => {

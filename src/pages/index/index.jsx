@@ -60,7 +60,11 @@ class Index extends Taro.Component {
 						</View>
 					</AtTabsPane>
 					<AtTabsPane current={this.state.current} index={1}>
-						<View>标签页二的内容</View>
+						<View className={style.orderList}>
+							<View className={style.itemBox}>
+								<OrderCart orderInfo={{}}/>
+							</View>
+						</View>
 					</AtTabsPane>
 				</AtTabs>
 			</View>
