@@ -8,7 +8,9 @@ import rightArrow from '@/assets/rightArrow.png'
 
 class MenuItem extends Taro.Component {
     static externalClasses = ['icon-style']
-
+    static options = {
+        addGlobalClass: true
+    }
     static defaultProps = {
         rightText: '',
         title: '',
