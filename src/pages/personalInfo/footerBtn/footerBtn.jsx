@@ -37,7 +37,7 @@ class FooterBtn extends Taro.Component {
 
     //设置为等待联系
     pendingContact (id) {
-        _fetch({url:'/reserve/pendingContact ',payload: { id },method: 'POST',autoLogin: true}) //判断登录有没有过期
+        _fetch({url:'/masterin/pendingContact ',payload: { id },method: 'POST',autoLogin: true}) //判断登录有没有过期
         .then(res => {
             this.props.orderInfo.init(id)
         })

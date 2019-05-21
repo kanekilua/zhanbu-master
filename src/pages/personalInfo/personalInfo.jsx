@@ -98,7 +98,7 @@ class PersonalInfo extends Taro.Component {
     //模态框确认,并设置状态为已完成，再初始化
     onHandleConfirm () {
         let { id } = this.state.order
-        _fetch({url:'/reserve/finish',payload: { id },method: 'POST',autoLogin: true}) //判断登录有没有过期
+        _fetch({url:'/masterin/finish',payload: { id },method: 'POST',autoLogin: true}) //判断登录有没有过期
         .then(res => {
         this.setState({isOpened: false})
             this.setState({isOpened: false})
