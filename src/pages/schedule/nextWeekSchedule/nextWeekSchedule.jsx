@@ -48,6 +48,11 @@ class NextWeekSchedule extends Taro.Component {
     }
     
     _disposeProps (list) {
+        if(list.length == 0){
+            let nextWeekInfoList = []
+            let headList = [{h1:'周一'},{h1:'周二'},{h1:'周三'},{h1:'周四'},{h1:'周五'}]
+            return {nextWeekInfoList, headList}
+        }
         let tempArr = []
         let nextWeekInfoList = []
         for(let item of list){
@@ -95,6 +100,8 @@ class NextWeekSchedule extends Taro.Component {
 
     render() {
         let {nextWeekInfo } = this.props
+        console.log('nextWeekInfo')
+        console.log(nextWeekInfo)
         let { nextWeekInfoList, headList} = this._disposeProps(nextWeekInfo)
         return (
             <View className={style.wrapper}>

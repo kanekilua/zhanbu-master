@@ -76,6 +76,7 @@ class Schedule extends Taro.Component {
     init () {
         _fetch({url:'/masterin/schedule_list',payload: {},method: 'POST',autoLogin: true}) //判断登录有没有过期
             .then(res => {
+                console.log(res)
                 this._disposeCcheduleList(res)
             })
             .catch(err=>console.log(err))
@@ -89,16 +90,23 @@ class Schedule extends Taro.Component {
     _disposeCcheduleList (list) {
         let lineIndex = ''
         let firstDay = list[0].week_day
-        for(let i in list){
-            if(i>10){
-                if(list[i].week_day == firstDay){
-                    lineIndex = i
-                    break
+        let nextWeekInfo = []
+        let scheduleInfo = []
+        if(list.length>25){
+            for(let i in list){
+                if(i>10){
+                    if(list[i].week_day == firstDay){
+                        lineIndex = i
+                        break
+                    }
                 }
             }
+            nextWeekInfo = list.slice(lineIndex,(list.length))
+            scheduleInfo = list.slice(0,lineIndex)
+        }else{
+            nextWeekInfo = []
+            scheduleInfo = list
         }
-        let nextWeekInfo = list.slice(lineIndex,(list.length))
-        let scheduleInfo = list.slice(0,lineIndex)
         let scheduleInfoHistory = JSON.parse(JSON.stringify(scheduleInfo))
 
         this.setState({
