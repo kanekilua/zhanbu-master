@@ -1,6 +1,6 @@
-import Taro from '@tarojs/taro'
+import Taro, { showToast } from '@tarojs/taro'
 import { View, Image, Text, Button} from '@tarojs/components'
-
+import copy from 'copy-to-clipboard';
 import style from './orderCart.module.scss'
 import customerAvatar from '@/assets/reserve.png'
 
@@ -17,17 +17,18 @@ class OrderCart extends Taro.Component {
         }
     }
 
-    copy (order_no) {
-        Taro.setClipboardData({
-            data: order_no,
-            success(res) {
-              wx.getClipboardData({
-                success(res) {
-                  console.log(res.data) // data
-                }
-              })
-            }
-        })
+    handelCopy (order_no) {
+        if(copy(order_no)){
+            Taro.showToast({
+                title:'复制成功',
+                icon:'success'
+            })
+        }else{
+            Taro.showToast({
+                title:'复制失败',
+                icon:'none'
+            })
+        }
     }
     
     onGotoPersonal (id) {
@@ -43,7 +44,7 @@ class OrderCart extends Taro.Component {
                 <View className={style.orderHead}>
                     <View>订单号:</View>
                     <View>{order_no}</View>
-                    <Button className={style.copyBtn} onClick={this.copy.bind(this,order_no)}>复制</Button>
+                    <Button className={style.copyBtn} onClick={this.handelCopy.bind(this,order_no)}>复制</Button>
                 </View>
                 <View className={style.userInfo}>
                     <View className={style.userInfoLeft}>
