@@ -72,9 +72,9 @@ class MyOrder extends Taro.Component {
 				overList,
 				waitConnectList
 			})
-            .catch(err=>console.log(err))
-
         })
+        .catch(err=>console.log(err))
+
 	}
 	
     componentDidMount () {

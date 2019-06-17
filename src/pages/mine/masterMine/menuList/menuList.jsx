@@ -8,6 +8,8 @@ import userFile from '../../assets/userFile.png'
 import accountSecurity from '../../assets/accountSecurity.png'
 import clean from '../../assets/clean.png'
 import update from '../../assets/update.png'
+import alarm from '../../assets/alarm.png'
+
 
 class MenuList extends Taro.Component {
     render() {
@@ -71,6 +73,14 @@ class MenuList extends Taro.Component {
                         title='检测更新'
                         icon-style={style[`icon${5}`]}
                         iconStyle={style[`icon${5}`]}
+                    />
+                </View>
+                <View className={style.menuItem}>
+                    <MenuItem 
+                        icon={alarm}
+                        title='提醒设置'
+                        icon-style={style[`icon${6}`]}
+                        iconStyle={style[`icon${6}`]}
                     />
                 </View>
             </View>
