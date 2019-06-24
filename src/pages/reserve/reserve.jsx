@@ -32,8 +32,9 @@ class Reserve extends Taro.Component {
     init () {
 		let prepareList = []
 		let waitConnectList = []
-        _fetch({url:'/masterin/reserve_list',payload: null,method: 'POST',autoLogin:false, showToast: false})
+        _fetch({url:'/masterin/reserve_list',payload: null,method: 'POST',autoLogin:true, showToast: false})
         .then(res=>{
+			console.log(res)
 			for(let item of res){
 				item.order_flag == 30
 				?
@@ -51,7 +52,6 @@ class Reserve extends Taro.Component {
 	}
 	
     componentDidMount () {
-        checkLogin();
         this.init();
     }
 

@@ -60,7 +60,7 @@ class OrderCart extends Taro.Component {
                     咨询项目:
                     <Image
                         className={style.serverIco}
-                        src={reserve.service_img}
+                        src={reserve.service_image}
                     />
                     {reserve.service_name}
                 </View>

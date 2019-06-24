@@ -119,7 +119,6 @@ class Schedule extends Taro.Component {
     //全选
     onAllCheck (allCheckedFlag) {
         let { scheduleInfo, scheduleInfoHistory, ids} = this.state
-
         // allCheckedFlag  true 选中 false 取消
         if(allCheckedFlag){
             for(let i in scheduleInfo){

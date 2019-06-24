@@ -43,7 +43,7 @@ class App extends Component {
             borderStyle: 'black',
             list: [{
               pagePath: "pages/index/index",
-              iconPath: "assets/message.png",
+              iconPath: "assets/message-active.png",
               selectedIconPath: "assets/message.png",
               text: "消息"
             },{

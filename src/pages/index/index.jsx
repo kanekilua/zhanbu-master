@@ -38,7 +38,7 @@ class Index extends Taro.Component {
                 />
 				<AtTabs current={this.state.current} tabList={tabList} onClick={this.handleClick.bind(this)}>
 					<AtTabsPane current={this.state.current} index={0} >
-						<View className={style.orderList}>
+						{/* <View className={style.orderList}>
 							<View className={style.allCheckBox}>
 								<View className={style.boxLeft}>
 									<View className={`${style.radio} ${style.radioChecked}`}>
@@ -57,14 +57,14 @@ class Index extends Taro.Component {
 								</View>
 								
 							</View>
-						</View>
+						</View> */}
 					</AtTabsPane>
 					<AtTabsPane current={this.state.current} index={1}>
-						<View className={style.orderList}>
+						{/* <View className={style.orderList}>
 							<View className={style.itemBox}>
 								<OrderCart orderInfo={{}}/>
 							</View>
-						</View>
+						</View> */}
 					</AtTabsPane>
 				</AtTabs>
 			</View>
