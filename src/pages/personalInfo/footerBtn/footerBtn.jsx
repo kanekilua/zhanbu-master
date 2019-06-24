@@ -27,6 +27,7 @@ class FooterBtn extends Taro.Component {
     //档期确认,然后初始化父组件
     scheduleConfirm (id) {
         let { schedule_id } = this.props.orderInfo
+        console.log('props:', this.props)
 
         _fetch({url:'/masterin/schedule_set',payload: { ids: schedule_id, type: 10 },method: 'POST',autoLogin: true}) //判断登录有没有过期
         .then(res => {

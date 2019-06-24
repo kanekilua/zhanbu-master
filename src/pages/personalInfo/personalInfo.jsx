@@ -114,7 +114,7 @@ class PersonalInfo extends Taro.Component {
     }
 
     render() {
-        let { schedule_id, isOpened, order, order : { id, order_flag, order_no, reserve : { service_name, schedule_code, name, sex_data, mobile, wx_number } } }= this.state
+        let { isOpened, order, order : { id, order_flag, order_no, reserve : { service_name, schedule_code, name, sex_data, mobile, wx_number, schedule_id } } }= this.state
 
         //orderInfo的参数
         let orderInfo = [
