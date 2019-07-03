@@ -41,10 +41,11 @@ class Login extends Taro.Component {
             _fetch({url:'/masterin/master_login',payload: params,method: 'POST',autoLogin:false, showToast: true})
             .then(res=>{
                 console.log(res)
-                // Taro.getStorage({ key: 'userInfo' })
-                    // .then(res => console.log(res))
                     setTimeout(()=>{
-                        Taro.navigateBack();
+                        // Taro.navigateBack();
+                        Taro.redirectTo({
+                            url:'/pages/index/index'
+                        })
                     },2000)
             })
             .catch(err=>console.log(err))
