@@ -1,6 +1,10 @@
 import Taro, { Component } from '@tarojs/taro'
 import { Provider } from '@tarojs/redux'
 import '@tarojs/async-await'
+
+import appData from '@/utils/appData'
+import IMController from './controller/im'
+import _fetch from '@/utils/fetch'
 import Index from './pages/index'
 
 import configStore from './store'
@@ -15,7 +19,7 @@ import './styles/theme.scss'
 // }
 
 const store = configStore()
-
+appData.store = store
 class App extends Component {
     config = {
         pages: [
@@ -65,15 +69,50 @@ class App extends Component {
           }
         }
 
-    componentDidMount () {}
+    componentWillMount () {
+        // 判断大师是否登录
+        const master_data = Taro.getStorageSync('master_data')
+        if(!master_data) {
+            Taro.navigateTo({
+                url: '/pages/login/login'
+            })
+        }
+        const token = Taro.getStorageSync('token')
+        if( token ) {
+            _fetch({url:'/app/checkToken'}) //判断登录有没有过期
+            .then(res => {
+                if(!res.status) {
+                    Taro.navigateTo({
+                        url: '/pages/login/login'
+                    })
+                }
+            })
+        }else {
+            Taro.navigateTo({
+                url: '/pages/login/login'
+            })
+        }
+        this.init()
+    }
 
-    componentDidShow () {}
-
-    componentDidHide () {}
-
-    componentCatchError () {}
-
-    componentDidCatchError () {}
+    init () {
+        // 连接网易云信
+        const userInfo = Taro.getStorageSync('userInfo')
+        if(!userInfo) {
+            Taro.navigateTo({
+                url: '/pages/login/login'
+            })
+        }else {
+            let {accid, yunxin_token, avatar} = userInfo
+            if( accid && yunxin_token ) {
+                new IMController({
+                    account : accid,
+                    token : yunxin_token,
+                    avatar : avatar
+                })
+            }
+        }
+    }
 
     // 在 App 类中的 render() 函数没有实际作用
     // 请勿修改此函数

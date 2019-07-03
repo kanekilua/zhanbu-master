@@ -1,6 +1,6 @@
 import { combineReducers } from 'redux'
-import counter from './counter'
+import imsdk from './imsdk'
 
 export default combineReducers({
-  counter
+    imsdk
 })

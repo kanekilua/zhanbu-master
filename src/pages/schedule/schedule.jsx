@@ -76,7 +76,6 @@ class Schedule extends Taro.Component {
     init () {
         _fetch({url:'/masterin/schedule_list',payload: {},method: 'POST',autoLogin: true}) //判断登录有没有过期
             .then(res => {
-                console.log(res)
                 this._disposeCcheduleList(res)
             })
             .catch(err=>console.log(err))

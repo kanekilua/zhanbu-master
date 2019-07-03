@@ -38,7 +38,7 @@ class OrderCart extends Taro.Component {
     }
    
 	render () {
-        let { id, order_no, reserve, } = this.props.orderInfo
+        let { id, order_no, reserve } = this.props.orderInfo
 		return (
 			<View className={style.orderCartWrap}>
                 <View className={style.orderHead}>
@@ -50,7 +50,7 @@ class OrderCart extends Taro.Component {
                     <View className={style.userInfoLeft}>
                         <Image
                             className={style.customerAvatar}
-                            src={reserve.avatar}
+                            src={customerAvatar}
                         />
                         <View className={style.customerName}>{reserve.nickname}</View>
                     </View>

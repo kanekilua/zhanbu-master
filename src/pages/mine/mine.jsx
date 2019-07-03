@@ -16,38 +16,14 @@ class Mine extends Taro.Component {
         }
     } 
     init () {
-        const token = Taro.getStorageSync('token');
-        if(!token){ //如果token为空
-            this.clearMasterInfo();
+        const master_data = Taro.getStorageSync('master_data')
+        if(master_data) {
+            this.setState({master_data})
         }else {
-            _fetch({url:'/app/checkToken',payload: {},method: 'POST',autoLogin: false}) //判断登录有没有过期
-                .then(res => {
-                    if(!res.status) {
-                        this.clearMasterInfo(); 
-                    }
-                })
-                .catch(err=>console.log('token过期',err))
+            Taro.navigateTo({
+                url: '/pages/login/login'
+            })   
         }
-        // 如果用户已登录
-        Taro.getStorage({ key: 'master_data' })
-        .then(res => {
-            if(res.data){
-                this.setState({
-                    master_data: res.data
-                })
-            }
-        })
-        .catch(err=>console.log(err))
-    }
-
-    clearMasterInfo () {
-        this.setState({
-            master_data: {
-                name: '未登录',
-                avatar: defaultAvatar,
-                reserve_num: 0,
-            }
-        })
     }
 
     //退出登录后更新视图
