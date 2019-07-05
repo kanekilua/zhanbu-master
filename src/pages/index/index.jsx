@@ -1,4 +1,7 @@
 import Taro from '@tarojs/taro'
+import { connect } from '@tarojs/redux'
+import { bindActionCreators } from 'redux'
+import { SysMessageList_Update } from '@/actions/imsdk'
 import { View, Image,} from '@tarojs/components'
 import { AtTabs, AtTabsPane } from 'taro-ui'
 
@@ -13,7 +16,11 @@ import HeaderTitle from '@/components/headerTitle/headerTitle'
 class Index extends Taro.Component {
     config = {
         navigationStyle: 'custom'
-    }
+	}
+	static defaultProps = {
+		messageList: []
+	}
+
 	constructor (props) {
 		super(props)
 		this.state = { 
@@ -29,20 +36,18 @@ class Index extends Taro.Component {
 		this._getMessage()
 	}
 
-	// 获取系统消息
-    _getMessage () {
-        // 通过accid获取历史纪录
-        _fetch({ url: '/app/history_notification'})
-        .then(async (res) => {
+	componentWillReceiveProps (newProps) {
+		let msgList = newProps.messageList
+		setTimeout(async () => {
 			let readMsgList = []
 			let unreadMsgList = []
-            for(let msgItem of res) {
+			for(let msgItem of msgList) {
 				if(msgItem.type[0] === '3') {
 					const orderId = JSON.parse(msgItem.content).orderId
 					let orderInfo = null
 					await _fetch({ url: '/masterin/detail', payload: { id: orderId }})
-					.then(res=> {
-						orderInfo = res.order
+					.then(msgList=> {
+						orderInfo = msgList.order
 					})
 					if(orderInfo) {
 						if(msgItem.is_read === '10') {
@@ -58,8 +63,19 @@ class Index extends Taro.Component {
 				selectList.push(0)
 			}
 			this.setState({
-				readMsgList, unreadMsgList, selectList  //创建为与unreadMsgList等长的数组
+				readMsgList: readMsgList.reverse(), 
+				unreadMsgList: unreadMsgList.reverse(), 
+				selectList
 			})
+		}, 300)
+	}
+
+	// 获取系统消息
+    _getMessage () {
+        // 通过accid获取历史纪录
+        _fetch({ url: '/app/history_notification'})
+        .then(async (res) => {
+			this.props.SysMessageList_Update(res)
         })
 	}
 	
@@ -171,4 +187,14 @@ class Index extends Taro.Component {
 	}
 }
 
-export default Index
+let mapStateToProps = (state) => {
+    return {
+        messageList : state.imsdk.sysMessageList
+    }
+}
+
+let mapDispatchToProps = (dispatch) => {
+    return bindActionCreators({SysMessageList_Update}, dispatch)
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Index)

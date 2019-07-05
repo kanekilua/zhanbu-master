@@ -386,7 +386,7 @@ export default class IMController {
     console.log(sysMsg)
     app.store.dispatch({
       type: 'SysMessageList_Update',
-      payload: sysMsg
+      payload: [sysMsg]
     })
   }
   onSysMsgUnread(obj) {
