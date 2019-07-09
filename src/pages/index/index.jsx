@@ -32,16 +32,57 @@ class Index extends Taro.Component {
         }
 	}
 
-	componentDidShow () {
-		this._getMessage()
+	componentDidMount () {
+		// 先从store拿，再从后台获取
+		this.init()
 	}
 
 	componentWillReceiveProps (newProps) {
-		let msgList = newProps.messageList
-		setTimeout(async () => {
-			let readMsgList = []
-			let unreadMsgList = []
-			for(let msgItem of msgList) {
+		this._handleMsgRead(newProps.messageList)
+	}
+
+	/**
+	 * 先从store中读取，再从服务器获取并刷新 
+	*/
+	init () {
+		let { messageList } = this.props
+		if(messageList) {
+			this._handleMsgRead(messageList)
+		}
+		if( messageList.length === 0 ) {
+			this._getMessage()
+		}
+	}
+
+	// 分辨是否已读，并且把数组顺序翻转
+	_handleMsgRead (msgList) {
+		let readMsgList = []
+		let unreadMsgList = []
+		for(let msgItem of msgList) {
+			if(msgItem.is_read === '10') {
+				unreadMsgList.push(msgItem.orderInfo)
+			} else {
+				readMsgList.push(msgItem.orderInfo)
+			}
+		}
+		let selectList = []
+		for(let i in unreadMsgList){
+			selectList.push(0)
+		}
+		this.setState({
+			readMsgList: readMsgList.reverse(), 
+			unreadMsgList: unreadMsgList.reverse(), 
+			selectList
+		})
+	}
+
+	// 获取历史记录并更改store里面的
+	_getMessage () {
+		_fetch({ url: '/app/history_notification'})
+        .then(async (res) => {
+			console.log(res)
+			let msgList = []
+			for(let msgItem of res) {
 				if(msgItem.type[0] === '3') {
 					const orderId = JSON.parse(msgItem.content).orderId
 					let orderInfo = null
@@ -49,33 +90,13 @@ class Index extends Taro.Component {
 					.then(msgList=> {
 						orderInfo = msgList.order
 					})
-					if(orderInfo) {
-						if(msgItem.is_read === '10') {
-							unreadMsgList.push(orderInfo)
-						} else {
-							readMsgList.push(orderInfo)
-						}
-					}
+					msgList.push({
+						is_read: msgItem.is_read,
+						orderInfo
+					})
 				}
 			}
-			let selectList = []
-			for(let i in unreadMsgList){
-				selectList.push(0)
-			}
-			this.setState({
-				readMsgList: readMsgList.reverse(), 
-				unreadMsgList: unreadMsgList.reverse(), 
-				selectList
-			})
-		}, 300)
-	}
-
-	// 获取系统消息
-    _getMessage () {
-        // 通过accid获取历史纪录
-        _fetch({ url: '/app/history_notification'})
-        .then(async (res) => {
-			this.props.SysMessageList_Update(res)
+			this.props.SysMessageList_Update(msgList)
         })
 	}
 	

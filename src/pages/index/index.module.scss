@@ -67,6 +67,8 @@
         }
     
         .radioChecked{
+            width: calc(34px + 2PX);
+            height: calc(34px + 2PX);
             background:rgba(195,151,109,1);
             opacity:1;
         }

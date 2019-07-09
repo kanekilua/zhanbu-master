@@ -3,6 +3,7 @@ import Taro from '@tarojs/taro'
 import MD5 from '@/util/md5'
 import imsdkUtils from '@/utils/imsdk'
 import app from '@/utils/appData'
+import _fetch from '@/utils/fetch'
 
 let NIM = window.NIM
 
@@ -380,14 +381,28 @@ export default class IMController {
     })
   }
   // 系统消息
-  onCustomSysMsg(sysMsg) {
+  async onCustomSysMsg(sysMsg) {
     console.log(orderCounter++, ' onCustomSysMsg')
     console.log('----onCustomSysMsg---------')
     console.log(sysMsg)
-    app.store.dispatch({
-      type: 'SysMessageList_Update',
-      payload: [sysMsg]
-    })
+    let msgItem = {}
+    let content = JSON.parse(sysMsg.content)
+    let orderInfo = null
+    if(content.type[0] === '3') {
+      const orderId = content.content.orderId
+      await _fetch({ url: '/masterin/detail', payload: { id: orderId }})
+      .then((res) => {
+        orderInfo = res.order
+      })
+      msgItem = {
+        is_read: '10',
+        orderInfo
+      }
+      app.store.dispatch({
+        type: 'SysMessageList_Update',
+        payload: [msgItem]
+      })
+    }
   }
   onSysMsgUnread(obj) {
     console.log(orderCounter++, ' onSysMsgUnread')
