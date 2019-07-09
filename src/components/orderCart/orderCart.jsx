@@ -37,6 +37,12 @@ class OrderCart extends Taro.Component {
         })
     }
    
+    shouldComponentUpdate (nextProps, nextState) {
+		if (this.props.orderInfo !== nextProps.current) {
+		  return true
+		}
+		return false
+	}
 	render () {
         let { id, order_no, reserve } = this.props.orderInfo
 		return (

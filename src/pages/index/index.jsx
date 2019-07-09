@@ -9,6 +9,7 @@ import _fetch from '@/utils/fetch'
 
 import OrderCart from '@/components/orderCart/orderCart'
 import HeaderTitle from '@/components/headerTitle/headerTitle'
+import { underline } from '_ansi-colors@3.2.4@ansi-colors';
  
 class Index extends Taro.Component {
     config = {
@@ -34,6 +35,7 @@ class Index extends Taro.Component {
         // 通过accid获取历史纪录
         _fetch({ url: '/app/history_notification'})
         .then(async (res) => {
+			console.log(res)
 			let readMsgList = []
 			let unreadMsgList = []
             for(let msgItem of res) {
@@ -70,9 +72,19 @@ class Index extends Taro.Component {
 	}
 
 	//知道了事件
+	// 等待接口
 	onKown () {
-		let { selectList } = this.state   //选择情况列表，与unreadMsgList索引对应  1选中  0未选中
-
+		let { selectList, unreadMsgList, readMsgList } = this.state   //选择情况列表，与unreadMsgList索引对应  1选中  0未选中
+		for(let i in selectList) {
+			if(selectList[i] === 1) {
+				unreadMsgList.splice(i,1);
+				readMsgList.push(unreadMsgList[i])
+			}
+		}
+		this.setState({
+			unreadMsgList,
+			readMsgList
+		})
 	}
 
 	//全选事件
@@ -116,7 +128,7 @@ class Index extends Taro.Component {
 		}
 		this.setState({selectList})
 	}
-    
+
 	render () {
 		const tabList = [{ title: '未读' }, { title: '已读' }]
 		const { readMsgList, unreadMsgList } = this.state
@@ -171,4 +183,4 @@ class Index extends Taro.Component {
 	}
 }
 
-export default Index
+export default Indexx
