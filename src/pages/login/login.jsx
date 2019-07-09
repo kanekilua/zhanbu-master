@@ -40,13 +40,12 @@ class Login extends Taro.Component {
             //  获取token并保存
             _fetch({url:'/masterin/master_login',payload: params,method: 'POST',autoLogin:false, showToast: true})
             .then(res=>{
-                console.log(res)
-                    setTimeout(()=>{
-                        // Taro.navigateBack();
-                        Taro.redirectTo({
-                            url:'/pages/index/index'
-                        })
-                    },2000)
+                setTimeout(()=>{
+                    // Taro.navigateBack();
+                    Taro.redirectTo({
+                        url:'/pages/index/index'
+                    })
+                },2000)
             })
             .catch(err=>console.log(err))
         }
@@ -58,7 +57,7 @@ class Login extends Taro.Component {
             <View className={style.loginWrap}>
                 <Header
                     headerTitle='登录'
-                />
+                    back={false}/>
                 <View className={style.content}>
                     <Image
                         className={style.logo}

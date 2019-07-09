@@ -1,4 +1,7 @@
 import Taro from '@tarojs/taro'
+import { connect } from '@tarojs/redux'
+import { bindActionCreators } from 'redux'
+import { SysMessageList_Update } from '@/actions/imsdk'
 import { View, Image,} from '@tarojs/components'
 import { AtTabs, AtTabsPane } from 'taro-ui'
 
@@ -14,7 +17,11 @@ import { underline } from '_ansi-colors@3.2.4@ansi-colors';
 class Index extends Taro.Component {
     config = {
         navigationStyle: 'custom'
-    }
+	}
+	static defaultProps = {
+		messageList: []
+	}
+
 	constructor (props) {
 		super(props)
 		this.state = { 
@@ -26,42 +33,71 @@ class Index extends Taro.Component {
         }
 	}
 
-	componentDidShow () {
-		this._getMessage()
+	componentDidMount () {
+		// 先从store拿，再从后台获取
+		this.init()
 	}
 
-	// 获取系统消息
-    _getMessage () {
-        // 通过accid获取历史纪录
-        _fetch({ url: '/app/history_notification'})
+	componentWillReceiveProps (newProps) {
+		this._handleMsgRead(newProps.messageList)
+	}
+
+	/**
+	 * 先从store中读取，再从服务器获取并刷新 
+	*/
+	init () {
+		let { messageList } = this.props
+		if(messageList) {
+			this._handleMsgRead(messageList)
+		}
+		if( messageList.length === 0 ) {
+			this._getMessage()
+		}
+	}
+
+	// 分辨是否已读，并且把数组顺序翻转
+	_handleMsgRead (msgList) {
+		let readMsgList = []
+		let unreadMsgList = []
+		for(let msgItem of msgList) {
+			if(msgItem.is_read === '10') {
+				unreadMsgList.push(msgItem.orderInfo)
+			} else {
+				readMsgList.push(msgItem.orderInfo)
+			}
+		}
+		let selectList = []
+		for(let i in unreadMsgList){
+			selectList.push(0)
+		}
+		this.setState({
+			readMsgList: readMsgList.reverse(), 
+			unreadMsgList: unreadMsgList.reverse(), 
+			selectList
+		})
+	}
+
+	// 获取历史记录并更改store里面的
+	_getMessage () {
+		_fetch({ url: '/app/history_notification'})
         .then(async (res) => {
 			console.log(res)
-			let readMsgList = []
-			let unreadMsgList = []
-            for(let msgItem of res) {
+			let msgList = []
+			for(let msgItem of res) {
 				if(msgItem.type[0] === '3') {
 					const orderId = JSON.parse(msgItem.content).orderId
 					let orderInfo = null
 					await _fetch({ url: '/masterin/detail', payload: { id: orderId }})
-					.then(res=> {
-						orderInfo = res.order
+					.then(msgList=> {
+						orderInfo = msgList.order
 					})
-					if(orderInfo) {
-						if(msgItem.is_read === '10') {
-							unreadMsgList.push(orderInfo)
-						} else {
-							readMsgList.push(orderInfo)
-						}
-					}
+					msgList.push({
+						is_read: msgItem.is_read,
+						orderInfo
+					})
 				}
 			}
-			let selectList = []
-			for(let i in unreadMsgList){
-				selectList.push(0)
-			}
-			this.setState({
-				readMsgList, unreadMsgList, selectList  //创建为与unreadMsgList等长的数组
-			})
+			this.props.SysMessageList_Update(msgList)
         })
 	}
 	
@@ -183,4 +219,14 @@ class Index extends Taro.Component {
 	}
 }
 
-export default Indexx
+let mapStateToProps = (state) => {
+    return {
+        messageList : state.imsdk.sysMessageList
+    }
+}
+
+let mapDispatchToProps = (dispatch) => {
+    return bindActionCreators({SysMessageList_Update}, dispatch)
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Index)

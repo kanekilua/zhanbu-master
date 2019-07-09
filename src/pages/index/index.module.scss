@@ -3,7 +3,7 @@
     
     .orderList{
         width: 100%;
-        padding-top: 22px;
+        padding: 22px 0 25px 0;
         box-sizing: border-box;
     
         .allCheckBox{
@@ -67,6 +67,8 @@
         }
     
         .radioChecked{
+            width: calc(34px + 2PX);
+            height: calc(34px + 2PX);
             background:rgba(195,151,109,1);
             opacity:1;
         }

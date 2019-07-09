@@ -56,7 +56,7 @@ class OrderCart extends Taro.Component {
                     <View className={style.userInfoLeft}>
                         <Image
                             className={style.customerAvatar}
-                            src={customerAvatar}
+                            src={reserve.avatar}
                         />
                         <View className={style.customerName}>{reserve.nickname}</View>
                     </View>

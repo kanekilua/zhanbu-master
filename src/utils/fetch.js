@@ -1,6 +1,7 @@
 // 暂时只封装请求资源的fetch方法
 
 import Taro from '@tarojs/taro'
+import { API_BASEURL } from '@/constants/global'
 
 
 // 更新storage
@@ -18,8 +19,6 @@ function updateStorage(data = {}) {
  * _fetch({url:'/app/phoneLogin',payload: params,method: 'POST',autoLogin:false,showToast: false}).then(res=>console.log(res)).catch(err=>console.log(err))
  */
 export default async function _fetch(options) {
-    const baseUrl = 'https://mingli.szmonster.com/api';
-
     const {url, payload, method='GET', autoLogin=false, showToast=false, showStatus= false} = options
     const token = Taro.getStorageSync('token') //从缓存获取token
     const header = token ? { 'Authorization': token } : {} //将token放入header
@@ -28,7 +27,7 @@ export default async function _fetch(options) {
     }
     
     return Taro.request({
-        url: baseUrl + url,
+        url: API_BASEURL + url,
         method,
         data: payload,
         header,
