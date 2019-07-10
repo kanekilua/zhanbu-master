@@ -81,21 +81,28 @@ class Index extends Taro.Component {
 	_getMessage () {
 		_fetch({ url: '/app/history_notification'})
         .then(async (res) => {
-			console.log(res)
 			let msgList = []
+			let ids = ''
+			let orderInfoList = []
+			// 从返回的系统消息列表获取orderId并拼接，并提取出消息id和已读状态放在msgList中
 			for(let msgItem of res) {
 				if(msgItem.type[0] === '3') {
 					const orderId = JSON.parse(msgItem.content).orderId
-					let orderInfo = null
-					await _fetch({ url: '/masterin/detail', payload: { id: orderId }})
-					.then(msgList=> {
-						orderInfo = msgList.order
-					})
+					ids += orderId + ','
 					msgList.push({
-						is_read: msgItem.is_read,
-						orderInfo
+						id: msgItem.id,
+						is_read: msgItem.is_read
 					})
 				}
+			}
+			// 根据ids请求这部分订单的详情
+			await _fetch({ url: '/masterin/detail', payload: { ids: ids.substring(0, ids.length - 1) }})
+			.then(orderList=> {
+				orderInfoList = orderList.order
+			})
+			// 将返回的详情数组和msgList整合
+			for(let i in msgList ) {
+				msgList[i]['orderInfo'] = orderInfoList[i]
 			}
 			this.props.SysMessageList_Update(msgList)
         })
