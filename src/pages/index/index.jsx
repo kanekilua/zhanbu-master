@@ -115,6 +115,7 @@ class Index extends Taro.Component {
 			if(selectList[i] === 1) {
 				unreadMsgList.splice(i,1);
 				readMsgList.push(unreadMsgList[i])
+				// _fetch({ url: '/masterin/set_read', payload: ids})
 			}
 		}
 		this.setState({
@@ -169,6 +170,7 @@ class Index extends Taro.Component {
 		const tabList = [{ title: '未读' }, { title: '已读' }]
 		const { readMsgList, unreadMsgList } = this.state
 		let { selectList, allCheckFlag } = this.state
+		// console.log('readMsgList',selectList,'unreadMsgList',unreadMsgList)
 		return (
 			<View className={style.wrapper}>
                 <HeaderTitle

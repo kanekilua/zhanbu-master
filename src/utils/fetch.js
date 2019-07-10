@@ -27,7 +27,7 @@ export default async function _fetch(options) {
     }
     
     return Taro.request({
-        url: API_BASEURL + url,
+        url: API_BASEURL + url + '?time=' + new Date().getTime(),
         method,
         data: payload,
         header,
