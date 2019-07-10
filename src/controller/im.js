@@ -390,11 +390,12 @@ export default class IMController {
     let orderInfo = null
     if(content.type[0] === '3') {
       const orderId = content.content.orderId
-      await _fetch({ url: '/masterin/detail', payload: { id: orderId }})
+      await _fetch({ url: '/masterin/detail', payload: { ids: orderId }})
       .then((res) => {
-        orderInfo = res.order
+        orderInfo = res.order[0]
       })
       msgItem = {
+        id: content.id,
         is_read: '10',
         orderInfo
       }
