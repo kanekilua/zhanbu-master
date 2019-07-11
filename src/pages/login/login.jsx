@@ -30,8 +30,6 @@ class Login extends Taro.Component {
          //账号登录
         if(!checkForm.checkPhone(this.state.account)){
             return;
-        }else if(!checkForm.checkPassword(this.state.password)){
-            return;
         }else {
             let params = {
                 mobile: this.state.account,
@@ -41,7 +39,6 @@ class Login extends Taro.Component {
             _fetch({url:'/masterin/master_login',payload: params,method: 'POST',autoLogin:false, showToast: true})
             .then(res=>{
                 setTimeout(()=>{
-                    // Taro.navigateBack();
                     Taro.redirectTo({
                         url:'/pages/index/index'
                     })

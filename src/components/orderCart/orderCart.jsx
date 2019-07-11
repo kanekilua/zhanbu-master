@@ -47,35 +47,38 @@ class OrderCart extends Taro.Component {
         let { id, order_no, reserve } = this.props.orderInfo
 		return (
             <View 
-                className={style.orderCartWrap}
-                onClick={this.onGotoPersonal.bind(this,id)}>
+                className={style.orderCartWrap}>
                 <View className={style.orderHead}>
                     <View>订单号:</View>
                     <View>{order_no}</View>
                     <Button className={style.copyBtn} onClick={this.handelCopy.bind(this,order_no)}>复制</Button>
                 </View>
-                <View className={style.userInfo}>
-                    <View className={style.userInfoLeft}>
-                        <Image
-                            className={style.customerAvatar}
-                            src={reserve.avatar}
-                        />
-                        <View className={style.customerName}>{reserve.nickname}</View>
+                <View
+                    onClick={this.onGotoPersonal.bind(this,id)}>
+                    <View className={style.userInfo}>
+                        <View className={style.userInfoLeft}>
+                            <Image
+                                className={style.customerAvatar}
+                                src={reserve.avatar}
+                            />
+                            <View className={style.customerName}>{reserve.nickname}</View>
+                        </View>
+                        <Button className={style.detailBtn}>详情</Button>
                     </View>
-                    <Button className={style.detailBtn}>详情</Button>
+                    <View className={style.problemContent}>
+                        咨询项目:
+                        <Image
+                            className={style.serverIco}
+                            src={reserve.service_image}
+                        />
+                        {reserve.service_name}
+                    </View>
+                    <View className={style.dateTime}>
+                        预约时间:
+                        <Text className={style.time}>{reserve.schedule_code}</Text>
+                    </View>
                 </View>
-                <View className={style.problemContent}>
-                    咨询项目:
-                    <Image
-                        className={style.serverIco}
-                        src={reserve.service_image}
-                    />
-                    {reserve.service_name}
-                </View>
-                <View className={style.dateTime}>
-                    预约时间:
-                    <Text className={style.time}>{reserve.schedule_code}</Text>
-                </View>
+                
 			</View>
 		)
 	}
