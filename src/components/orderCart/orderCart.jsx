@@ -46,7 +46,9 @@ class OrderCart extends Taro.Component {
 	render () {
         let { id, order_no, reserve } = this.props.orderInfo
 		return (
-			<View className={style.orderCartWrap}>
+            <View 
+                className={style.orderCartWrap}
+                onClick={this.onGotoPersonal.bind(this,id)}>
                 <View className={style.orderHead}>
                     <View>订单号:</View>
                     <View>{order_no}</View>
@@ -60,7 +62,7 @@ class OrderCart extends Taro.Component {
                         />
                         <View className={style.customerName}>{reserve.nickname}</View>
                     </View>
-                    <Button className={style.detailBtn} onClick={this.onGotoPersonal.bind(this,id)}>详情</Button>
+                    <Button className={style.detailBtn}>详情</Button>
                 </View>
                 <View className={style.problemContent}>
                     咨询项目:

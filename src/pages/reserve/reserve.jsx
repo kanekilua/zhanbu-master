@@ -62,7 +62,7 @@ class Reserve extends Taro.Component {
 		return (
 			<View className={style.reserveWrap}>
                 <HeaderTitle
-                    title='消息'
+                    title='预约'
                 />
 				<AtTabs current={this.state.current} tabList={tabList} onClick={this.handleClick.bind(this)}>
 					<AtTabsPane current={this.state.current} index={0} >

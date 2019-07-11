@@ -24,63 +24,24 @@ class PersonalInfo extends Taro.Component {
             order_id:'',
             isOpened : false,
             schedule_id:'',
-
-            "order": {
-                "id": 17,
-                "order_no": "2019051351575552",
-                "total_price": "0.01",
-                "pay_price": "0.01",
-                "pay_status": "10",
-                "pay_time": 0,
-                "order_status": "10",
-                "createtime": 1557732979,
-                "advisory_status": "10",
-                "reserve": {
-                    "id": 17,
-                    "service_id": 4,
-                    "service_name": "爱情",
-                    "service_price": "0.01",
-                    "total_price": "0.01",
-                    "order_id": 17,
-                    "user_id": 357,
-                    "createtime": 1557732979,
-                    "updatetime": 1557732979,
-                    "master_id": 3,
-                    "schedule_id": 14,
-                    "schedule_code": "2019-05-16 星期四 10:30",
-                    "schedule_time": 1557973800,
-                    "name": "212",
-                    "sex_data": "1",
-                    "birthday": "2019-03-20 11:26:26",
-                    "birth_address": "广东",
-                    "mobile": "13111111111",
-                    "wx_number": "1211131",
-                    "hand_images": "https://gameleyuan.oss-cn-hangzhou.aliyuncs.com/uploads/common/20190510/1c3944ccb26d0fa9af3906352a2ea503.jpg",
-                    "face_images": "https://gameleyuan.oss-cn-hangzhou.aliyuncs.com/uploads/common/20190510/1c3944ccb26d0fa9af3906352a2ea503.jpg",
-                    "problem_content": "事业444问题",
-                    "expire_time": 1557733159,
-                    "master_name": "林大大"
-                },
-                "order_flag": "10"
-            }
+            order: { reserve : {}}
         }
     } 
 
-    componentWillMount () {
+    componentDidMount () {
+        const order_id = this.$router.params.order_id
+        const schedule_id = this.$router.params.schedule_id
+        this.init(order_id)
         this.setState({
-            order_id:this.$router.params.order_id,
-            schedule_id:this.$router.params.schedule_id
-        },()=>{
-            this.init(this.state.order_id)
+            order_id,schedule_id
         })
     }
 
     init (id){
-        _fetch({url:'/masterin/detail ',payload: {id},method: 'POST',autoLogin: true}) //判断登录有没有过期
+        _fetch({url:'/masterin/detail',payload: {ids: id},method: 'POST',autoLogin: true}) //判断登录有没有过期
         .then(res => {
-            console.log(res.order)
             this.setState({
-                order:res.order
+                order:res.order[0]
             })
         })
         .catch(err=>console.log(err))

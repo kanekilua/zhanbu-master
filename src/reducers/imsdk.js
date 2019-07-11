@@ -650,14 +650,13 @@ let imsdk = (state = INITIAL_STATE, action) => {
     // 系统消息改已读
     case 'SysMessage_Read' : {
       let tempState = Object.assign({}, state)
-      let tempMessageArr = state.sysMessageList
+      let tempMessageArr = [].concat(state.sysMessageList)
       for(let msg of tempMessageArr) {
         if(msg.id === action.payload) {
           msg.is_read = '20'
           break
         }
       }
-      console.log(tempMessageArr)
       tempState.sysMessageList = tempMessageArr
       return Object.assign({}, state, tempState)
     }

@@ -38,7 +38,7 @@ class FooterBtn extends Taro.Component {
 
     //设置为等待联系
     pendingContact (id) {
-        _fetch({url:'/masterin/pendingContact ',payload: { id },method: 'POST',autoLogin: true}) //判断登录有没有过期
+        _fetch({url:'/masterin/pendingContact',payload: { id },method: 'POST',autoLogin: true}) //判断登录有没有过期
         .then(res => {
             this.props.orderInfo.init(id)
         })
@@ -59,7 +59,7 @@ class FooterBtn extends Taro.Component {
 
             {
                 order_flag == 10 ?
-                    <View className={style.waitConfirm}><View className={style.btnItem} onClick={this.scheduleConfirm.bind(this,id)}>待确认预约</View></View>  : 
+                    <View className={style.waitConfirm}><View className={style.btnItem} onClick={this.scheduleConfirm.bind(this,id)}>确认预约</View></View>  : 
                         order_flag == 20 ?
                             <View className={style.waitConnectBox}>
                                 <View className={`${style.btnItem} ${style.waitConnect}`} onClick={this.pendingContact.bind(this, id)}>暂待联系</View>

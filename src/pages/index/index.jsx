@@ -1,7 +1,7 @@
 import Taro from '@tarojs/taro'
 import { connect } from '@tarojs/redux'
 import { bindActionCreators } from 'redux'
-import { SysMessageList_Update } from '@/actions/imsdk'
+import { SysMessageList_Update, SysMessage_Read } from '@/actions/imsdk'
 import { View, Image,} from '@tarojs/components'
 import { AtTabs, AtTabsPane } from 'taro-ui'
 
@@ -61,9 +61,9 @@ class Index extends Taro.Component {
 		let unreadMsgList = []
 		for(let msgItem of msgList) {
 			if(msgItem.is_read === '10') {
-				unreadMsgList.push(msgItem.orderInfo)
+				unreadMsgList.push(msgItem)
 			} else {
-				readMsgList.push(msgItem.orderInfo)
+				readMsgList.push(msgItem)
 			}
 		}
 		let selectList = []
@@ -120,9 +120,10 @@ class Index extends Taro.Component {
 		let { selectList, unreadMsgList, readMsgList } = this.state   //选择情况列表，与unreadMsgList索引对应  1选中  0未选中
 		for(let i in selectList) {
 			if(selectList[i] === 1) {
-				unreadMsgList.splice(i,1);
-				readMsgList.push(unreadMsgList[i])
-				// _fetch({ url: '/masterin/set_read', payload: ids})
+				_fetch({ url: '/masterin/set_read', payload: { ids: unreadMsgList[i].id}})
+				.then(() => {
+					this.props.SysMessage_Read(unreadMsgList[i].id)
+				})
 			}
 		}
 		this.setState({
@@ -195,7 +196,7 @@ class Index extends Taro.Component {
 								</View>
 								<View className={style.boxRight} onClick={this.onKown.bind(this)}>知道了</View>
 							</View>
-							{ unreadMsgList.map((orderInfo, index) => (
+							{ unreadMsgList.map((msgItem, index) => (
 								<View 
 									className={style.orderCattItem}
 									key={'orderCart' + index}>
@@ -203,7 +204,7 @@ class Index extends Taro.Component {
 										<Image className={style.getImage} src={GET}/>
 									</View>
 									<View className={style.redioContentBox}>
-										<OrderCart orderInfo={orderInfo}/>
+										<OrderCart orderInfo={msgItem.orderInfo}/>
 									</View>
 								</View>
 							))}
@@ -212,12 +213,12 @@ class Index extends Taro.Component {
 					</AtTabsPane>
 					<AtTabsPane current={this.state.current} index={1}>
 						<View className={style.orderList}>
-							{ readMsgList.map((orderInfo, index) => (
+							{ readMsgList.map((msgItem, index) => (
 								<View 
 									key = {'orderCart' + index}
 									className={style.itemBox}>
 									<OrderCart 
-										orderInfo={orderInfo}/>
+										orderInfo={msgItem.orderInfo}/>
 								</View>
 							))}
 						</View>
@@ -235,7 +236,7 @@ let mapStateToProps = (state) => {
 }
 
 let mapDispatchToProps = (dispatch) => {
-    return bindActionCreators({SysMessageList_Update}, dispatch)
+    return bindActionCreators({SysMessageList_Update, SysMessage_Read }, dispatch)
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(Index)
