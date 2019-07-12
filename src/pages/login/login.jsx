@@ -2,6 +2,7 @@ import Taro from '@tarojs/taro'
 import { View, Image, Input, Button, Text } from '@tarojs/components'
 import _fetch from '@/utils/fetch.js'
 import checkForm from '@/utils/checkForm.js'
+import IMController from '@/controller/im'
 
 import Header from '@/components/header/header'
 
@@ -38,6 +39,17 @@ class Login extends Taro.Component {
             //  获取token并保存
             _fetch({url:'/masterin/master_login',payload: params,method: 'POST',autoLogin:false, showToast: true})
             .then(res=>{
+                setTimeout(() => {
+                    const userInfo = Taro.getStorageSync('userInfo')
+                    let {accid, yunxin_token, avatar} = userInfo
+                    if( accid && yunxin_token ) {
+                        new IMController({
+                            account : accid,
+                            token : yunxin_token,
+                            avatar : avatar
+                        })
+                    }
+                },500)
                 setTimeout(()=>{
                     Taro.redirectTo({
                         url:'/pages/index/index'

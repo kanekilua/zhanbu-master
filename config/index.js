@@ -34,6 +34,7 @@ const config = {
     '@/constants' : require('path').resolve(__dirname, '..', 'src/constants'),
     '@/actions' : require('path').resolve(__dirname, '..', 'src/actions'),
     '@/reducers' : require('path').resolve(__dirname, '..', 'src/reducers'),
+    '@/controller' : require('path').resolve(__dirname, '..', 'src/controller'),
   },
   copy: {
     patterns: [

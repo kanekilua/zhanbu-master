@@ -3,7 +3,7 @@ import { Provider } from '@tarojs/redux'
 import '@tarojs/async-await'
 
 import appData from '@/utils/appData'
-import IMController from './controller/im'
+import IMController from '@/controller/im'
 import _fetch from '@/utils/fetch'
 import Index from './pages/index'
 
