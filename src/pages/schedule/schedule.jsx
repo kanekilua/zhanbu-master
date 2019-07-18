@@ -82,6 +82,11 @@ class Schedule extends Taro.Component {
     }
 
     componentWillMount () {
+        window.addEventListener('hashchange',()=>{                //监听hash值改变，如果是回到本页，进行初始化
+			if(location.hash == '#/pages/schedule/schedule'){
+				this.init();
+			}
+		})
         this.init();
     }
     
@@ -143,6 +148,10 @@ class Schedule extends Taro.Component {
         let params = {ids,type:10}
         _fetch({url:'/masterin/schedule_set',payload: params,method: 'POST',autoLogin: true}) //判断登录有没有过期
         .then(res => {
+            Taro.showToast({
+                title:'确认预约成功',
+                icon:'success'
+            })
             this.init()
         })
         .catch(err=>console.log(err))
