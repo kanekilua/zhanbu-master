@@ -88,11 +88,13 @@ class Index extends Taro.Component {
 			for(let msgItem of res) {
 				if(msgItem.type[0] === '3') {
 					const orderId = JSON.parse(msgItem.content).orderId
-					ids += orderId + ','
-					msgList.push({
-						id: msgItem.id,
-						is_read: msgItem.is_read
-					})
+					if( ids.indexOf(orderId) === -1 ) {
+						ids += orderId + ','
+						msgList.push({
+							id: msgItem.id,
+							is_read: msgItem.is_read
+						})
+					}
 				}
 			}
 			// 根据ids请求这部分订单的详情
@@ -178,7 +180,7 @@ class Index extends Taro.Component {
 		const tabList = [{ title: '未读' }, { title: '已读' }]
 		const { readMsgList, unreadMsgList } = this.state
 		let { selectList, allCheckFlag } = this.state
-		// console.log('readMsgList',selectList,'unreadMsgList',unreadMsgList)
+		// console.log('readMsgList',readMsgList,'unreadMsgList',unreadMsgList)
 		return (
 			<View className={style.wrapper}>
                 <HeaderTitle
