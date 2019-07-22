@@ -29,6 +29,11 @@ class MyOrder extends Taro.Component {
 			current: value
 		})
     }
+
+    onClear () {
+        this.setState({value:''})
+        this.init()
+    }
     
     // 搜索框
     onChange (value) {
@@ -95,6 +100,7 @@ class MyOrder extends Taro.Component {
                         value={this.state.value}
                         placeholder="订单号"
                         onChange={this.onChange.bind(this)}
+                        onClear={this.onClear.bind(this)}
                         onActionClick={this.onActionClick.bind(this)}
                     />
                 </View>

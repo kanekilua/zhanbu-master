@@ -52,6 +52,11 @@ class Reserve extends Taro.Component {
 	}
 	
     componentDidMount () {
+		window.addEventListener('hashchange',()=>{                //监听hash值改变，如果是回到本页，进行初始化
+			if(location.hash == '#/pages/reserve/reserve'){
+				this.init();
+			}
+		})
         this.init();
     }
 

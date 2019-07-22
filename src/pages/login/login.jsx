@@ -119,8 +119,9 @@ class Login extends Taro.Component {
                             <Text
                                 className={style.resetPasswordText}
                                 onClick={()=>{
-                                    Taro.navigateTo({
-                                        url: '/pages/forgetPassword/forgetPassword'
+                                    Taro.showToast({
+                                        title:'请联系客服',
+                                        icon:'none'
                                     })
                                 }}    
                             >忘记密码></Text>

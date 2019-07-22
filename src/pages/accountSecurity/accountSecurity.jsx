@@ -13,11 +13,19 @@ class AccountSecurity extends Taro.Component {
 	constructor (props) {
 		super(props)
 		this.state = { 
-
+            userInfo:{}
         }
+    }
+
+    componentDidMount () {
+        const userInfo = Taro.getStorageSync('userInfo')
+        this.setState({
+            userInfo
+        })
     }
     
     render() {
+        const { mobile } = this.state.userInfo
         return (
             <View className={style.accountSecurityWrap}>
                 <Header
@@ -26,14 +34,19 @@ class AccountSecurity extends Taro.Component {
                 <View className={style.settingItem}>
                     <SettingItem
                         leftText='手机号'
-                        extraText='1371***6892'
+                        extraText={mobile}
                     />
                 </View>
                 <View className={style.settingItem}
-                    onClick={()=>{
-                        Taro.navigateTo({
-                            url: '/pages/forgetPassword/forgetPassword'
+                    onClick={(e)=>{
+                        Taro.showToast({
+                            title:'请联系客服',
+                            icon:'none'
                         })
+                        // e.preventDefault()
+                        // Taro.navigateTo({
+                        //     url: '/pages/forgetPassword/forgetPassword'
+                        // })
                     }}
                 >
                     <SettingItem

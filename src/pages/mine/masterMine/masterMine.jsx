@@ -72,11 +72,11 @@ class MasterMine extends Taro.Component {
                     <Image
                         className={style.avatar}
                         src={avatar}
-                        onClick={()=>{
-                            Taro.navigateTo({
-                                url: '/pages/login/login'
-                            })
-                        }}
+                        // onClick={()=>{
+                        //     Taro.navigateTo({
+                        //         url: '/pages/login/login'
+                        //     })
+                        // }}
                     />
                     <View className={style.nickName}>{name}</View>
                     <View className={style.hot}>
