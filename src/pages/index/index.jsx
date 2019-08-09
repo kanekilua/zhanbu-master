@@ -1,244 +1,163 @@
-import Taro from '@tarojs/taro'
+import Taro, { Component } from '@tarojs/taro'
 import { connect } from '@tarojs/redux'
 import { bindActionCreators } from 'redux'
-import { SysMessageList_Update, SysMessage_Read } from '@/actions/imsdk'
-import { View, Image,} from '@tarojs/components'
-import { AtTabs, AtTabsPane } from 'taro-ui'
-
-import style from './index.module.scss'
-import './index.scss'
-import GET from './assets/get.png'
+import { SysMessageList_Update } from '@/actions/imsdk'
+import { View } from '@tarojs/components'
 import _fetch from '@/utils/fetch'
+import Header from '@/components/header/header'
+import ProjectItem from './projectItem/projectItem'
+import style from  './index.module.scss'
+import FlashIcon from './assets/flash.png'
+import OrderIcon from './assets/order.png'
 
-import OrderCart from '@/components/orderCart/orderCart'
-import HeaderTitle from '@/components/headerTitle/headerTitle'
-import { underline } from '_ansi-colors@3.2.4@ansi-colors';
- 
-class Index extends Taro.Component {
-    config = {
-        navigationStyle: 'custom'
-	}
-	static defaultProps = {
-		messageList: []
+class Index extends Component {
+	config = {
+		navigationBarTitleText: '首页'
 	}
 
 	constructor (props) {
 		super(props)
-		this.state = { 
-			current: 0,
-			readMsgList: [],
-			unreadMsgList: [],
-			selectList: [],
-			allCheckFlag:false
-        }
+		this.state = {
+			readFlag: [false, false, false]
+		}
 	}
 
-	componentDidMount () {
-		// 先从store拿，再从后台获取
-		this.init()
+	componentWillMount () {
+		// this.init()
 	}
 
 	componentWillReceiveProps (newProps) {
-		this._handleMsgRead(newProps.messageList)
+		// if(JSON.stringify(newProps.messageList) !== JSON.stringify(this.props.messageList)) {
+		// 	this._handleMsgRead(newProps.messageList)
+		// }
+		// if(JSON.stringify(newProps.unreadInfo) !== JSON.stringify(this.props.unreadInfo) ) {
+		// 	this._handleChatRead(newProps.unreadInfo)
+		// }
 	}
 
-	/**
-	 * 先从store中读取，再从服务器获取并刷新 
-	*/
+	// 初始化, 需要判断是否有未读消息
 	init () {
-		let { messageList } = this.props
-		if(messageList) {
-			this._handleMsgRead(messageList)
-		}
-		if( messageList.length === 0 ) {
-			this._getMessage()
-		}
+		// let { messageList, unreadInfo } = this.props
+		// if( messageList.length === 0 ) {
+		// 	// 从store取系统消息记录和聊天消息记录
+		// 	this._getMessage()
+		// }else {
+		// 	this._handleMsgRead(messageList)
+		// }
+		// setTimeout(() => {
+		// 	this._handleChatRead(unreadInfo)
+		// }, 1300)
 	}
 
-	// 分辨是否已读，并且把数组顺序翻转
+	// 从服务器请求获取历史通知
+	// _getMessage () {
+	// 	_fetch({ url: '/app/history_notification'})
+    //     .then(async (res) => {
+	// 		let ids = ''
+	// 		let orderInfoList = []
+	// 		let serviceMsgList = []
+	// 		let masterMsgList = []
+	// 		// 从返回的系统消息列表获取orderId并拼接，并提取出消息id和已读状态放在msgList中
+	// 		for(let msgItem of res) {
+	// 			if(msgItem.type[0] === '2') {
+	// 				if(msgItem.type[3] === '1') {
+	// 					serviceMsgList.push({
+	// 						id: msgItem.id,
+	// 						is_read: msgItem.is_read,
+	// 						orderInfo: JSON.parse(msgItem.content)
+	// 					})
+	// 				}else if(msgItem.type[3] === '2') {
+	// 					const orderId = JSON.parse(msgItem.content).orderId
+	// 					if( ids.indexOf(orderId) === -1 ) {
+	// 						ids += orderId + ','
+	// 						masterMsgList.push({
+	// 							id: msgItem.id,
+	// 							is_read: msgItem.is_read
+	// 						})
+	// 					}
+	// 				}
+	// 			}
+	// 		}
+	// 		// 根据ids请求这部分订单的详情
+	// 		await _fetch({ url: '/servicesin/detail', payload: { ids: ids.substring(0, ids.length - 1) }})
+	// 		.then(orderList=> {
+	// 			orderInfoList = orderList.order
+	// 		})
+	// 		// 将返回的详情数组和msgList整合
+	// 		for(let i in masterMsgList ) {
+	// 			masterMsgList[i]['orderInfo'] = orderInfoList[i]
+	// 		}
+	// 		console.log('serviceMsgList', serviceMsgList, 'masterMsgList', masterMsgList)
+	// 		this.props.SysMessageList_Update([
+	// 			serviceMsgList, masterMsgList
+	// 		])
+    //     })
+	// }
+
+	// 处理是否已读(系统通知)
 	_handleMsgRead (msgList) {
-		let readMsgList = []
-		let unreadMsgList = []
-		for(let msgItem of msgList) {
-			if(msgItem.is_read === '10') {
-				unreadMsgList.push(msgItem)
-			} else {
-				readMsgList.push(msgItem)
-			}
-		}
-		let selectList = []
-		for(let i in unreadMsgList){
-			selectList.push(0)
-		}
-		this.setState({
-			readMsgList: readMsgList.reverse(), 
-			unreadMsgList: unreadMsgList.reverse(), 
-			selectList
-		})
+		// if( msgList.length === 2 ) {
+		// 	let readFlag = [].concat(this.state.readFlag)
+		// 	for( let i in msgList ) {
+		// 		readFlag[i] = msgList[i].some(( msgItem ) => {
+		// 			if( msgItem.is_read === '10' ) {
+		// 				return true
+		// 			}
+		// 		})
+		// 	}
+		// 	this.setState({ readFlag })
+		// }
 	}
 
-	// 获取历史记录并更改store里面的
-	_getMessage () {
-		_fetch({ url: '/app/history_notification'})
-        .then(async (res) => {
-			let msgList = []
-			let ids = ''
-			let orderInfoList = []
-			// 从返回的系统消息列表获取orderId并拼接，并提取出消息id和已读状态放在msgList中
-			for(let msgItem of res) {
-				if(msgItem.type[0] === '3') {
-					const orderId = JSON.parse(msgItem.content).orderId
-					if( ids.indexOf(orderId) === -1 ) {
-						ids += orderId + ','
-						msgList.push({
-							id: msgItem.id,
-							is_read: msgItem.is_read
-						})
-					}
-				}
-			}
-			// 根据ids请求这部分订单的详情
-			await _fetch({ url: '/masterin/detail', payload: { ids: ids.substring(0, ids.length - 1) }})
-			.then(orderList=> {
-				orderInfoList = orderList.order
-			})
-			// 将返回的详情数组和msgList整合
-			for(let i in msgList ) {
-				msgList[i]['orderInfo'] = orderInfoList[i]
-			}
-			this.props.SysMessageList_Update(msgList)
-        })
-	}
-	
-	handleClick (value) {
-		this.setState({
-			current: value
-		})
+	// 处理聊天记录是否已读
+	_handleChatRead ( unreadInfo ) {
+		// let arr = Object.keys(unreadInfo)
+		// let readFlag = [].concat(this.state.readFlag)
+		// readFlag[2] = arr.some((key) => {
+		// 	if( unreadInfo[key] ) {
+		// 		return true
+		// 	}
+		// })
+		// this.setState({ readFlag })
 	}
 
-	//知道了事件
-	// 等待接口
-	onKown () {
-		let { selectList, unreadMsgList, readMsgList } = this.state   //选择情况列表，与unreadMsgList索引对应  1选中  0未选中
-		for(let i in selectList) {
-			if(selectList[i] === 1) {
-				_fetch({ url: '/masterin/set_read', payload: { ids: unreadMsgList[i].id}})
-				.then(() => {
-					this.props.SysMessage_Read(unreadMsgList[i].id)
-				})
-			}
-		}
-		this.setState({
-			unreadMsgList,
-			readMsgList
-		})
-	}
-
-	//全选事件
-	onAllCheck (allCheckFlag) {
-		let { selectList } = this.state
-
-		if(allCheckFlag){
-			for(let i in selectList){
-				selectList[i] = 0
-			}
-		}else{
-			for(let i in selectList){
-				selectList[i] = 1
-			}
-		}
-		this.setState({
-			selectList,
-			allCheckFlag:!allCheckFlag
-		})
-	}
-
-	//单选事件
-	onCheck (index) {
-		let { selectList } = this.state
-		let allChecked = true
-		if(selectList[index]){
-			selectList[index] = 0
-			allChecked=false
-		}else{
-			selectList[index] = 1
-			for(let i in selectList){
-				if(selectList[i] == 0){
-					allChecked=false
-				}
-			}
-		}
-		if(allChecked){
-			this.setState({allCheckFlag:true})
-		}else{
-			this.setState({allCheckFlag:false})
-		}
-		this.setState({selectList})
-	}
-
-	render () {
-		const tabList = [{ title: '未读' }, { title: '已读' }]
-		const { readMsgList, unreadMsgList } = this.state
-		let { selectList, allCheckFlag } = this.state
-		// console.log('readMsgList',readMsgList,'unreadMsgList',unreadMsgList)
+  	render() {
+		  const { readFlag } = this.state
+		  //header设置没有返回键
+		  let back = false
+		  //列表项数据
+		  let projectList = [
+			  {'icon':OrderIcon,'title':'预约消息','url':'/pages/orderMessage/orderMessage',tips:readFlag[0], tag:'yy'},
+			  {'icon':FlashIcon,'title':'闪测消息','url':'/pages/flashMessage/flashMessage',tips:readFlag[1], tag:'sc'},
+	  		]
 		return (
 			<View className={style.wrapper}>
-                <HeaderTitle
-                    title='消息'
-                />
-				<AtTabs current={this.state.current} tabList={tabList} onClick={this.handleClick.bind(this)}>
-					<AtTabsPane current={this.state.current} index={0} >
-						<View className={style.orderList}>
-							<View className={style.allCheckBox}>
-								<View className={style.boxLeft} onClick={this.onAllCheck.bind(this,allCheckFlag)}>
-									<View className={allCheckFlag ? `${style.radio} ${style.radioChecked}` : `${style.radio} ${style.radioNone}`}>
-										<Image className={style.getImage} src={GET}/>
-									</View>
-									<View className={style.text}>全选</View>
-								</View>
-								<View className={style.boxRight} onClick={this.onKown.bind(this)}>知道了</View>
-							</View>
-							{ unreadMsgList.map((msgItem, index) => (
-								<View 
-									className={style.orderCattItem}
-									key={'orderCart' + index}>
-									<View className={selectList[index] == 1 ? `${style.radio} ${style.radioChecked}` : `${style.radio} ${style.radioNone}`}  onClick={this.onCheck.bind(this,index)}>
-										<Image className={style.getImage} src={GET}/>
-									</View>
-									<View className={style.redioContentBox}>
-										<OrderCart orderInfo={msgItem.orderInfo}/>
-									</View>
-								</View>
-							))}
-							
-						</View>
-					</AtTabsPane>
-					<AtTabsPane current={this.state.current} index={1}>
-						<View className={style.orderList}>
-							{ readMsgList.map((msgItem, index) => (
-								<View 
-									key = {'orderCart' + index}
-									className={style.itemBox}>
-									<OrderCart 
-										orderInfo={msgItem.orderInfo}/>
-								</View>
-							))}
-						</View>
-					</AtTabsPane>
-				</AtTabs>
+				<Header 
+					headerTitle="消息"
+					back={back}
+				/>
+				<View className={style.contentBox}>
+					{
+						projectList.map((item)=>
+							<ProjectItem 
+								Info={item}/>	
+						)
+					}
+				</View>
 			</View>
 		)
-	}
+  	}
 }
 
 let mapStateToProps = (state) => {
     return {
-        messageList : state.imsdk.sysMessageList
+		messageList : state.imsdk.sysMessageList,
+		unreadInfo: state.imsdk.unreadInfo
     }
 }
 
 let mapDispatchToProps = (dispatch) => {
-    return bindActionCreators({SysMessageList_Update, SysMessage_Read }, dispatch)
+    return bindActionCreators({ SysMessageList_Update }, dispatch)
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(Index)

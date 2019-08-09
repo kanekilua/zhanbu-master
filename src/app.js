@@ -33,7 +33,8 @@ class App extends Component {
             "pages/myOrder/myOrder",
             "pages/fileSetting/fileSetting",
             "pages/accountSecurity/accountSecurity",
-            'pages/chat/chat'
+            'pages/chat/chat',
+            'pages/orderMessage/orderMessage'
         ],
         window: {
             backgroundTextStyle: 'light',

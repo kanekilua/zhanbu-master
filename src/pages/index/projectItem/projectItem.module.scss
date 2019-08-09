@@ -1,0 +1,60 @@
+.wrapper{
+    width: 100%;
+    margin-top: 10px;
+    background: white;
+    height:100px;
+    box-shadow:0px -1px 2px 0px rgba(238,238,238,1), 0px 1px 2px 0px rgba(238,238,238,1);
+    border-radius:15px;
+    display: flex;
+    justify-content: space-between;
+    align-items:center;
+    flex-wrap: wrap;
+    padding: 30px 20px;
+    box-sizing: border-box; 
+    
+    .iconBox{
+        position: relative;
+        width: 50px;
+        height: 35px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        .icon-yy{
+            display: block;
+            width: 33px;
+            height: 34px;
+        }
+
+        .icon-sc{
+            display: block;
+            width: 24px;
+            height: 34px;
+        }
+
+        .tips{
+            position: absolute;
+            width: 8px;
+            height: 8px;
+            background: #FF0000;
+            border-radius: 50%;
+            top: 0;
+            right: 0;
+        }
+    }
+    .title{
+        width:590px;
+        text-align: left;
+        font-size: 30px;
+        height: 30px;
+        line-height: 30px;
+        color: #121212;
+    }
+
+    .rightIcon{
+        display: block;
+        width: 19px;
+        height: 32px;
+    }
+
+}
