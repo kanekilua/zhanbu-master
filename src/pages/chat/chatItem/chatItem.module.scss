@@ -1,0 +1,72 @@
+@mixin msgItem ($bgColor, $flexJustify, $flexDirection, $triangleBorderWidth, $triangleBorderColor) {
+    display: flex;
+    justify-content: $flexJustify;
+    .msgItem {
+        display: flex;
+        justify-content: $flexJustify;
+        flex-direction: $flexDirection;
+        .avatar {
+            width: 78px;
+            height: 78px;
+            margin: 0 20px;
+        }
+        .triangleBorder {
+            width: 0;
+            height: 0;
+            border-width:$triangleBorderWidth;
+            border-style:solid;
+            border-color:$triangleBorderColor;/*黄 透明 透明 */
+            margin-top: 25px;
+        }
+        .content {
+            padding: 15px 20px;
+            box-sizing: border-box;
+            max-width: 493px;
+            font-size: 30px;
+            color:#333;
+            background-color: $bgColor;
+            border-radius: 10px;
+        }
+        .img {
+            max-width: 260px;
+            border-radius: 10px;
+        }
+    }
+}
+
+.chatItemWrapper {
+    width: 100%;
+    margin-top: 30px;
+    .timeHeader {
+        width: 100%;
+        height: 40px;
+        text-align: center;
+        font-size: 24px;
+        color: #999;
+        margin-bottom: 20px;
+    }
+}
+.itemMe {
+    $bgColor : #fff;
+    $flexJustify : flex-end;
+    $flexDirection : row-reverse;
+    $triangleBorderWidth : 8px 0 8px 8px;
+    $triangleBorderColor : transparent transparent transparent $bgColor;
+    @include msgItem($bgColor, $flexJustify, $flexDirection, $triangleBorderWidth, $triangleBorderColor)
+}
+
+.itemYou {
+    $bgColor : #ffead6;
+    $flexJustify : flex-start;
+    $flexDirection : row;
+    $triangleBorderWidth : 8px 8px 8px 0;
+    $triangleBorderColor : transparent $bgColor transparent transparent ;
+    @include msgItem($bgColor, $flexJustify, $flexDirection, $triangleBorderWidth, $triangleBorderColor)
+}
+
+.itemTime{
+    width: 100%;
+    font-size: 20px;
+    color:#999;
+    text-align: center;
+} 

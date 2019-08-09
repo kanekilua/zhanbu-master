@@ -1,0 +1,14 @@
+.chatListWrapper {
+    background: #F1F1F1;
+    box-sizing: border-box;
+}
+.chatListWrapperHigh {
+    @extend .chatListWrapper;
+    height: calc(100vh - 220px);
+    padding-bottom: 220px;
+}
+.chatListWrapperLow {
+    @extend .chatListWrapper;
+    height: calc(100vh - 130px);
+    padding-bottom: 130px;
+}

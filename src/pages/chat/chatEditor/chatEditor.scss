@@ -1,0 +1,33 @@
+.editorBarWrapper {
+    .editorInput {
+        width: 68%;
+        height: 68px;
+        background-color: #EEE;
+        margin-left: 15px;
+        border-radius: 34px;
+        font-size: 32px;
+        padding : 0 30px;
+        box-sizing: border-box;
+    }
+
+    .editorInput1 {
+        @extend .editorInput;
+        text-align: center;
+        color : #999;
+        user-select:none;
+    }
+
+    $placeholderColor : #999;
+    input::-webkit-input-placeholder{
+        color:$placeholderColor;
+    }
+    input::-moz-placeholder{   /* Mozilla Firefox 19+ */
+        color:$placeholderColor;
+    }
+    input:-moz-placeholder{    /* Mozilla Firefox 4 to 18 */
+        color:$placeholderColor;
+    }
+    input:-ms-input-placeholder{  /* Internet Explorer 10-11 */ 
+        color:$placeholderColor;
+    }
+}
