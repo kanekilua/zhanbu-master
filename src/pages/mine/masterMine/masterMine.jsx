@@ -67,8 +67,27 @@ class MasterMine extends Taro.Component {
         return (
             <View className={style.masterMineWrap}>
                 <View className={style.background}>
+                    <Image 
+                        className={style.avatar}
+                        src={avatar}/>
+                    <View className={style.nickName}>{name}</View>
                 </View>
-                <View className={style.userCart}>
+                <View className={style.reserveCount}>
+                    <View className={style.reserveWrap}>
+                        <View className={style.content}>
+                            <View className={style.num}>{reserve_num}</View>
+                            <View className={style.text}>咨询完成数</View>
+                        </View>
+                    </View>
+                    <View className={style.separate}></View>
+                    <View className={style.flashCount}>
+                        <View className={style.content}>
+                            <View className={style.num}>{reserve_num}</View>
+                            <View className={style.text}>咨询完成数</View>
+                        </View>
+                    </View>
+                </View>
+                {/* <View className={style.userCart}>
                     <Image
                         className={style.avatar}
                         src={avatar}
@@ -87,7 +106,7 @@ class MasterMine extends Taro.Component {
                         <Text className={style.hotNum}>{reserve_num}</Text>
                     </View>
                     <Button className={style.serverNum}>服务人数</Button>
-                </View>
+                </View> */}
                 <MenuList/>
                 <View className={style.logout}>
                     <Button

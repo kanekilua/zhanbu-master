@@ -1,5 +1,5 @@
 import Taro from '@tarojs/taro'
-import { View } from '@tarojs/components'
+import { View, Image, Text } from '@tarojs/components'
 import MenuItem from '@/components/menuItem/menuItem'
 import style from './menuList.module.scss'
 
@@ -9,12 +9,23 @@ import accountSecurity from '../../assets/accountSecurity.png'
 import clean from '../../assets/clean.png'
 import update from '../../assets/update.png'
 import alarm from '../../assets/alarm.png'
+import flash from '../../assets/flash.png'
 
 
 class MenuList extends Taro.Component {
     render() {
         return (
             <View className={style.wrapper}>
+                <View className={style.flashItem}>
+                    <Image 
+                        className={style.flashIcon}
+                        src={flash}/>
+                    <Text className={style.title}>闪测状态</Text>
+                    <View className={style.right}>
+                        <View className={style.switchWrap}>
+                        </View>
+                    </View>
+                </View>
                 <View className={style.menuItem}
                     onClick={()=>{
                         Taro.navigateTo({
@@ -58,7 +69,7 @@ class MenuList extends Taro.Component {
                         iconStyle={style[`icon${3}`]}
                     />
                 </View>
-                <View className={style.menuItem}>
+                {/* <View className={style.menuItem}>
                     <MenuItem 
                         icon={clean}
                         title='清理缓存'
@@ -66,7 +77,7 @@ class MenuList extends Taro.Component {
                         iconStyle={style[`icon${4}`]}
                         rightText='51MB'
                     />
-                </View>
+                </View> */}
                 <View className={style.menuItem}>
                     <MenuItem 
                         icon={update}
@@ -75,14 +86,14 @@ class MenuList extends Taro.Component {
                         iconStyle={style[`icon${5}`]}
                     />
                 </View>
-                <View className={style.menuItem}>
+                {/* <View className={style.menuItem}>
                     <MenuItem 
                         icon={alarm}
                         title='提醒设置'
                         icon-style={style[`icon${6}`]}
                         iconStyle={style[`icon${6}`]}
                     />
-                </View>
+                </View> */}
             </View>
         )
     }

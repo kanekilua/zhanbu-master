@@ -3,7 +3,41 @@
     box-sizing: border-box;
     background-color: #F1F1F1;
     .menuItem{
-        margin-bottom: 12px;   
+        margin-bottom: 12px;
+    }
+    .flashItem {
+        @extend .menuItem;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        height: 100px;
+        padding: 0 32px;
+        box-sizing: border-box;
+        margin-top: 10px;
+        background-color: #fff;
+        border-radius: 15px;
+        .flashIcon {
+            display: block;
+            width: 24px;
+            height: 34px;
+        }
+        .title {
+            display: block;
+            width: 50%;
+            height: 50px;
+            font-size: 28px;
+            color: #121212;
+        }
+        .right {
+            width: 40%;
+            display: flex;
+            justify-content: flex-end;
+            .switchWrap {
+                width: 150px;
+                height: 38px;
+                border: 1px solid #f00;
+            }
+        }
     }
     .icon1 {
         display: inline-block;
