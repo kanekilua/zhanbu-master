@@ -1,0 +1,61 @@
+@import '../../../styles/theme.scss';
+
+.wrapper {
+    width: 100%;
+    height: 236px;
+    background-color: #fff;
+    padding: 20px;
+    box-sizing: border-box;
+    color: #121212;
+    border-radius:4px;
+    .head {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding-bottom: 20px;
+        border-bottom: solid 1px #F1F1F1;
+        box-sizing: border-box;
+        .name {
+            font-size: 30px;
+        }
+        .time {
+            font-size: 24px;
+            color: #999;
+        }
+    }
+    .content {
+        font-size: 28px;
+        padding: 20px 0;
+        box-sizing: border-box;
+        .unread {
+            display: inline-block;
+            margin-right: 15px;
+            color: #C3976D;
+        }
+        .read {
+            display: inline-block;
+            margin-right: 15px;
+            color: #999;
+        }
+    }
+    .foot {
+        display: flex;
+        justify-content: flex-end;
+        .replyButton {
+            @extend .button;
+            width: 120px;
+            height: 40px;
+            line-height: 40px;
+            color: #fff;
+            font-size: 24px;
+        }
+        .comfirm{
+            @extend .replyButton;
+            background-color: #C3976D;
+        }
+        .already{
+            @extend .replyButton;
+            background-color: #999999;
+        }
+    }
+}

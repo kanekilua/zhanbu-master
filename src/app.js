@@ -34,7 +34,8 @@ class App extends Component {
             "pages/fileSetting/fileSetting",
             "pages/accountSecurity/accountSecurity",
             'pages/chat/chat',
-            'pages/orderMessage/orderMessage'
+            'pages/orderMessage/orderMessage',
+            'pages/flashMessage/flashMessage'
         ],
         window: {
             backgroundTextStyle: 'light',

@@ -1,0 +1,21 @@
+.wrapper {
+    .tip {
+        display: inline-block;
+        margin-left: -150px;
+        font-size: 26px;       
+    }
+    .switch {
+        width: 80px;
+        height: 38px;
+    }
+    :global(.weui-switch) {
+        right: 0;
+        &:before {
+            height: 34px;
+        }
+        &:after {
+            width: 34px;
+            height: 34px;
+        }
+    }
+}
