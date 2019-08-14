@@ -2,6 +2,7 @@ import Taro from '@tarojs/taro'
 import { View, Image, Text } from '@tarojs/components'
 import MenuItem from '@/components/menuItem/menuItem'
 import style from './menuList.module.scss'
+import OnlineSwitch from '@/components/onlineSwitch/onlineSwitch'
 
 import orderIco from '../../assets/orderIco.png'
 import userFile from '../../assets/userFile.png'
@@ -22,8 +23,7 @@ class MenuList extends Taro.Component {
                         src={flash}/>
                     <Text className={style.title}>闪测状态</Text>
                     <View className={style.right}>
-                        <View className={style.switchWrap}>
-                        </View>
+                        <OnlineSwitch onlineFlag={true}></OnlineSwitch>
                     </View>
                 </View>
                 <View className={style.menuItem}

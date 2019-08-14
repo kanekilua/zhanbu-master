@@ -83,7 +83,7 @@ class MasterMine extends Taro.Component {
                     <View className={style.flashCount}>
                         <View className={style.content}>
                             <View className={style.num}>{reserve_num}</View>
-                            <View className={style.text}>咨询完成数</View>
+                            <View className={style.text}>闪测完成数</View>
                         </View>
                     </View>
                 </View>
