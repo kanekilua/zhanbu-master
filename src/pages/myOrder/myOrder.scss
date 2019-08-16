@@ -1,7 +1,9 @@
 @import '../../styles/theme.scss';
 .myOrderWrap{
-    padding-top: 300px;
     box-sizing: border-box;
+    .at-tabs{
+        padding-top: 300px;
+    }
     .at-tabs__header {
         position: fixed;
         top: 206px;
@@ -44,5 +46,8 @@
         text-align: center;
         color:#C59B73;
         white-space: pre-line;
+    }
+    .faqPanel{
+        padding-top: 240px;
     }
 }

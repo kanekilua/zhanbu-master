@@ -1,0 +1,78 @@
+.wrapper{
+    position: relative;
+    width: 710px;
+    margin: 0 auto 20px;
+    background:rgba(255,255,255,1);
+    border-radius:10px;
+    padding: 20px;
+    box-sizing: border-box;
+
+    .top{
+        width: 100%;
+        display: flex;
+        font-size: 26px;
+        font-weight:bold;
+        color:rgba(51,51,51,1);
+        justify-content: space-between;
+
+        .status{
+            font-size: 24px;
+            color: #C3976D;
+        }
+    }
+
+    .bottom{
+        margin-top: 20px;
+        display: flex;
+
+        .Icon{
+            width: 140px;
+            height: 140px;
+            border-radius: 50%;
+        }
+
+        .content{
+            flex-grow: 1;
+            margin-left: 10px;
+            font-size: 26px;
+            color:rgba(51,51,51,1);
+
+            .master{
+                font-size: 32px;
+                font-weight: bold;
+            }
+
+            .price{
+                font-size: 28px;
+                color: #FF3B3B;
+                font-weight: bold;
+            }
+        }
+    }
+}
+
+.btnWrapper{
+    position: absolute;
+    bottom: 20px;
+    right: 20px;
+    display: flex;
+    justify-content: flex-end;
+
+    .btn{
+        font-size:18px;
+        font-weight:500;
+        color:rgba(195,151,109,1);
+        line-height: 16px;
+        height:30px;
+        padding: 6px 12px;
+        box-sizing: border-box;
+        border:1PX solid rgba(195,151,109,1);
+        border-radius:15px;
+    }
+
+    .btnDelete{
+        margin-left: 30px;
+        width: 30px;
+        height: 30px;
+    }
+}

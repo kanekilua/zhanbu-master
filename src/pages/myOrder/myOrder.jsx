@@ -5,8 +5,8 @@ import _fetch from '@/utils/fetch.js'
 import checkLogin from '@/utils/checkLogin.js'
 
 import OrderCart from '@/components/orderCart/orderCart'
-import Header from '@/components/header/header'
-
+import Header from './header/header'
+import QuestionItem from '@/components/questionItem/questionItem'
 
 import './myOrder.scss'
 import style from './myOrder.module.scss'
@@ -20,9 +20,12 @@ class MyOrder extends Taro.Component {
             current: 0,
             value: '',
             overList: [],
-            waitConnectList: []
+            waitConnectList: [],
+            activeOrderIndex: 0, 
+            faq: [], //闪测订单
         }
-	}
+    }
+    
 	// atTab
 	handleClick (value) {
 		this.setState({
@@ -56,6 +59,11 @@ class MyOrder extends Taro.Component {
         
     }
 
+    handleActiveOrder (index) {
+        this.setState({
+            activeOrderIndex: index
+        })
+    }
     
 
     init (order_no) {
@@ -66,6 +74,7 @@ class MyOrder extends Taro.Component {
         }
         _fetch({url:'/masterin/search_order',payload: params,method: 'POST',autoLogin:false, showToast: false})
         .then(res=>{
+            console.log(res,res)
 			for(let item of res){
 				item.order_flag == 30
 				?
@@ -81,19 +90,32 @@ class MyOrder extends Taro.Component {
         .catch(err=>console.log(err))
 
 	}
-	
+    
+    init() {
+
+    }
+    
     componentDidMount () {
-        checkLogin();
         this.init('');
+        // this.init()
+        _fetch({url:'/masterin/reserve_list',payload: null,method: 'POST',autoLogin:true, showToast: false})
+        .then(res => {
+            this.setState({
+                faq: res.faq
+            })
+            console.log(res,'init')
+        })
     }
     
 	render () {
-        let { waitConnectList, overList } = this.state
+        let { waitConnectList, overList, activeOrderIndex, faq } = this.state
 		const tabList = [{ title: '待咨询' }, { title: '已完成' }]
 		return (
 			<View className='myOrderWrap'>
                 <Header
                     headerTitle='订单管理'
+                    activeOrderIndex={activeOrderIndex}
+                    handleActiveOrder={this.handleActiveOrder.bind(this)}
                 />
                 <View className={style.searchBox}>
                     <AtSearchBar
@@ -104,30 +126,47 @@ class MyOrder extends Taro.Component {
                         onActionClick={this.onActionClick.bind(this)}
                     />
                 </View>
-				<AtTabs current={this.state.current} tabList={tabList} onClick={this.handleClick.bind(this)}>
-					<AtTabsPane current={this.state.current} index={0} >
-						<View className={style.orderList}>
-                            {waitConnectList.map((item)=>
-								<View className={style.orderCattItem} key={item.id}>
-									<View className={style.itemBox}>
-										<OrderCart orderInfo={item}/>
-									</View>
-								</View>
-							)}
-                        </View>
-					</AtTabsPane>
-					<AtTabsPane current={this.state.current} index={1}>
-                        <View className={style.orderList}>
-                            {overList.map((item)=>
-								<View className={style.orderCattItem} key={item.id}>
-									<View className={style.itemBox}>
-										<OrderCart orderInfo={item}/>
-									</View>
-								</View>
-							)}
+                {activeOrderIndex === 0 ?
+                    <AtTabs current={this.state.current} tabList={tabList} onClick={this.handleClick.bind(this)}>
+                        <AtTabsPane current={this.state.current} index={0} >
+                            <View className={style.orderList}>
+                                {waitConnectList.map((item)=>
+                                    <View className={style.orderCattItem} key={item.id}>
+                                        <View className={style.itemBox}>
+                                            <OrderCart orderInfo={item}/>
+                                        </View>
+                                    </View>
+                                )}
                             </View>
-					</AtTabsPane>
-				</AtTabs>
+                        </AtTabsPane>
+                        <AtTabsPane current={this.state.current} index={1}>
+                            <View className={style.orderList}>
+                                {overList.map((item)=>
+                                    <View className={style.orderCattItem} key={item.id}>
+                                        <View className={style.itemBox}>
+                                            <OrderCart orderInfo={item}/>
+                                        </View>
+                                    </View>
+                                )}
+                                </View>
+                        </AtTabsPane>
+                    </AtTabs>
+                    :
+                    <View className="faqPanel">
+                        { faq &&
+                            faq.map(item =>
+                                <QuestionItem 
+                                    Info={item} 
+                                    // onHandleBtn={onHandleBtn} 
+                                    // onHandleItem={onHandleItem}
+                                    key={item.order_no}
+                                />
+                            )
+                        }
+                        
+                    </View>
+                }
+				
 			</View>
 		)
 	}
