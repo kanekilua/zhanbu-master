@@ -1,0 +1,191 @@
+.proWrapper{
+    width: 100%;
+    background: white;
+    padding-bottom: 20px;
+
+    .top{
+        width: 100%;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        font-size:24px;
+        font-weight:500;
+        color:rgba(51,51,51,1);
+
+        .checkText{
+            font-size: 32px;
+            color: #333333;
+            font-weight:bold;
+        }
+    }
+
+    .bottom{
+        position: relative;
+        width: 100%;
+        height: 18px;
+        background:rgba(238,238,238,1);
+        border-radius:9px;
+        margin-top: 22px;
+
+        .progress{
+            // width: 200px;
+            height: 18px;
+            background:#BD8144;
+            border-radius:20px;
+        }
+
+        .round{
+            z-index: 99;
+            position: absolute;
+            top: -12px;
+            // left: 190px;
+            width: 34px;
+            height: 34px;
+            border-radius: 50%;
+            border:4px solid rgba(189,129,68,1);
+            background: white;
+        }
+    }
+}
+
+.MessageCardWrapper{
+    background: white;
+    width: 100%;
+    padding: 0;
+    margin: 0;
+    font-size:28px;
+    font-weight:500;
+    color:rgba(18,18,18,1);
+
+    .item{
+        width: 100%;
+        display: flex;
+        padding: 10px 0;
+
+        .label{
+            width: 140px;
+            padding-right: 12px;
+            text-align: right;
+        }
+
+        .show{
+            flex-grow: 1;
+            border-bottom:1PX solid rgba(204,204,204,1);
+        }
+
+        .numShow{
+            flex-grow: 1;
+            display: flex;
+
+            .numBox{
+                margin-right: 30px;
+                width: 46px;
+                height: 46px;
+                border: 1PX solid rgba(189,129,68,1);
+                text-align: center;
+                line-height: 46px;
+            }
+        }
+    }
+}
+
+
+.mask{
+    z-index: 9999;
+    position: absolute;
+    background: rgba(0, 0, 0, 0.5);
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+
+    .popupWindow{
+        position: relative;
+        width: 588px;
+        margin: 500px auto 0;
+        background: white;
+        padding: 32px 52px;
+        box-sizing: border-box;
+        border-radius: 10px;
+
+        .closeBtn{
+            position: absolute;
+            top: -22px;
+            right: -22px;
+            width: 45px;
+            height: 45px;
+            background: url('http://alicdn.szmonster.com/uploads/Bversion/login_close.png') center / cover no-repeat;
+        }
+    }
+}
+
+.opwWrapper{
+    z-index: 9999;
+    position: fixed;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.5);
+    top: 0;
+    left: 0;
+
+    .content{
+        position: relative;
+        width: 588px;
+        margin: 400px auto 0;
+        background: white;
+        box-sizing: border-box;
+        border-radius: 10px;
+
+        .title{
+            width: 100%;
+            text-align: center;
+            font-size:32px;
+            font-weight:bold;
+            color:rgba(197,155,115,1);
+            padding: 30px 0 20px;
+        }
+
+        .btnBox{
+            font-size:24px;
+            font-weight:500;
+            color:rgba(112,112,112,1);
+            text-align: center;
+            display: flex;
+            width: 100%;
+            border-top: 1PX solid rgba(221,221,221,1);
+
+            .btn{
+                width: 50%;
+                box-sizing: border-box;
+                padding: 26px 0;
+                
+                &:last-child{
+                    color: rgba(195,151,109,1);
+                    border-left: 1PX solid rgba(221,221,221,1);
+                }
+            }
+        }
+    }
+}
+
+.IntroductionTitle{
+    width: 100%;
+    padding: 0 0 0 40px;
+    box-sizing: border-box;
+    margin: 80px 0 42px;
+    font-size:44px;
+    font-weight:normal;
+    line-height:62px;
+    color:rgba(17,17,17,1);
+}
+
+.RankTitle{
+    width: 100%;
+    padding: 5px 42px;
+    box-sizing: border-box;
+    font-size:30px;
+    font-weight:normal;
+    line-height:42px;
+    color:rgba(195,151,109,1);
+    opacity:1;
+}

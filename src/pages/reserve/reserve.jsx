@@ -34,18 +34,19 @@ class Reserve extends Taro.Component {
 		let waitConnectList = []
         _fetch({url:'/masterin/reserve_list',payload: null,method: 'POST',autoLogin:true, showToast: false})
         .then(res=>{
-			console.log(res)
-			for(let item of res){
-				item.order_flag == 30
-				?
-				waitConnectList.push(item)
-				:
-				item.order_flag == 50 && prepareList.push(item)
+			if(res.reserve && res.reserve.length > 0) {
+				for(let item of res.reserve){
+					item.order_flag == 30
+					?
+					waitConnectList.push(item)
+					:
+					item.order_flag == 50 && prepareList.push(item)
+				}
+				this.setState({
+					prepareList,
+					waitConnectList
+				})
 			}
-			this.setState({
-				prepareList,
-				waitConnectList
-			})
 		})
         .catch(err=>console.log(err))
 		

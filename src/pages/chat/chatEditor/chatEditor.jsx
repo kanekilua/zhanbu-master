@@ -1,6 +1,7 @@
 import Taro from '@tarojs/taro'
 import { View, Image, Input, Button } from '@tarojs/components'
 import app from '@/utils/appData'
+import _fetch from '@/utils/fetch'
 
 import { _executeRecord, _stopRecord } from './func'
 import voiceIcon from './assets/voice.png'
@@ -66,30 +67,67 @@ class ChatEditor extends Taro.Component {
 
     // 长按开始
     handleInputTouchStart (e) {
-        e.preventDefault()
         const pressStart = new Date().getTime()
         const recordTimer = setTimeout(() => {
-            // TODO: 调用录音
+            if(app.getEnv() === 0) {
+                const wxRecordPermission = Taro.getStorageSync('wxRecordPermission')
+                window.wx.startRecord({
+                    success: () => {
+                        if( !wxRecordPermission && wxRecordPermission !== 'true' ) {
+                            window.wx.stopRecord()
+                            Taro.setStorageSync('wxRecordPermission', 'true')
+                        }
+                    },
+                    cancel: () => {
+                        Taro.showToast({
+                            title: '用户拒绝授权录音'
+                        })
+                    }
+                })
+            }
         }, 450)
         this.setState({ pressStart, recordTimer })
     }
 
     // 长按结束
     handleInputTouchEnd (e) {
-        e.preventDefault()
         const { pressStart, recordTimer } = this.state
         const pressEnd = new Date().getTime()
         if( pressEnd - pressStart < 450 ) {
             clearTimeout(recordTimer)
-            
+
             this.setState({
                 pressStart: 0,
                 recordTimer: null
             })
             return
         }
-        // TODO：停止录音
-
+        if(app.getEnv() === 0) {
+            window.wx.stopRecord({
+                success: function (res) {
+                    let localId = res.localId
+                    wx.uploadVoice({
+                        localId,
+                        success: function (res) {
+                            let serverId = res.serverId
+                            _fetch({
+                                url: '/app/voice', 
+                                payload: { 
+                                    media_id: serverId
+                                }
+                            }).then((res) => {
+                                app.BlobUrlToBlob('https://alicdnoss.szmonster.com/uploads/voice/llll.mp3').then((res) => {
+                                    this._sendFileMsg({
+                                        type: 'audio',
+                                        blob: res
+                                    })
+                                })
+                            })
+                        }
+                    })
+                }
+            })
+        }
         // this.setState({
         //     recordClicked : false
         // })
@@ -164,7 +202,10 @@ class ChatEditor extends Taro.Component {
     // }
 
     handleInputOnBlur () {
-        window.scrollTo(0, 0)
+        const env = app.getEnv()
+        if(env === 0 || env === 2) {
+            window.scrollTo(0, 0)
+        }
     }
 
     handleSendClick () {
@@ -195,10 +236,10 @@ class ChatEditor extends Taro.Component {
             <View 
                 className={style.chatEditorWrapper}>
                 <View className={`${style.editorBarWrapper} editorBarWrapper`}>
-                    <Image 
+                    {/* <Image 
                         src={msgType ? textIcon : voiceIcon}
                         className={style.icon}
-                        onClick={this.handleMsgTypeClick.bind(this)}/>
+                        onClick={this.handleMsgTypeClick.bind(this)}/> */}
                     {
                         msgType
                         ? <Input 

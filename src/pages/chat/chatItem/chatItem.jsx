@@ -1,7 +1,10 @@
 import Taro from '@tarojs/taro'
-import { View, Image } from '@tarojs/components'
+import { View, Image, Audio } from '@tarojs/components'
 import { connect } from '@tarojs/redux'
 import PreviewImages from '@/components/previewImages/previewImages'
+// import * as iconBase64Map from '@/utils/imageBase64.js'
+import { MessageCard } from '@/components/components'
+import app from '@/utils/appData'
 
 import style from './chatItem.module.scss'
 
@@ -16,7 +19,9 @@ class ChatItem extends Taro.Component {
             msg : {},
             imgs: [],
             imgPrevIndex: 0,
-            imgPrevShow: false
+            imgPrevShow: false,
+            voicePlayFlag : false,
+            audioContext: null
         }
     }
 
@@ -137,16 +142,41 @@ class ChatItem extends Taro.Component {
     // TODO: autoPlayNextUnreadAudio 自动播放下条语音
 
     // TODO: playAudio 播放语音
+    playAudio (url) {
+        const { voicePlayFlag } = this.state
+        if(voicePlayFlag) {
+
+        }
+        const audioContext = Taro.createInnerAudioContext()
+        audioContext.src = url
+        audioContext.play()
+        // audioContext.onPlay(() => {
+        // })
+        // audioContext.onEnded(() => {
+        //     wx.hideToast()
+        // })
+        // audioContext.onError((res) => {
+        //     showToast('text', res.errCode)
+        // })
+    }
 
     // TODO: canclePlayAudio 取消播放语音
 
     // TODO: canclePlayAudio 停止播放语音
-
     render() {
         // TODO: 音频对象audio
         // TODO: props的参数
         // TODO: type, rawMsg, userInfos, myInfo, isHistory
         const { msg, imgs, imgPrevIndex, imgPrevShow } = this.state
+        let text 
+        if(app.isJson(msg.text)) {
+            const { name, sex_data, birthday, birth_address, random_num } = JSON.parse(msg.text)
+            text = {
+                name, sex: sex_data, birthday, address: birth_address, num: random_num
+            }
+        }else {
+            text = msg.text
+        }
         return (
             <View className={style.chatItemWrapper}>
                 {msg.displayTimeHeader !== '' && <View className={style.timeHeader}>{msg.displayTimeHeader}</View>}
@@ -156,26 +186,36 @@ class ChatItem extends Taro.Component {
                     + (msg.type === 'timeTag' ? style.itemTime : '') + " " 
                     + (msg.type === 'tip' ? style.itemTip : '')}>
                 {msg.type === 'timeTag'
-                    ?  msg.text
+                    ?  text
                     : msg.type === 'tip'    
-                    ?  <View>{msg.text}</View>
+                    ?  <View>{text}</View>
                     : msg.type === 'notification' && msg.scene==='team'
-                    ?  <View>{msg.text}</View>
+                    ?  <View>{text}</View>
                     : msg.sendOrReceive === 'send' || msg.sendOrReceive === 'receive'
-                    ?  <View>
+                    ? <View>
                             <View className={style.msgItem}>
                                 <Image 
                                     className={style.avatar}
                                     src={msg.avatar}/>
                                 <View className={style.triangleBorder}></View>
                                 {msg.type === 'text' 
-                                    ? <View className={style.content}>{msg.text}</View>
+                                    ? typeof(text) != 'string'
+                                    ? <View className={style.content}><MessageCard Info={text}/></View>
+                                    : <View className={style.content}>{text}</View>
                                     : msg.type === 'image'
                                     ? <Image 
                                         onClick={this.handleImgClick.bind(this, msg.originLink)}
                                         src={msg.originLink}
                                         className={style.img}
                                         mode="widthFix"/>
+                                    : msg.type === 'audio'
+                                    ? 
+                                    <View
+                                        onClick={this.playAudio.bind(this, msg.audio.mp3Url)}
+                                        className={style.audio}>
+                                        {/* <image src={iconBase64Map.iconVoiceWhite} class='image'></image> */}
+                                        <text class='text'>{msg.audio.dur / 1000 << 1 >> 1}''</text>
+                                    </View>
                                     : <View></View>}
                             </View>
                         </View>
