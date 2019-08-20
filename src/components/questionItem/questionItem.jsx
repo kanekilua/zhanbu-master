@@ -37,11 +37,14 @@ function QuestionItem (props) {
         return `${year}-${addZero(mouth)}-${addZero(day)} ${addZero(hour)}:${addZero(minute)}:${addZero(second)}`
     }
 
-    let { order_no, faq : { master_name, problem_content, createtime, total_price, avatar },  order_flag, problem } = props.Info
-    console.log(props.Info,'avatar')
+    let { order_no, faq : { master_name, problem_content, createtime, total_price, avatar, nickname, user_accid },  order_flag, problem } = props.Info
+    const userInfo = {
+        avatar, nickname,
+        accid: user_accid
+    }
 
     return (
-        <View className={style.wrapper} onClick={(e)=>{props.onHandleItem(order_flag,problem,order_no)}}>
+        <View className={style.wrapper} onClick={(e)=>{props.onHandleItem(order_flag,problem,order_no,userInfo)}}>
             <View className={style.top}>
                 <View className={style.orderId}>订单号：{order_no}</View>
                 <View className={style.status}>{_getIns(order_flag,instructions)}</View>

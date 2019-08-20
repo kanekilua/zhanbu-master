@@ -1,4 +1,4 @@
-  .wrapper{
+.wrapper{
     width: 0;
     height: 0;
 
@@ -9,27 +9,27 @@
         z-index: 999;
         top: 0;
         left: 0;
+        bottom: 0;
+        right: 0;
         background: rgba(0, 0, 0, 0.8);
 
-        transition: all 500ms;
-
         .imageBox{
-            width: 100vw;
-            height: 100vh;
+            width: 100%;
+            height: 100%;
             display: flex;
-            justify-content: center;
             align-items: center;
-            
-            transition: all 500ms;
+            overflow: scroll;
 
-            .image{
+            .imageWrapper{
                 width: 100%;
+                padding: 0;
 
-                transition: all 500ms;
+                .image{
+                    width: 100%;
+                    margin: 0;
+                    display: block;
+                }
             }
-
         }
     }
-
-    
 }

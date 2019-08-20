@@ -23,7 +23,7 @@ class MenuList extends Taro.Component {
                         src={flash}/>
                     <Text className={style.title}>闪测状态</Text>
                     <View className={style.right}>
-                        <OnlineSwitch onlineFlag={true}></OnlineSwitch>
+                        <OnlineSwitch></OnlineSwitch>
                     </View>
                 </View>
                 <View className={style.menuItem}

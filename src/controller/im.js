@@ -62,6 +62,7 @@ export default class IMController {
       onbroadcastmsgs: this.onBroadcastMsgs,
       // 事件订阅
       onpushevents: this.onPushEvents,
+      autoMarkRead: true
     })
     // 发送消息开始登陆
     app.store.dispatch({
@@ -175,6 +176,10 @@ export default class IMController {
       })
     } catch(error) {
     }
+    app.store.dispatch({
+      type: 'Update_Session',
+      payload: session
+    })
   }
   /**
    * 收到消息
@@ -350,9 +355,20 @@ export default class IMController {
   /**会话
    * [ {id:"p2p-liuxuanlin",lastMsg:{from:'wujie',text:'222',to:"liuxuanlin"}} ]
    */
-  onSessions(sessions) {
+  async onSessions(sessions) {
     // console.log('onSessions: ', sessions)
     // console.log('----onSessions---------')
+    const sessionsTmp = await Promise.all(sessions.map(async (session, index) => {
+      const account = session.id.split('-')[1]
+      const user = await imsdkUtils.getUserInfo(account)
+      session['accountInfo'] = user
+      return session
+    }))
+    
+    app.store.dispatch({
+      type: 'Add_SessionList',
+      payload: sessionsTmp
+    })
     app.store.dispatch({
       type: 'SessionUnreadInfo_update',
       payload: sessions

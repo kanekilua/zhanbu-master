@@ -41,11 +41,11 @@
         @mixin baseNum($numColor) {
             width: calc(50% - 1px);
             .content {
-                width: 160px;
                 margin: 0 auto;
                 .num {
                     color: $numColor;
                     font-size: 48px;
+                    text-align: center;
                 }
                 .text {
                     width: 135px;

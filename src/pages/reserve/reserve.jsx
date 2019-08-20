@@ -1,8 +1,9 @@
 import Taro from '@tarojs/taro'
-import { View } from '@tarojs/components'
+import { View, Image } from '@tarojs/components'
 import { AtTabs, AtTabsPane } from 'taro-ui'
 import _fetch from '@/utils/fetch.js'
 import checkLogin from '@/utils/checkLogin.js'
+import noOrder from './assets/noOrder.png'
 
 
 import OrderCart from '@/components/orderCart/orderCart'
@@ -73,25 +74,35 @@ class Reserve extends Taro.Component {
 				<AtTabs current={this.state.current} tabList={tabList} onClick={this.handleClick.bind(this)}>
 					<AtTabsPane current={this.state.current} index={0} >
 						<View className={style.orderList}>
-							{waitConnectList.map((item)=>
-								<View className={style.orderCattItem} key={item.id}>
-									<View className={style.itemBox}>
-										<OrderCart orderInfo={item}/>
+							{	waitConnectList.length > 0 ?
+								waitConnectList.map((item)=>
+									<View className={style.orderCattItem} key={item.id}>
+										<View className={style.itemBox}>
+											<OrderCart orderInfo={item}/>
+										</View>
 									</View>
+								)
+								: <View className={style.noOrderBox}>
+									<Image className={style.noOrder} src={noOrder}/>
 								</View>
-							)}
+							}
                         </View>
 					</AtTabsPane>
 					<AtTabsPane current={this.state.current} index={1}>
 					<View className={style.orderList}>
-							<View className={style.tips}>温馨提示：以下订单暂未处理,请尽快处理。</View>	
-							{prepareList.map((item)=>
+							{ prepareList.length > 0 && <View className={style.tips}>温馨提示：以下订单暂未处理,请尽快处理。</View>	}
+							{ 	prepareList.length > 0 ?
+								prepareList.map((item)=>
 								<View className={style.orderCattItem} key={item.id}>
 									<View className={style.itemBox}>
 										<OrderCart orderInfo={item}/>
 									</View>
 								</View>
-							)}
+								)
+								: <View className={style.noOrderBox}>
+									<Image className={style.noOrder} src={noOrder}/>
+								</View>
+							}
                         </View>
 					</AtTabsPane>
 				</AtTabs>

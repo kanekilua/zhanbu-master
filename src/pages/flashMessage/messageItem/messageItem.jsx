@@ -3,14 +3,20 @@ import { View, Text, Button } from '@tarojs/components'
 
 import style from './messageItem.module.scss'
 
-export default function MessageItem ({ messageItem }) {
+export default function MessageItem ({ messageItem, onChatToChange }) {
 
     useEffect(() => {
 
     })
 
     return (
-        <View className={style.wrapper}>
+
+        <View 
+            className={style.wrapper}
+            onClick={() => {
+                onChatToChange(messageItem.accountInfo)
+                Taro.navigateTo({url: '/pages/chat/chat'})
+            }}>
             <View className={style.head}>
                 <View className={style.name}>姓名：{messageItem.name}</View>
                 <View className={style.time}>{messageItem.time}</View>

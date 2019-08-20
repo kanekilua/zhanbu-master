@@ -95,10 +95,10 @@ class App extends Component {
                 url: '/pages/login/login'
             })
         }
-        this.init()
+        this.init(master_data)
     }
 
-    init () {
+    init (master_data) {
         // 连接网易云信
         const userInfo = Taro.getStorageSync('userInfo')
         if(!userInfo) {
@@ -114,6 +114,10 @@ class App extends Component {
                     avatar : avatar
                 })
             }
+        }
+        // 更新大师的在线状态
+        if(master_data.flash_status) {
+            appData.setMasterOnline(master_data.flash_status)
         }
     }
 

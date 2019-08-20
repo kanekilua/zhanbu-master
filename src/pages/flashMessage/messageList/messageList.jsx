@@ -4,7 +4,7 @@ import MessageItem from '../messageItem/messageItem'
 
 import style from './messageList.module.scss'
 
-export default function MessageList ({ messageList }) {
+export default function MessageList ({ messageList, onChatToChange }) {
 
     useEffect(() => {
 
@@ -17,7 +17,8 @@ export default function MessageList ({ messageList }) {
                     className={style.messageItemWrapper}
                     key={'messageItem' + index}>
                     <MessageItem 
-                        messageItem={messageItem}></MessageItem>
+                        messageItem={messageItem}
+                        onChatToChange={onChatToChange}></MessageItem>
                 </View>
             ))}
         </View>

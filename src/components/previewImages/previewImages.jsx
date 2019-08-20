@@ -17,26 +17,32 @@ class PreviewImages extends Taro.Component {
         super(props)
     } 
 
-    onCloseImage () {
+    onCloseImage (e) {
         this.props.onCloseImage()
+        e.stopPropagation()
+    }
+
+    hide = {
+        visibility:'hidden'
+    }
+
+    show = {
+        visibility:'visible'
     }
 
     render() {
         let { images, index, isOpened } = this.props
 
         return (
-            isOpened && 
-                <View className={style.wrapper} >
-                
-                    <View className={style.mask} onClick={this.onCloseImage.bind(this)}>
-                        <View className={style.imageBox} onClick={this.onCloseImage.bind(this)}>
-                            <Image className={style.image} src={images[index]} />
+            <View className={style.wrapper} style={isOpened ? this.show : this.hide}>
+                <View className={style.mask} onClick={this.onCloseImage.bind(this)}>
+                    <View className={style.imageBox} onClick={this.onCloseImage.bind(this)}>
+                        <View className={style.imageWrapper}>
+                            <Image className={style.image} src={images[index]} mode="widthFix"/>
                         </View>
                     </View>
-                    
-            
-                
                 </View>
+            </View>
         )
     }
 }

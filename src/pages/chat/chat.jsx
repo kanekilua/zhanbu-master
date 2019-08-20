@@ -7,7 +7,9 @@ import { AtToast } from 'taro-ui'
 import style from './chat.module.scss'
 import Header from '@/components/header/header'
 import ChatMain from './chatMain/chatMain'
+import IMController from '../../controller/im'
 import imsdkUtils from '@/utils/imsdk'
+// import * as iconBase64Map from '@/utils/imageBase64.js'
 
 import * as actions from '@/actions/imsdk'
 import { LOCAL_MSG_LIMIT_WEAPP, TOAST_DURATION } from '@/constants/chat'
@@ -24,6 +26,7 @@ class Chat extends Taro.Component {
             videoSrc: '', // 视频源
             recorderManager: null, // 微信录音管理对象
             recordClicked: false, // 判断手指是否触摸录音按钮
+            // iconBase64Map: {}, //发送栏base64图标集合
             isLongPress: false, // 录音按钮是否正在长按
             chatWrapperMaxHeight: 0,// 聊天界面最大高度
             chatTo: '', //聊天对象account
@@ -47,6 +50,19 @@ class Chat extends Taro.Component {
         Taro.eventCenter.on('onSendTextMsg', this.handleMsgSend.bind(this))
         Taro.eventCenter.on('onSendFile', this.handleFileSend.bind(this))
         Taro.eventCenter.on('onShowToast', this.handleToastShow.bind(this))
+        // 在挂载chat页面时，要先
+        if(app.globalData.nim === null) {
+            let userInfo = utils.getUserInfo()
+            // 连接网易云信
+            const {accid, yunxin_token, avatar} = userInfo
+            if(accid !== undefined && yunxin_token !== undefined) {
+                new IMController({
+                    account : accid,
+                    token : yunxin_token,
+                    avatar: avatar
+                })
+            }
+        }
         this.init()
     }
 
@@ -56,20 +72,6 @@ class Chat extends Taro.Component {
             if(rawMessageList.length > 0) {
                 this.reCalcAllMessageTime(rawMessageList)
             }
-            if(this.props.syncDone && rawMessageList.length === 0) {
-                app.globalData.nim.getHistoryMsgs({
-                    scene: 'p2p',
-                    to: this.props.currentChatTo.accid,
-                    done: (error, obj) => {
-                        if(obj.msgs.length > 0) {
-                            this.props.RawMessageList_Replace_History({
-                                msgs: obj.msgs.reverse(),
-                                sessionId: 'p2p-' + this.props.currentChatTo.accid
-                            })
-                        }
-                    }
-                })
-            }
         }
     }
 
@@ -77,14 +79,36 @@ class Chat extends Taro.Component {
         Taro.eventCenter.off('onSendTextMsg')
         Taro.eventCenter.off('onSendFile')
         Taro.eventCenter.off('onShowToast')
+        this.props.CurrentChatTo_Change({})
     }
 
     // 初始化
     init () {
-        let chatTo = this.props.currentChatTo
+        let chatTo
+        if(this.$router.params.chatTo) {
+            chatTo = JSON.parse(this.$router.params.chatTo)
+            this.props.CurrentChatTo_Change(chatTo)
+        }else {
+            chatTo = this.props.currentChatTo
+        }
         if(!chatTo) {
             Taro.navigateBack()
         }
+
+        // 获取历史记录
+        app.globalData.nim.getHistoryMsgs({
+            scene: 'p2p',
+            to: chatTo.accid,
+            done: (error, obj) => {
+                if(obj.msgs.length > 0) {
+                    this.props.RawMessageList_Replace_History({
+                        msgs: obj.msgs.reverse(),
+                        sessionId: 'p2p-' + chatTo.accid
+                    })
+                }
+            }
+        })
+        
         // 从state中获取需要的数据
         const { defaultUserLogo } = this.state
         // 从props中获取需要的数据
@@ -96,6 +120,7 @@ class Chat extends Taro.Component {
         this.setState({
             chatTo,
             loginAccountLogo,
+            // iconBase64Map: iconBase64Map,
             chatWrapperMaxHeight,
         })
     }

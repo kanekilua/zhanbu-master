@@ -1,5 +1,6 @@
 import Taro from '@tarojs/taro'
 import { View, Image, Input, Button, Text } from '@tarojs/components'
+import app from '@/utils/appData'
 import _fetch from '@/utils/fetch.js'
 import checkForm from '@/utils/checkForm.js'
 import IMController from '@/controller/im'
@@ -49,6 +50,8 @@ class Login extends Taro.Component {
                             avatar : avatar
                         })
                     }
+                    const master_data = Taro.getStorageSync('master_data')
+                    app.setMasterOnline(master_data.flash_status)
                 },500)
                 setTimeout(()=>{
                     Taro.redirectTo({

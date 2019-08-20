@@ -3,6 +3,9 @@ import { View } from '@tarojs/components'
 import { AtTabs, AtTabsPane, AtSearchBar  } from 'taro-ui'
 import _fetch from '@/utils/fetch.js'
 import checkLogin from '@/utils/checkLogin.js'
+import { connect } from '@tarojs/redux'
+import { bindActionCreators } from 'redux'
+import { CurrentChatTo_Change } from '@/actions/imsdk'
 
 import OrderCart from '@/components/orderCart/orderCart'
 import Header from './header/header'
@@ -57,6 +60,16 @@ class MyOrder extends Taro.Component {
         // .catch(err=>console.log(err))
         this.init(this.state.value)
         
+    }
+
+    onHandleItem (order_flag, problem, order_no, { avatar, nickname, accid}) {
+        // 跳转到聊天页面
+        this.props.CurrentChatTo_Change({
+            avatar, nickname, accid
+        })
+        Taro.navigateTo({
+            url: '/pages/chat/chat'
+        })
     }
 
     handleActiveOrder (index) {
@@ -158,12 +171,11 @@ class MyOrder extends Taro.Component {
                                 <QuestionItem 
                                     Info={item} 
                                     // onHandleBtn={onHandleBtn} 
-                                    // onHandleItem={onHandleItem}
+                                    onHandleItem={this.onHandleItem.bind(this)}
                                     key={item.order_no}
                                 />
                             )
                         }
-                        
                     </View>
                 }
 				
@@ -171,4 +183,12 @@ class MyOrder extends Taro.Component {
 		)
 	}
 }
-export default MyOrder
+
+let mapStateToProps = (state) => {
+}
+
+let mapDispatchToProps = (dispatch) => {
+    return bindActionCreators({ CurrentChatTo_Change }, dispatch)
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(MyOrder)

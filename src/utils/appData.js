@@ -27,6 +27,20 @@ let app = {
             }
         }
         return false
+    },
+    setMasterOnline: (flash_status) => {
+        if(app.store) {
+            let online
+            if(flash_status === 10) {
+                online = true
+            }else if(flash_status === 20) {
+                online = false
+            }
+            app.store.dispatch({
+                type: 'Set_Online',
+                payload: online
+            })
+        }
     }
 }
 
