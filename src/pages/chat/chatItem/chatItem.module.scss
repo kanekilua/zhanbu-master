@@ -26,6 +26,10 @@
             color:#333;
             background-color: $bgColor;
             border-radius: 10px;
+            .linkText {
+                text-decoration: underline;
+                color: #E0BD9A;
+            }
         }
         .img {
             max-width: 260px;

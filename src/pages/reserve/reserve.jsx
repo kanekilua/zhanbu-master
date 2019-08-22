@@ -3,7 +3,7 @@ import { View, Image } from '@tarojs/components'
 import { AtTabs, AtTabsPane } from 'taro-ui'
 import _fetch from '@/utils/fetch.js'
 import checkLogin from '@/utils/checkLogin.js'
-import noOrder from './assets/noOrder.png'
+import noOrder from '@/assets/noOrder.png'
 
 
 import OrderCart from '@/components/orderCart/orderCart'
@@ -33,7 +33,7 @@ class Reserve extends Taro.Component {
     init () {
 		let prepareList = []
 		let waitConnectList = []
-        _fetch({url:'/masterin/reserve_list',payload: null,method: 'POST',autoLogin:true, showToast: false})
+        _fetch({url:'/masterin/reserve_list'})
         .then(res=>{
 			if(res.reserve && res.reserve.length > 0) {
 				for(let item of res.reserve){

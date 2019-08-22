@@ -202,10 +202,7 @@ class ChatEditor extends Taro.Component {
     // }
 
     handleInputOnBlur () {
-        const env = app.getEnv()
-        if(env === 0 || env === 2) {
-            window.scrollTo(0, 0)
-        }
+        window.scrollTo(0, 0)
     }
 
     handleSendClick () {

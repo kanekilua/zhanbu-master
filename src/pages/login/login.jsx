@@ -30,9 +30,9 @@ class Login extends Taro.Component {
     // 登录
     login () {
          //账号登录
-        if(!checkForm.checkPhone(this.state.account)){
-            return;
-        }else {
+        // if(!checkForm.checkPhone(this.state.account)){
+        //     return;
+        // }else {
             let params = {
                 mobile: this.state.account,
                 password: this.state.password,
@@ -60,7 +60,7 @@ class Login extends Taro.Component {
                 },2000)
             })
             .catch(err=>console.log(err))
-        }
+        // }
     }
 
     render() {

@@ -1,5 +1,7 @@
 import { useEffect, useState } from '@tarojs/taro'
 import { View, Text, Button } from '@tarojs/components'
+import app from '@/utils/appData'
+import _fetch from '@/utils/fetch'
 
 import style from './messageItem.module.scss'
 
@@ -9,12 +11,21 @@ export default function MessageItem ({ messageItem, onChatToChange }) {
 
     })
 
+    function handleReply (e) {
+        e.stopPropagation()
+        if(!messageItem.replyFlag) {
+            _fetch({url: '/masterin/replied', payload: {order_no: messageItem.orderNo }})
+        }
+    }
+
     return (
 
         <View 
             className={style.wrapper}
             onClick={() => {
                 onChatToChange(messageItem.accountInfo)
+                console.log(messageItem.sessionId)
+                app.globalData.nim.resetSessionUnread(messageItem.sessionId)
                 Taro.navigateTo({url: '/pages/chat/chat'})
             }}>
             <View className={style.head}>
@@ -28,7 +39,9 @@ export default function MessageItem ({ messageItem, onChatToChange }) {
                 {messageItem.lastMsg}
             </View>
             <View className={style.foot}>
-                <Button className={messageItem.replyFlag ? style.already : style.comfirm}>{messageItem.replyFlag? '已回复' : '确定回复'}</Button>
+                <Button 
+                    className={messageItem.replyFlag ? style.already : style.comfirm}
+                    onClick={handleReply}>{messageItem.replyFlag? '已回复' : '确定回复'}</Button>
             </View>
         </View>
     )

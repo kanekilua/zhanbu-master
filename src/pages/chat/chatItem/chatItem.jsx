@@ -1,5 +1,5 @@
 import Taro from '@tarojs/taro'
-import { View, Image, Audio } from '@tarojs/components'
+import { View, Image, Text, Audio } from '@tarojs/components'
 import { connect } from '@tarojs/redux'
 import PreviewImages from '@/components/previewImages/previewImages'
 // import * as iconBase64Map from '@/utils/imageBase64.js'
@@ -170,9 +170,14 @@ class ChatItem extends Taro.Component {
         const { msg, imgs, imgPrevIndex, imgPrevShow } = this.state
         let text 
         if(app.isJson(msg.text)) {
-            const { name, sex_data, birthday, birth_address, random_num } = JSON.parse(msg.text)
-            text = {
-                name, sex: sex_data, birthday, address: birth_address, num: random_num
+            const tmpText = JSON.parse(msg.text)
+            if(tmpText.master_id) {
+                text = tmpText.content
+            }else {
+                const { name, sex_data, birthday, birth_address, random_num } = tmpText
+                text = {
+                    name, sex: sex_data, birthday, address: birth_address, num: random_num
+                }
             }
         }else {
             text = msg.text
@@ -200,6 +205,12 @@ class ChatItem extends Taro.Component {
                                 <View className={style.triangleBorder}></View>
                                 {msg.type === 'text' 
                                     ? typeof(text) != 'string'
+                                    // ? text.master_id
+                                    // ? <View className={style.content}>
+                                    //     {text.content.split('本人主页')[0]}
+                                    //     <Text className={style.linkText} onClick={()=>{Taro.navigateTo({url:`/pages/masterIntroduction/masterIntroduction?master_id=${text.master_id}`})}}>本人主页</Text>
+                                    //     {text.content.split('本人主页')[1]}
+                                    // </View>
                                     ? <View className={style.content}><MessageCard Info={text}/></View>
                                     : <View className={style.content}>{text}</View>
                                     : msg.type === 'image'

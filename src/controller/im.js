@@ -73,13 +73,13 @@ export default class IMController {
    * 连接成功
    */
   onConnect() {
-    // console.log(orderCounter++, ' onConnect: ')
+    console.log(orderCounter++, ' onConnect: ')
   }
   /** 2或sync done之后触发
    * 设置订阅后，服务器消息事件回调
    */
   onPushEvents(param) {
-    // console.log(orderCounter++, ' onPushEvents: ', param)
+    console.log(orderCounter++, ' onPushEvents: ', param)
     let msgEvents = param.msgEvents
     if (msgEvents) {
       let statusArr = []
@@ -100,7 +100,7 @@ export default class IMController {
  * 收到黑名单列表
  */
   onBlacklist(blacklist) {
-    // console.log(orderCounter++, ' onBlacklist: ', blacklist)
+    console.log(orderCounter++, ' onBlacklist: ', blacklist)
     app.store.dispatch({
       type: 'Blacklist_Update_Initial',
       payload: blacklist
@@ -110,15 +110,15 @@ export default class IMController {
    * onMutelist
    */
   onMutelist(mutelist) {
-    // console.log(orderCounter++, ' onMutelist: ', mutelist)
-    // console.log('----onMutelist---------')
+    console.log(orderCounter++, ' onMutelist: ', mutelist)
+    console.log('----onMutelist---------')
   }
   /** 5
    * 同步好友信息，不含名片 [{account, createTime, updateTime}]
    */
   onFriends(friends) {
-    // console.log(orderCounter++, ' onFriends: ', friends)
-    // console.log('----onFriends---------')
+    console.log(orderCounter++, ' onFriends: ', friends)
+    console.log('----onFriends---------')
     app.store.dispatch({
       type: 'FriendCard_Update_Initial',
       payload: friends
@@ -128,8 +128,8 @@ export default class IMController {
    * 个人名片：存储个人信息到全局数据
    */
   onMyInfo(user) {
-    // console.log(orderCounter++, ' onMyInfo: ')
-    // console.log('----onMyInfo---------')
+    console.log(orderCounter++, ' onMyInfo: ')
+    console.log('----onMyInfo---------')
     user.avatar = this.avatar
     app.store.dispatch({
       type: 'IM_OnMyInfo',
@@ -140,8 +140,8 @@ export default class IMController {
    * 包含名片的好友信息（可能某些字段不全），[{account,avatar,birth,createTime,email,gender,nick,sign,updateTime}]
    */
   onUsers(friends) {
-    // console.log(orderCounter++, ' onUsers: ', friends)
-    // console.log('----onUsers---------')
+    console.log(orderCounter++, ' onUsers: ', friends)
+    console.log('----onUsers---------')
     app.store.dispatch({
       type: 'FriendCard_Update_Initial',
       payload: friends
@@ -151,8 +151,8 @@ export default class IMController {
    * onSyncDone,同步完成
    */
   onSyncDone() {
-    // console.log(orderCounter++, ' Sync Done')
-    // console.log('----Sync Done---------')
+    console.log(orderCounter++, ' Sync Done')
+    console.log('----Sync Done---------')
     app.store.dispatch({
       type: 'Login_LoginSuccess'
     })
@@ -167,8 +167,12 @@ export default class IMController {
  * {id:'team-1389946935',lastMsg:{attach:{accounts,team},type,users},scene,to,from,type,unread,updateTime}
  */
   onUpdateSession(session) {
-    // console.log('onUpdateSession: ', session)
-    // console.log('----onUpdateSession---------')
+    console.log('onUpdateSession: ', session)
+    console.log('----onUpdateSession---------')
+    let tempSession = Object.assign({}, session)
+    const account = session.id.split('-')[1]
+    const user = await imsdkUtils.getUserInfo(account)
+    tempSession['accountInfo'] = user
     try {
       app.store.dispatch({
         type: 'UnreadInfo_update',
@@ -186,8 +190,8 @@ export default class IMController {
    * {cc,flow:"in",from,fromClientType:"Web",fromDeviceId,fromNick,idClient,idServer:"9680840912",isHistoryable:true,isLocal,isMuted, isOfflinable,isPushable,isRoamingable,isSyncable,isUnreadable,needPushNick,resend,scene:"p2p",sessionId:"p2p-zys2",status:"success",target:"zys2",text:"[呕吐]",time,to:"wujie",type:"text",userUpdateTime}
    */
   onMsg(msg) {
-    // console.log('onMsg: 收到消息', msg)
-    // console.log('----onMsg---------')
+    console.log('onMsg: 收到消息', msg)
+    console.log('----onMsg---------')
     try {
       app.store.dispatch({
         type: 'RawMessageList_Add_Msg',
@@ -203,21 +207,21 @@ export default class IMController {
    * time:为删除消息时间，deletedMsgTime为删除的消息发送时间
    */
   onSysMsg(msg) {
-    // console.log('onSysMsg: ', msg)
-    // console.log('----onSysMsg---------')
+    console.log('onSysMsg: ', msg)
+    console.log('----onSysMsg---------')
     imsdkUtils.dealMsg(msg, app.store, app)
   }
   /**
    * 丢失连接
    */
   onDisconnect(error) {
-    // console.log(orderCounter++, ' onDisconnect: ')
-    // console.log('----onDisconnect---------')
+    console.log(orderCounter++, ' onDisconnect: ')
+    console.log('----onDisconnect---------')
     if (error) {
       switch (error.code) {
         // 账号或者密码错误, 请跳转到登录页面并提示错误
         case 302:
-          // console.log('onError: 账号或者密码错误')
+          console.log('onError: 账号或者密码错误')
           Taro.showToast({
             title: '账号或密码错误',
             image: '/images/emoji.png'
@@ -226,7 +230,7 @@ export default class IMController {
           break;
         // 重复登录, 已经在其它端登录了, 请跳转到登录页面并提示错误
         case 417:
-          // console.log('onError: 重复登录')
+          console.log('onError: 重复登录')
           break;
         // 被踢, 请提示错误后跳转到登录页面
         case 'kicked':
@@ -248,7 +252,7 @@ export default class IMController {
                           app.globalData.netcall.destroy()
                           app.globalData.nim.destroy({
                             done: function () {
-                              // console.log('destroy nim done !!!')
+                              console.log('destroy nim done !!!')
                               Taro.clearStorage()
                               Taro.hideLoading()
                             }
@@ -269,7 +273,7 @@ export default class IMController {
                            app.globalData.netcall.destroy()
                            app.globalData.nim.destroy({
                              done: function () {
-                               // console.log('destroy nim done !!!')
+                               console.log('destroy nim done !!!')
                                Taro.clearStorage()
                                Taro.hideLoading()
                              }
@@ -286,7 +290,7 @@ export default class IMController {
                   app.globalData.netcall.destroy()
                   app.globalData.nim.destroy({
                     done: function () {
-                      // console.log('destroy nim done !!!')
+                      console.log('destroy nim done !!!')
                       Taro.clearStorage()
                       Taro.hideLoading()
                     }
@@ -311,8 +315,8 @@ export default class IMController {
     // {scene:"team",sessionId:"team-3944051",timetag:1513153729257,to:"3944051",msg:[{from:'wujie',text:'222',to:'cs4'}]}
    */
   onRoamingMsgs(list) {
-    // console.log(orderCounter++, ' 漫游消息')
-    // console.log('----roamingMsg-----')
+    console.log(orderCounter++, ' 漫游消息')
+    console.log('----roamingMsg-----')
     app.store.dispatch({
       type: 'RawMessageList_Add_RoamingMsgList',
       payload: list
@@ -322,42 +326,42 @@ export default class IMController {
    * 连接出错
    */
   onError(error) {
-    // console.log(' onError', error)
-    // console.log('----onError---------')
+    console.log(' onError', error)
+    console.log('----onError---------')
     app.globalData.nim.disconnect()
     app.globalData.nim.connect()
   }
 
   onMarkInBlacklist(obj) {
-    // console.log(orderCounter++, ' onMarkInBlacklist: ')
-    // console.log('----onMarkInBlacklist---------')
+    console.log(orderCounter++, ' onMarkInBlacklist: ')
+    console.log('----onMarkInBlacklist---------')
   }
 
   onMarkInMutelist(obj) {
-    // console.log(orderCounter++, ' onMarkInMutelist: ')
-    // console.log('----onMarkInMutelist---------')
+    console.log(orderCounter++, ' onMarkInMutelist: ')
+    console.log('----onMarkInMutelist---------')
   }
 
   onSyncFriendAction(obj) {
-    // console.log(orderCounter++, ' onSyncFriendAction')
-    // console.log('----onSyncFriendAction---------')
+    console.log(orderCounter++, ' onSyncFriendAction')
+    console.log('----onSyncFriendAction---------')
   }
 
   onUpdateMyInfo(user) {
-    // console.log(orderCounter++, ' onUpdateMyInfo')
-    // console.log('----onUpdateMyInfo---------')
+    console.log(orderCounter++, ' onUpdateMyInfo')
+    console.log('----onUpdateMyInfo---------')
   }
 
   onUpdateUser(user) {
-    // console.log(orderCounter++, ' onUpdateUser')
-    // console.log('----onUpdateUser---------')
+    console.log(orderCounter++, ' onUpdateUser')
+    console.log('----onUpdateUser---------')
   }
   /**会话
    * [ {id:"p2p-liuxuanlin",lastMsg:{from:'wujie',text:'222',to:"liuxuanlin"}} ]
    */
   async onSessions(sessions) {
-    // console.log('onSessions: ', sessions)
-    // console.log('----onSessions---------')
+    console.log('onSessions: ', sessions)
+    console.log('----onSessions---------')
     const sessionsTmp = await Promise.all(sessions.map(async (session, index) => {
       const account = session.id.split('-')[1]
       const user = await imsdkUtils.getUserInfo(account)
@@ -375,8 +379,8 @@ export default class IMController {
     })
   }
   onOfflineMsgs(msg) {
-    // console.log(orderCounter++, ' onOfflineMsgs')
-    // console.log('----onOfflineMsgs---------')
+    console.log(orderCounter++, ' onOfflineMsgs')
+    console.log('----onOfflineMsgs---------')
     app.store.dispatch({
       type: 'RawMessageList_Add_OfflineMessage',
       payload: msg
@@ -384,13 +388,13 @@ export default class IMController {
   }
   // 系统通知
   onOfflineSysMsgs(msg) {
-    // console.log(orderCounter++, ' onOfflineSysMsgs')
-    // console.log('----onOfflineSysMsgs---------')
+    console.log(orderCounter++, ' onOfflineSysMsgs')
+    console.log('----onOfflineSysMsgs---------')
     msg.map(item => imsdkUtils.dealMsg(item, app.store, app))
   }
   onUpdateSysMsg(sysMsg) {
-    // console.log(orderCounter++, ' onUpdateSysMsg')
-    // console.log('----onUpdateSysMsg---------')
+    console.log(orderCounter++, ' onUpdateSysMsg')
+    console.log('----onUpdateSysMsg---------')
     app.store.dispatch({
       type: 'Update_Sys_Msg',
       payload: [sysMsg]
@@ -398,9 +402,9 @@ export default class IMController {
   }
   // 系统消息
   async onCustomSysMsg(sysMsg) {
-    // console.log(orderCounter++, ' onCustomSysMsg')
-    // console.log('----onCustomSysMsg---------')
-    // console.log(sysMsg)
+    console.log(orderCounter++, ' onCustomSysMsg')
+    console.log('----onCustomSysMsg---------')
+    console.log(sysMsg)
     let msgItem = {}
     let content = JSON.parse(sysMsg.content)
     let orderInfo = null
@@ -422,32 +426,32 @@ export default class IMController {
     }
   }
   onSysMsgUnread(obj) {
-    // console.log(orderCounter++, ' onSysMsgUnread')
-    // console.log('----onSysMsgUnread---------')
+    console.log(orderCounter++, ' onSysMsgUnread')
+    console.log('----onSysMsgUnread---------')
   }
   onUpdateSysMsgUnread(obj) {
-    // console.log(orderCounter++, ' onUpdateSysMsgUnread')
-    // console.log('----onUpdateSysMsgUnread---------')
+    console.log(orderCounter++, ' onUpdateSysMsgUnread')
+    console.log('----onUpdateSysMsgUnread---------')
   }
   onOfflineCustomSysMsgs(sysMsg) {
-    // console.log(orderCounter++, ' onOfflineCustomSysMsgs')
-    // console.log('----onOfflineCustomSysMsgs---------')
+    console.log(orderCounter++, ' onOfflineCustomSysMsgs')
+    console.log('----onOfflineCustomSysMsgs---------')
   }
   // 收到广播消息
   onBroadcastMsg(msg) {
-    // console.log('onBroadcastMsg: ', msg)
-    // console.log('----onBroadcastMsg---------')
+    console.log('onBroadcastMsg: ', msg)
+    console.log('----onBroadcastMsg---------')
   }
   onBroadcastMsgs(msg) {
-    // console.log('onBroadcastMsgs: ', msg)
-    // console.log('----onBroadcastMsgs---------')
+    console.log('onBroadcastMsgs: ', msg)
+    console.log('----onBroadcastMsgs---------')
   }
   /**
    * 断开重连
    */
   onWillReconnect() {
-    // console.log(' onWillReconnect')
-    // console.log('----onWillReconnect---------')
+    console.log(' onWillReconnect')
+    console.log('----onWillReconnect---------')
     imsdkUtils.showToast('text', '重连中，请稍后！', { duration: 3000 })
   }
 }

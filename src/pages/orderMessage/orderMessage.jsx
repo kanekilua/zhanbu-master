@@ -8,6 +8,7 @@ import { AtTabs, AtTabsPane } from 'taro-ui'
 import style from './orderMessage.module.scss'
 import './orderMessage.scss'
 import GET from './assets/get.png'
+import noMessage from './assets/noMessage.png'
 import _fetch from '@/utils/fetch'
 
 import OrderCart from '@/components/orderCart/orderCart'
@@ -80,6 +81,9 @@ class Index extends Taro.Component {
 	_getMessage () {
 		_fetch({ url: '/app/history_notification'})
         .then(async (res) => {
+			if(res.length <= 0) {
+				return 
+			}
 			let msgList = []
 			let ids = ''
 			let orderInfoList = []
@@ -197,7 +201,9 @@ class Index extends Taro.Component {
 								</View>
 								<View className={style.boxRight} onClick={this.onKown.bind(this)}>知道了</View>
 							</View>
-							{ unreadMsgList.map((msgItem, index) => (
+							{ 
+								unreadMsgList.length > 0 ?
+ 								unreadMsgList.map((msgItem, index) => (
 								<View 
 									className={style.orderCattItem}
 									key={'orderCart' + index}>
@@ -208,20 +214,30 @@ class Index extends Taro.Component {
 										<OrderCart orderInfo={msgItem.orderInfo}/>
 									</View>
 								</View>
-							))}
+								))
+								: <View className={style.noOrderBox}>
+									<Image className={style.noOrder} src={noMessage}/>
+								</View>
+							}
 							
 						</View>
 					</AtTabsPane>
 					<AtTabsPane current={this.state.current} index={1}>
 						<View className={style.orderList}>
-							{ readMsgList.map((msgItem, index) => (
-								<View 
-									key = {'orderCart' + index}
-									className={style.itemBox}>
-									<OrderCart 
-										orderInfo={msgItem.orderInfo}/>
+							{ 
+								readMsgList.length > 0 ?
+								readMsgList.map((msgItem, index) => (
+									<View 
+										key = {'orderCart' + index}
+										className={style.itemBox}>
+										<OrderCart 
+											orderInfo={msgItem.orderInfo}/>
+									</View>
+								))
+								: <View className={style.noOrderBox}>
+									<Image className={style.noOrder} src={noMessage}/>
 								</View>
-							))}
+							}
 						</View>
 					</AtTabsPane>
 				</AtTabs>

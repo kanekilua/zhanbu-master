@@ -668,7 +668,7 @@ switch (action.type) {
     let tempState = Object.assign({}, state)
     const sessionList = action.payload
     let tempSessionList = sessionList.concat(state.sessionList)
-    tempState.sessionList = tempSessionList
+    tempState.sessionList = tempSessionList                                                                                                                                                                                           
     // for()
     // let sessionList = action.payload.sessionList
     // tempState.sessionList = Object.assign({}, tempState.sessionList)
@@ -687,12 +687,16 @@ switch (action.type) {
     let tempState = Object.assign({}, state)
     const session = action.payload
     let tempSessionList = [].concat(state.sessionList)
-    for( let i in tempSessionList ) {
+    let i = 0
+    for( i; i < tempSessionList.length; ++i ) {
       if( tempSessionList[i].id === session.id ) {
         session.accountInfo = tempSessionList[i].accountInfo
         tempSessionList[i] = session
         break
       }
+    }
+    if(i >= tempSessionList.length) {
+      tempSessionList.unshift(session)
     }
     tempState.sessionList = tempSessionList
     return Object.assign({}, state, tempState)

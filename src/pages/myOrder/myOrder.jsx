@@ -1,15 +1,17 @@
 import Taro from '@tarojs/taro'
-import { View } from '@tarojs/components'
+import { View, Image } from '@tarojs/components'
 import { AtTabs, AtTabsPane, AtSearchBar  } from 'taro-ui'
 import _fetch from '@/utils/fetch.js'
 import checkLogin from '@/utils/checkLogin.js'
 import { connect } from '@tarojs/redux'
 import { bindActionCreators } from 'redux'
 import { CurrentChatTo_Change } from '@/actions/imsdk'
+import app from '@/utils/appData'
 
 import OrderCart from '@/components/orderCart/orderCart'
 import Header from './header/header'
 import QuestionItem from '@/components/questionItem/questionItem'
+import noOrder from '@/assets/noOrder.png'
 
 import './myOrder.scss'
 import style from './myOrder.module.scss'
@@ -23,6 +25,7 @@ class MyOrder extends Taro.Component {
             current: 0,
             value: '',
             overList: [],
+            contactList: [],
             waitConnectList: [],
             activeOrderIndex: 0, 
             faq: [], //闪测订单
@@ -58,7 +61,7 @@ class MyOrder extends Taro.Component {
 
         // })
         // .catch(err=>console.log(err))
-        this.init(this.state.value)
+        this.search(this.state.value)
         
     }
 
@@ -67,6 +70,7 @@ class MyOrder extends Taro.Component {
         this.props.CurrentChatTo_Change({
             avatar, nickname, accid
         })
+        app.globalData.nim.resetSessionUnread(`p2p-${accid}`)
         Taro.navigateTo({
             url: '/pages/chat/chat'
         })
@@ -79,50 +83,57 @@ class MyOrder extends Taro.Component {
     }
     
 
-    init (order_no) {
-		let overList = []
-        let waitConnectList = []
+    search (order_no) {
         let params = {
             order_no
         }
         _fetch({url:'/masterin/search_order',payload: params,method: 'POST',autoLogin:false, showToast: false})
         .then(res=>{
-            console.log(res,res)
-			for(let item of res){
-				item.order_flag == 30
-				?
-				waitConnectList.push(item)
-				:
-				item.order_flag == 40 && overList.push(item)
-			}
-			this.setState({
-				overList,
-				waitConnectList
-			})
+			this._dealReserveList(res)
         })
         .catch(err=>console.log(err))
 
 	}
     
-    init() {
-
-    }
-    
     componentDidMount () {
-        this.init('');
-        // this.init()
+        this.init()
+    }
+
+    init () {
         _fetch({url:'/masterin/reserve_list',payload: null,method: 'POST',autoLogin:true, showToast: false})
         .then(res => {
-            this.setState({
-                faq: res.faq
-            })
-            console.log(res,'init')
+            if(res) {
+                this._dealReserveList(res.reserve)
+                this.setState({
+                    faq: res.faq
+                })
+            }
         })
     }
     
+    _dealReserveList (res) {
+        let overList = []
+        let waitConnectList = []
+        let contactList = []
+        for(let item of res){
+            if(item.order_flag == 30) {
+                waitConnectList.push(item)
+            }else if(item.order_flag == 40) {
+                overList.push(item)
+            }else if(item.order_flag == 50) {
+                contactList.push(item)
+            }
+        }
+        this.setState({
+            overList,
+            contactList,
+            waitConnectList
+        })
+    }
+
 	render () {
-        let { waitConnectList, overList, activeOrderIndex, faq } = this.state
-		const tabList = [{ title: '待咨询' }, { title: '已完成' }]
+        let { waitConnectList,contactList, overList, activeOrderIndex, faq } = this.state
+		const tabList = [{ title: '待咨询' }, {title: '待联系'}, { title: '已完成' }]
 		return (
 			<View className='myOrderWrap'>
                 <Header
@@ -131,7 +142,7 @@ class MyOrder extends Taro.Component {
                     handleActiveOrder={this.handleActiveOrder.bind(this)}
                 />
                 <View className={style.searchBox}>
-                    <AtSearchBar
+                    <AtSearchBar 
                         value={this.state.value}
                         placeholder="订单号"
                         onChange={this.onChange.bind(this)}
@@ -143,24 +154,53 @@ class MyOrder extends Taro.Component {
                     <AtTabs current={this.state.current} tabList={tabList} onClick={this.handleClick.bind(this)}>
                         <AtTabsPane current={this.state.current} index={0} >
                             <View className={style.orderList}>
-                                {waitConnectList.map((item)=>
-                                    <View className={style.orderCattItem} key={item.id}>
-                                        <View className={style.itemBox}>
-                                            <OrderCart orderInfo={item}/>
+                                {
+                                    waitConnectList.length > 0 ?
+                                    waitConnectList.map((item)=>
+                                        <View className={style.orderCattItem} key={item.id}>
+                                            <View className={style.itemBox}>
+                                                <OrderCart orderInfo={item}/>
+                                            </View>
                                         </View>
+                                    )
+                                    : <View className={style.noOrderBox}>
+                                        <Image className={style.noOrder} src={noOrder}/>
                                     </View>
-                                )}
+                                }
                             </View>
                         </AtTabsPane>
                         <AtTabsPane current={this.state.current} index={1}>
                             <View className={style.orderList}>
-                                {overList.map((item)=>
-                                    <View className={style.orderCattItem} key={item.id}>
-                                        <View className={style.itemBox}>
-                                            <OrderCart orderInfo={item}/>
+                                {
+                                    contactList.length > 0 ?
+                                    contactList.map((item)=>
+                                        <View className={style.orderCattItem} key={item.id}>
+                                            <View className={style.itemBox}>
+                                                <OrderCart orderInfo={item}/>
+                                            </View>
                                         </View>
+                                    )
+                                    : <View className={style.noOrderBox}>
+                                        <Image className={style.noOrder} src={noOrder}/>
                                     </View>
-                                )}
+                                }
+                                </View>
+                        </AtTabsPane>
+                        <AtTabsPane current={this.state.current} index={2}>
+                            <View className={style.orderList}>
+                                {
+                                    overList.length > 0 ?
+                                    overList.map((item)=>
+                                        <View className={style.orderCattItem} key={item.id}>
+                                            <View className={style.itemBox}>
+                                                <OrderCart orderInfo={item}/>
+                                            </View>
+                                        </View>
+                                    )
+                                    : <View className={style.noOrderBox}>
+                                        <Image className={style.noOrder} src={noOrder}/>
+                                    </View>
+                                }
                                 </View>
                         </AtTabsPane>
                     </AtTabs>

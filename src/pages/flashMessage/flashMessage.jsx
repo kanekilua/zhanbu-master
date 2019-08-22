@@ -21,21 +21,25 @@ class FlashMessage extends Component{
         }
     }
 
-    async componentDidMount () {
+    async componentDidShow () {
         let tempMessageList = await Promise.all(this.props.sessionList.map(async (item, index) => {
-            const { accountInfo, updateTime, unread, lastMsg: {type, text} } = item
+            const { id, accountInfo, updateTime, unread, lastMsg: {type, text} } = item
             const { account, nick } = accountInfo
             const tempLastMsg = this.handleLastMsg(type, text)
             let replyFlag
+            let orderNo = ''
             await _fetch({url: '/masterin/order_status', payload: { accid: account }}).then((res) => {
-                replyFlag = res
+                replyFlag = res.replied
+                orderNo = res.order_no
             })
             return {
+                sessionId: id,
                 name : nick,
                 time: imsdkUtils.calcTimeHeader(updateTime),
                 unread: unread > 0 ? true : false,
                 lastMsg: tempLastMsg,
                 replyFlag,
+                orderNo,
                 accountInfo: accountInfo
             }
         }))
