@@ -29,6 +29,9 @@ class Mine extends Taro.Component {
     //退出登录后更新视图
     handleRefresh () {
        this.clearMasterInfo();
+       Taro.navigateTo({
+            url: '/pages/login/login'
+        })   
     }
 
     componentDidMount () {

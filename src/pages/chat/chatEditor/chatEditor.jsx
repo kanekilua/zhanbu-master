@@ -147,21 +147,7 @@ class ChatEditor extends Taro.Component {
 
     handleChooseImage () {
         // TODO:从相册选取照片
-        // this._getImg()
-        Taro.chooseImage({
-            count: 1,
-            sizeType: ['compressed'],
-            sourceType : ['album'],
-            success: (res) => {
-                app.BlobUrlToBlob(res.tempFilePaths[0])
-                .then((res) => {
-                    this._sendFileMsg({
-                        type: 'image',
-                        blob: res
-                    })
-                })
-            }
-        })
+        
     }
 
     // handleMenuClick (index) {

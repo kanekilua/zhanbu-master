@@ -105,6 +105,7 @@ class App extends Component {
             Taro.navigateTo({
                 url: '/pages/login/login'
             })
+            return
         }else {
             let {accid, yunxin_token, avatar} = userInfo
             if( accid && yunxin_token ) {
