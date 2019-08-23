@@ -4,7 +4,7 @@ module.exports = {
   },
   defineConstants: {
   },
-  outputRoot: '../zhanbu-cordova/www',
+  outputRoot: '../zhanbu-master-cordova/www',
   weapp: {},
   h5: {
     publicPath: './'

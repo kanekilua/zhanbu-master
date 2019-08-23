@@ -5,7 +5,7 @@ import imsdkUtils from '@/utils/imsdk'
 import app from '@/utils/appData'
 import _fetch from '@/utils/fetch'
 
-let NIM = window.NIM
+let NIM = require('../plugin/NIM_Web_NIM_v6.2.0')
 
 let orderCounter = 1
 // 第一次进去onConnect onBlacklist onMutelist onFriends onMyInfo onUsers onTeams SyncDone onPushEvents
@@ -166,11 +166,12 @@ export default class IMController {
  * {id:'p2p-zys2',lastMsg:{},scene,to,unread,updateTime}
  * {id:'team-1389946935',lastMsg:{attach:{accounts,team},type,users},scene,to,from,type,unread,updateTime}
  */
-  onUpdateSession(session) {
+  async onUpdateSession(session) {
     console.log('onUpdateSession: ', session)
     console.log('----onUpdateSession---------')
     let tempSession = Object.assign({}, session)
     const account = session.id.split('-')[1]
+    console.log('-------account--------', account)
     const user = await imsdkUtils.getUserInfo(account)
     tempSession['accountInfo'] = user
     try {
