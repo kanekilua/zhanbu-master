@@ -121,14 +121,17 @@ function OperationPopupWindow (props) {
 
     const { title ,leftBtnText, rightBtnText } = props.Info
 
-    function leftEvent () {
+    function leftEvent (e) {
+        e.stopPropagation()
         props.leftBtnEvent()
     }
 
-    function rightEvent () {
+    function rightEvent (e) {
+        e.stopPropagation()
         props.rightBtnEvent()
     }
 
+    
     return (
         <View className={style.opwWrapper} style={props.isOpened ? '' : 'visibility:hidden;'}>
             <View className={style.content}>
