@@ -89,7 +89,10 @@ class MyOrder extends Taro.Component {
         }
         _fetch({url:'/masterin/search_order',payload: params,method: 'POST',autoLogin:false, showToast: false})
         .then(res=>{
-			this._dealReserveList(res)
+            this._dealReserveList(res.res.reserve)
+            this.setState({
+                faq: res.faq
+            })
         })
         .catch(err=>console.log(err))
 
@@ -111,11 +114,11 @@ class MyOrder extends Taro.Component {
         })
     }
     
-    _dealReserveList (res) {
+    _dealReserveList (list) {
         let overList = []
         let waitConnectList = []
         let contactList = []
-        for(let item of res){
+        for(let item of list){
             if(item.order_flag == 30) {
                 waitConnectList.push(item)
             }else if(item.order_flag == 40) {
