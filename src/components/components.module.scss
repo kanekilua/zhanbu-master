@@ -63,18 +63,22 @@
         padding: 10px 0;
 
         .label{
-            width: 140px;
+            width: 150px;
             padding-right: 12px;
             text-align: right;
         }
 
         .show{
-            flex-grow: 1;
+            // flex-grow: 1;
+            width: calc(100% - 150px);
+            overflow-x: scroll;
+            white-space : nowrap;
             border-bottom:1PX solid rgba(204,204,204,1);
         }
 
         .numShow{
-            flex-grow: 1;
+            // flex-grow: 1;
+            width: calc(100% - 150px);
             display: flex;
 
             .numBox{
@@ -130,8 +134,8 @@
 
     .content{
         position: relative;
-        width: 588px;
-        margin: 400px auto 0;
+        width: 488px;
+        margin: 500px auto 0;
         background: white;
         box-sizing: border-box;
         border-radius: 10px;
@@ -141,7 +145,7 @@
             text-align: center;
             font-size:32px;
             font-weight:bold;
-            color:rgba(197,155,115,1);
+            // color:rgba(197,155,115,1);
             padding: 30px 0 20px;
         }
 
@@ -174,7 +178,7 @@
     box-sizing: border-box;
     margin: 80px 0 42px;
     font-size:44px;
-    font-weight:normal;
+    font-weight:bold;
     line-height:62px;
     color:rgba(17,17,17,1);
 }
@@ -184,7 +188,7 @@
     padding: 5px 42px;
     box-sizing: border-box;
     font-size:30px;
-    font-weight:normal;
+    font-weight:bold;
     line-height:42px;
     color:rgba(195,151,109,1);
     opacity:1;

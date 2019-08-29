@@ -211,14 +211,18 @@ class MyOrder extends Taro.Component {
                     :
                     <View className="faqPanel">
                         { faq &&
-                            faq.map(item =>
-                                <QuestionItem 
-                                    Info={item} 
-                                    // onHandleBtn={onHandleBtn} 
-                                    onHandleItem={this.onHandleItem.bind(this)}
-                                    key={item.order_no}
-                                />
-                            )
+                            faq.map(item => {
+                                if(item.faq.problem_content && item.faq.user_accid) {
+                                    return (
+                                        <QuestionItem 
+                                            Info={item} 
+                                            // onHandleBtn={onHandleBtn} 
+                                            onHandleItem={this.onHandleItem.bind(this)}
+                                            key={item.order_no}
+                                        />
+                                    )
+                                }
+                            })
                         }
                     </View>
                 }

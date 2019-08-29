@@ -53,7 +53,7 @@ function QuestionItem (props) {
         return `${year}-${addZero(mouth)}-${addZero(day)} ${addZero(hour)}:${addZero(minute)}:${addZero(second)}`
     }
 
-    let { order_no, faq : { master_name, problem_content, createtime, total_price, avatar, nickname, user_accid },  order_flag, problem } = props.Info
+    let { order_no, faq : { name, problem_content, createtime, total_price, avatar, nickname, user_accid },  order_flag, problem } = props.Info
     const userInfo = {
         avatar, nickname,
         accid: user_accid
@@ -71,7 +71,7 @@ function QuestionItem (props) {
                     style={`background:url('${avatar}') center / cover no-repeat;`}
                     ></View>
                 <View className={style.content}>
-                    <View className={style.master}>问答大师：{master_name}</View>
+                    <View className={style.master}>用户姓名：{name}</View>
                     <View>提问：{ problem_content ? problem_content : '您还没有提问' }</View>
                     <View>订单时间：{_disposeTime(createtime*1000)}</View>
                     <View className={style.price}>￥{total_price}</View>
