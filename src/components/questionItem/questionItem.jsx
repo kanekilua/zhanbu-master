@@ -1,7 +1,9 @@
 // import { useEffect, useLayoutEffect, useReducer, useState, useRef, useCallback, useMemo } from '@tarojs/taro'
 import { View } from '@tarojs/components'
+import copy from 'copy-to-clipboard';
 import style from './questionItem.module.scss'
 import ICONDELETE from '@/assets/delete.png';
+import { func } from 'prop-types';
 /**
  * 我的课程项 item
  * @param {*} props 
@@ -20,6 +22,20 @@ function QuestionItem (props) {
             }
         }
         return ''
+    }
+
+    function handelCopy (order_no) {
+        if(copy(order_no)){
+            Taro.showToast({
+                title:'复制成功',
+                icon:'success'
+            })
+        }else{
+            Taro.showToast({
+                title:'复制失败',
+                icon:'none'
+            })
+        }
     }
 
     function addZero(num) {
@@ -47,7 +63,7 @@ function QuestionItem (props) {
         <View className={style.wrapper} onClick={(e)=>{props.onHandleItem(order_flag,problem,order_no,userInfo)}}>
             <View className={style.top}>
                 <View className={style.orderId}>订单号：{order_no}</View>
-                <View className={style.status}>{_getIns(order_flag,instructions)}</View>
+            <View className={style.copyBtn} onClick={(e)=>{e.stopPropagation();handelCopy(order_no)}}>复制</View>
             </View>
             <View className={style.bottom}>
                 <View 
@@ -62,6 +78,7 @@ function QuestionItem (props) {
                 </View>
             </View>
             <BtnList status={order_flag} problem={problem} Info={props}/>
+            <View className={style.status}>{_getIns(order_flag,instructions)}</View>
         </View>
     )
 } 

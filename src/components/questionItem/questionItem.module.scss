@@ -15,9 +15,15 @@
         color:rgba(51,51,51,1);
         justify-content: space-between;
 
-        .status{
-            font-size: 24px;
-            color: #C3976D;
+        .copyBtn{
+            width: fit-content;
+            padding: 0 10px;
+            box-sizing: border-box;
+            border: 1PX solid rgba(189,129,68,1);
+            border-radius:4px;
+            color: rgba(189,129,68,1);
+            font-size: 20px;
+            line-height: 30px;
         }
     }
 
@@ -49,6 +55,16 @@
             }
         }
     }
+
+    .status{
+        position: absolute;
+        font-weight: bold;
+        font-size: 24px;
+        color: #C3976D;
+        top: 90px;
+        right: 20px;
+    }
+    
 }
 
 .btnWrapper{
