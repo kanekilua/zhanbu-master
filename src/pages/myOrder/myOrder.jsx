@@ -40,6 +40,7 @@ class MyOrder extends Taro.Component {
     }
 
     onClear () {
+        console.log('clear')
         this.setState({value:''})
         this.init()
     }
@@ -89,7 +90,7 @@ class MyOrder extends Taro.Component {
         }
         _fetch({url:'/masterin/search_order',payload: params,method: 'POST',autoLogin:false, showToast: false})
         .then(res=>{
-            this._dealReserveList(res.res.reserve)
+            this._dealReserveList(res.reserve)
             this.setState({
                 faq: res.faq
             })
