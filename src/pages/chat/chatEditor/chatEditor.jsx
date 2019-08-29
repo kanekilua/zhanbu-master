@@ -4,9 +4,12 @@ import app from '@/utils/appData'
 import _fetch from '@/utils/fetch'
 
 import { _executeRecord, _stopRecord } from './func'
-import voiceIcon from './assets/voice.png'
-import textIcon from './assets/text.png'
-import imageIcon from './assets/image.png'
+// import voiceIcon from './assets/voice.png'
+// import textIcon from './assets/text.png'
+// import imageIcon from './assets/image.png'
+import CHAT_EXTENDS from './assets/extends.png'
+import photoIcon from './assets/photo.png'
+import cameraIcon from './assets/camera.png'
 
 import style from './chatEditor.module.scss'
 import './chatEditor.scss'
@@ -140,52 +143,79 @@ class ChatEditor extends Taro.Component {
         // }
     }
 
-    // handleExtarMenuShow () {
-    //     const tempShow = this.props.showEditorExtra
-    //     this.props.onEditorExtarChange(!tempShow)
-    // }
-
-    handleChooseImage () {
-        // TODO:从相册选取照片
-        
+    handleExtarMenuShow () {
+        const tempShow = this.props.showEditorExtra
+        this.props.onEditorExtarChange(!tempShow)
     }
 
-    // handleMenuClick (index) {
-    //     switch(index) {
-    //         case 0 : 
-    //             // TODO:从相册选取照片
-    //             // this._getImg()
-    //             Taro.chooseImage({
-    //                 count: 1,
-    //                 sizeType: ['compressed'],
-    //                 sourceType : ['album'],
-    //                 success: (res) => {
-    //                     app.BlobUrlToBlob(res.tempFilePaths[0])
-    //                     .then((res) => {
-    //                         this._sendFileMsg({
-    //                             type: 'image',
-    //                             blob: res
-    //                         })
-    //                     })
-    //                 }
-    //             })
-    //             break
-    //         case 1: 
-    //             // TODO:拍照取片
-    //             console.log(index)
-    //             break
-    //         case 2:
-    //             // TODO:语音通话
-    //             console.log(index)
-    //             break
-    //         case 3:
-    //             // TODO:视频通话
-    //             console.log(index)
-    //             break
-    //         default:
-    //             break
-    //     }
+    // handleChooseImage () {
+    //     // TODO:从相册选取照片
+        
     // }
+
+    handleMenuClick (index) {
+        let _self = this
+        switch(index) {
+            case 0 : 
+                // TODO:从相册选取照片
+                var cameraOptions={
+                    quality: 100,
+                    sourceType:0,
+                    targetWidth : 800,
+                    targetHeight : 800,
+                    // allowEdit: true,
+                    destinationType:  Camera.DestinationType.DATA_URL, 
+                }
+                navigator.camera.getPicture(_self.cameraSuccess.bind(_self), () => {}, cameraOptions);
+                break
+            case 1: 
+                // TODO:拍照取片
+                var cameraOptions={
+                    quality: 100,
+                    sourceType:1,
+                    // allowEdit: true,
+                    targetWidth : 800,
+                    targetHeight : 800,
+                    saveToPhotoAlbum : true,
+                    destinationType: Camera.DestinationType.DATA_URL, 
+                }
+                navigator.camera.getPicture(_self.cameraSuccess.bind(_self), () => {}, cameraOptions);
+                break
+            case 2:
+                // TODO:语音通话
+                console.log(index)
+                break
+            case 3:
+                // TODO:视频通话
+                console.log(index)
+                break
+            default:
+                break
+        }
+    }
+
+    cameraSuccess (imageData) {
+        let imageFile = this.dataURLtoBlob('data:image/jpeg;base64,' + imageData)
+        // var arr = ('data:image/jpeg;base64,'+imageData).split(','), mime = arr[0].match(/:(.*?);/)[1],
+        //     bstr = atob(arr[1]), n = bstr.length, u8arr = new Uint8Array(n)
+        // while (n--) {
+        //     u8arr[n] = bstr.charCodeAt(n)
+        // }
+        // let imageFile = new Blob([u8arr], { type: mime })
+        this._sendFileMsg({
+            type: 'image',
+            blob: imageFile
+        })
+    }
+
+    dataURLtoBlob(dataurl) {//将base64转换为Blob
+        var arr = dataurl.split(','), mime = arr[0].match(/:(.*?);/)[1],
+            bstr = atob(arr[1]), n = bstr.length, u8arr = new Uint8Array(n)
+        while (n--) {
+            u8arr[n] = bstr.charCodeAt(n)
+        }
+        return new Blob([u8arr], { type: mime })
+    }
 
     handleInputOnBlur () {
         window.scrollTo(0, 0)
@@ -200,13 +230,13 @@ class ChatEditor extends Taro.Component {
         const { msgType, msgToSent } = this.state
         const { showEditorExtra } = this.props
         const menus = [
-            // {
-            //     icon: photoIcon,
-            //     text: '照片'
-            // }, {
-            //     icon: cameraIcon,
-            //     text: '拍摄'
-            // }
+            {
+                icon: photoIcon,
+                text: '照片'
+            }, {
+                icon: cameraIcon,
+                text: '拍摄'
+            }
             // , {
             //     icon: phoneIcon,
             //     text: '语音通话'
@@ -245,20 +275,20 @@ class ChatEditor extends Taro.Component {
                     {/* <Image 
                         src={CHAT_EMOJI}
                         className={style.icon}/> */}
-                    {/* <Image 
+                    <Image 
                         src={CHAT_EXTENDS}
                         className={style.icon}
-                        onClick={this.handleExtarMenuShow.bind(this)}/> */}
-                    <Image 
+                        onClick={this.handleExtarMenuShow.bind(this)}/>
+                    {/* <Image 
                         src={imageIcon}
                         className={style.icon}
-                        onClick={this.handleChooseImage.bind(this)}/>
+                        onClick={this.handleChooseImage.bind(this)}/> */}
                     <Button
                         className={style.btn}
                         onClick={this.handleSendClick.bind(this)}
                         >发送</Button>
                 </View>
-                {/* <View
+                <View
                     className={style.extraMenu}
                     style={showEditorExtra ? '' : 'display:none'}>
                     {menus.map((menu, index) => (
@@ -273,7 +303,7 @@ class ChatEditor extends Taro.Component {
                                 className={style.text}>{menu.text}</View>
                         </View>
                     ))}
-                </View> */}
+                </View>
             </View>
         )
     }

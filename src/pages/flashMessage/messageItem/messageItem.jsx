@@ -37,7 +37,6 @@ export default function MessageItem ({ messageItem, onChatToChange }) {
 
     return (
         <View 
-        
             className={style.wrapper}
             onClick={() => {
                 onChatToChange(message.accountInfo)

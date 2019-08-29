@@ -24,26 +24,44 @@ class FlashMessage extends Component{
     async componentDidShow () {
         let tempMessageList = await Promise.all(this.props.sessionList.map(async (item, index) => {
             const { id, accountInfo, updateTime, unread, lastMsg: {type, text} } = item
-            const { account, nick } = accountInfo
-            const tempLastMsg = this.handleLastMsg(type, text)
-            let replyFlag
-            let orderNo = ''
-            await _fetch({url: '/masterin/order_status', payload: { accid: account }}).then((res) => {
-                replyFlag = res.replied
-                orderNo = res.order_no
-            })
-            return {
-                sessionId: id,
-                name : nick,
-                time: imsdkUtils.calcTimeHeader(updateTime),
-                unread: unread > 0 ? true : false,
-                lastMsg: tempLastMsg,
-                replyFlag,
-                orderNo,
-                accountInfo: accountInfo
+            if(accountInfo) {
+                const tempLastMsg = this.handleLastMsg(type, text)
+                let replyFlag
+                let orderNo = ''
+                await _fetch({url: '/masterin/order_status', payload: { accid: accountInfo.account }}).then((res) => {
+                    replyFlag = res.replied
+                    orderNo = res.order_no
+                })
+                return {
+                    sessionId: id,
+                    name : accountInfo.nick,
+                    time: imsdkUtils.calcTimeHeader(updateTime),
+                    unread: unread > 0 ? true : false,
+                    lastMsg: tempLastMsg,
+                    replyFlag,
+                    orderNo,
+                    accountInfo: accountInfo
+                }
             }
         }))
 
+        // let tempMessageList = []
+        // for(let item of this.props.sessionList ){
+        //     const { id, accountInfo, updateTime, unread, lastMsg: {type, text} } = item
+        //     const tempLastMsg = this.handleLastMsg(type, text)
+        //     if(item.accountInfo) {
+        //         tempMessageList.push({
+        //             sessionId: id,
+        //             name : accountInfo.nick,
+        //             time: imsdkUtils.calcTimeHeader(updateTime),
+        //             unread: unread > 0 ? true : false,
+        //             lastMsg: tempLastMsg,
+        //             replyFlag: false,
+        //             orderNo: '123123',
+        //             accountInfo: accountInfo
+        //         })
+        //     }
+        // }
         this.setState({
             messageList: tempMessageList
         })

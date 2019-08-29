@@ -211,7 +211,7 @@ class MyOrder extends Taro.Component {
                     <View className="faqPanel">
                         { faq &&
                             faq.map(item => {
-                                if(item.faq.problem_content) {
+                                if(item.faq.problem_content && item.faq.user_accid) {
                                     return (
                                         <QuestionItem 
                                             Info={item} 
