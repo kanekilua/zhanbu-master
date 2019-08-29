@@ -29,7 +29,7 @@ class Mine extends Taro.Component {
     //退出登录后更新视图
     handleRefresh () {
        this.clearMasterInfo();
-       Taro.navigateTo({
+       Taro.redirectTo({
             url: '/pages/login/login'
         })   
     }

@@ -52,10 +52,7 @@ class MasterMine extends Taro.Component {
         })
         // 退出登录，更新token和用户信息
         _fetch({url:'/app/logout',payload: null,method: 'POST',autoLogin:false, showToast: true})
-        .then((res)=>
-            console.log(res)
-        )
-        this.props.onRefresh(); //刷新父组件数据
+        this.props.onRefresh() //刷新父组件数据
     }
     componentDidMount () {
         checkLogin();
