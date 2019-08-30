@@ -90,10 +90,11 @@ class MyOrder extends Taro.Component {
         }
         _fetch({url:'/masterin/search_order',payload: params,method: 'POST',autoLogin:false, showToast: false})
         .then(res=>{
+            console.log(this.state.faq)
             this._dealReserveList(res.reserve)
             this.setState({
                 faq: res.faq
-            })
+            },()=>{console.log(this.state.faq)})
         })
         .catch(err=>console.log(err))
 

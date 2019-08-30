@@ -1,7 +1,8 @@
 // app的域名
 // export const DOMAIN = 'https://mingli.szmonster.com'
-export const DOMAIN = 'https://suan.szmonster.com'
-// export const DOMAIN = 'https://develop.szmonster.com'
+// export const DOMAIN = 'https://suan.szmonster.com'
+export const DOMAIN = 'https://develop.szmonster.com'
+
 
 // app接口的baseurl
 export const API_BASEURL = DOMAIN + '/api'

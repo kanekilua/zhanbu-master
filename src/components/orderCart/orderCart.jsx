@@ -19,6 +19,7 @@ class OrderCart extends Taro.Component {
 
     handelCopy (order_no) {
         if(copy(order_no)){
+            copy(order_no)
             Taro.showToast({
                 title:'复制成功',
                 icon:'success'
