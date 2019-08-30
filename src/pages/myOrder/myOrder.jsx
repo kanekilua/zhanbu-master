@@ -104,6 +104,10 @@ class MyOrder extends Taro.Component {
         this.init()
     }
 
+    componentDidShow () {
+        this.init()
+    }
+
     init () {
         _fetch({url:'/masterin/reserve_list',payload: null,method: 'POST',autoLogin:true, showToast: false})
         .then(res => {
