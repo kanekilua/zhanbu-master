@@ -23,7 +23,8 @@ class MasterMine extends Taro.Component {
         master_data: {
             name: '未登录',
             avatar: defaultAvatar,
-            reserve_num: 0,
+            service_num: 0,
+            flash_num: 0
         }
     }
     // 退出登录
@@ -40,12 +41,6 @@ class MasterMine extends Taro.Component {
     }
     // 确认退出登录
     handleConfirm () {
-        if(this.props.master_data.name === '未登录') {
-            this.setState({
-                showDelete : false
-            })
-            return;
-        }
         // 若已登录
         this.setState({
             showDelete : false
@@ -60,7 +55,7 @@ class MasterMine extends Taro.Component {
 
     
     render() {
-        let { name, avatar, reserve_num } = this.props.master_data
+        let { name, avatar, service_num, flash_num } = this.props.master_data
         return (
             <View className={style.masterMineWrap}>
                 <View className={style.background}>
@@ -72,38 +67,18 @@ class MasterMine extends Taro.Component {
                 <View className={style.reserveCount}>
                     <View className={style.reserveWrap}>
                         <View className={style.content}>
-                            <View className={style.num}>{reserve_num}</View>
+                            <View className={style.num}>{service_num}</View>
                             <View className={style.text}>咨询完成数</View>
                         </View>
                     </View>
                     <View className={style.separate}></View>
                     <View className={style.flashCount}>
                         <View className={style.content}>
-                            <View className={style.num}>{reserve_num}</View>
+                            <View className={style.num}>{flash_num}</View>
                             <View className={style.text}>闪测完成数</View>
                         </View>
                     </View>
                 </View>
-                {/* <View className={style.userCart}>
-                    <Image
-                        className={style.avatar}
-                        src={avatar}
-                        // onClick={()=>{
-                        //     Taro.navigateTo({
-                        //         url: '/pages/login/login'
-                        //     })
-                        // }}
-                    />
-                    <View className={style.nickName}>{name}</View>
-                    <View className={style.hot}>
-                        <Image
-                            className={style.hotIco}
-                            src={hotIco}
-                        />
-                        <Text className={style.hotNum}>{reserve_num}</Text>
-                    </View>
-                    <Button className={style.serverNum}>服务人数</Button>
-                </View> */}
                 <MenuList/>
                 <View className={style.logout}>
                     <Button

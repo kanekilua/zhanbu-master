@@ -6,11 +6,17 @@ import _fetch from '@/utils/fetch'
 import style from './messageItem.module.scss'
 import { OperationPopupWindow } from '@/components/components'
 
-export default function MessageItem ({ messageItem, onChatToChange }) {
+export default function MessageItem ( {messageItem, onChatToChange} ) {
 
     const [ modelShow, setModelShow ] = useState(false)
 
     const [ message, setMessage ] = useState(messageItem)
+
+    useEffect(() => {
+        if(JSON.stringify(messageItem) !== JSON.stringify(message)) {
+            setMessage(messageItem)
+        }
+    })
 
     const modelInfo = {
         title: '是否完成该订单',

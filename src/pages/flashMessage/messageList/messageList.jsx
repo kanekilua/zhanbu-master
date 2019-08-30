@@ -7,10 +7,6 @@ import noMessage from '../assets/noMessage.png'
 
 export default function MessageList ({ messageList, onChatToChange }) {
 
-    useEffect(() => {
-
-    })
-
     return (
         <View className={style.wrapper}>
             {

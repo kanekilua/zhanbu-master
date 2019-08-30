@@ -3,6 +3,7 @@ import { View } from '@tarojs/components'
 import MasterMine from './masterMine/masterMine'
 import _fetch from '@/utils/fetch.js'
 import defaultAvatar from '@/assets/avatar.png'
+import app from '@/utils/appData'
 
 class Mine extends Taro.Component {
     constructor (props) {
@@ -11,7 +12,8 @@ class Mine extends Taro.Component {
             master_data: {
                 name: '未登录',
                 avatar: defaultAvatar,
-                reserve_num: 0,
+                service_num: 0,
+                flash_num: 0
             }
         }
     } 
@@ -28,10 +30,13 @@ class Mine extends Taro.Component {
 
     //退出登录后更新视图
     handleRefresh () {
-       this.clearMasterInfo();
-       Taro.redirectTo({
-            url: '/pages/login/login'
-        })   
+    //    this.clearMasterInfo()
+    app.store.dispatch({
+        type: 'init_data'
+    })
+    Taro.redirectTo({
+        url: '/pages/login/login'
+    })   
     }
 
     componentDidMount () {

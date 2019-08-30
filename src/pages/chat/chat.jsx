@@ -68,10 +68,9 @@ class Chat extends Taro.Component {
 
     componentDidUpdate (prevProps, prevState) {
         if(prevProps !== this.props) {
-            const rawMessageList = this.props.rawMessageList
-            if(rawMessageList.length > 0) {
-                this.reCalcAllMessageTime(rawMessageList)
-            }
+            this.setState({
+                messageArr: this.props.rawMessageList
+            })
         }
     }
 
@@ -126,24 +125,24 @@ class Chat extends Taro.Component {
     }
 
     // 重新计算时间头
-    reCalcAllMessageTime(messageArr) {
-        let tempArr = messageArr
-        if (tempArr.length == 0) return
-        // 计算时差
-        tempArr.map((msg, index) => {
-            if (index === 0) {
-                msg['displayTimeHeader'] = imsdkUtils.calcTimeHeader(msg.time)
-            } else {
-                let delta = (msg.time - tempArr[index - 1].time) / (120 * 1000)
-                if (delta > 1) { // 距离上一条，超过两分钟重新计算头部
-                    msg['displayTimeHeader'] = imsdkUtils.calcTimeHeader(msg.time)
-                }
-            }
-        })
-        this.setState({
-            messageArr : tempArr
-        })
-    }
+    // reCalcAllMessageTime(messageArr) {
+    //     let tempArr = messageArr
+    //     if (tempArr.length == 0) return
+    //     // 计算时差
+    //     tempArr.map((msg, index) => {
+    //         if (index === 0) {
+    //             msg['displayTimeHeader'] = imsdkUtils.calcTimeHeader(msg.time)
+    //         } else {
+    //             let delta = (msg.time - tempArr[index - 1].time) / (120 * 1000)
+    //             if (delta > 1) { // 距离上一条，超过两分钟重新计算头部
+    //                 msg['displayTimeHeader'] = imsdkUtils.calcTimeHeader(msg.time)
+    //             }
+    //         }
+    //     })
+    //     this.setState({
+    //         messageArr : tempArr
+    //     })
+    // }
 
     // 原始消息转化为适用于渲染的消息列表
     static convertRawMessageListToRenderMessageArr(rawMsgList) {
@@ -204,7 +203,7 @@ class Chat extends Taro.Component {
                 from: rawMsg.from,
                 type: msgType,
                 text: rawMsg.text || '',
-                time,
+                time: rawMsg.time,
                 sendOrReceive,
                 displayTimeHeader
             }, specifiedObject))

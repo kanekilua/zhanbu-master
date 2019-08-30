@@ -76,24 +76,27 @@ class App extends Component {
         // 判断大师是否登录
         const master_data = Taro.getStorageSync('master_data')
         if(!master_data) {
-            Taro.navigateTo({
+            Taro.redirectTo({
                 url: '/pages/login/login'
             })
+            return
         }
         const token = Taro.getStorageSync('token')
         if( token ) {
             _fetch({url:'/app/checkToken'}) //判断登录有没有过期
             .then(res => {
                 if(!res.status) {
-                    Taro.navigateTo({
+                    Taro.redirectTo({
                         url: '/pages/login/login'
                     })
+                    return
                 }
             })
         }else {
-            Taro.navigateTo({
+            Taro.redirectTo({
                 url: '/pages/login/login'
             })
+            return
         }
         this.init()
     }
@@ -102,7 +105,7 @@ class App extends Component {
         // 连接网易云信
         const userInfo = Taro.getStorageSync('userInfo')
         if(!userInfo) {
-            Taro.navigateTo({
+            Taro.redirectTo({
                 url: '/pages/login/login'
             })
             return

@@ -44,24 +44,6 @@ class FlashMessage extends Component{
                 }
             }
         }))
-
-        // let tempMessageList = []
-        // for(let item of this.props.sessionList ){
-        //     const { id, accountInfo, updateTime, unread, lastMsg: {type, text} } = item
-        //     const tempLastMsg = this.handleLastMsg(type, text)
-        //     if(item.accountInfo) {
-        //         tempMessageList.push({
-        //             sessionId: id,
-        //             name : accountInfo.nick,
-        //             time: imsdkUtils.calcTimeHeader(updateTime),
-        //             unread: unread > 0 ? true : false,
-        //             lastMsg: tempLastMsg,
-        //             replyFlag: false,
-        //             orderNo: '123123',
-        //             accountInfo: accountInfo
-        //         })
-        //     }
-        // }
         this.setState({
             messageList: tempMessageList
         })
