@@ -6,7 +6,7 @@ import _fetch from '@/utils/fetch'
 import style from './messageItem.module.scss'
 import { OperationPopupWindow } from '@/components/components'
 
-export default function MessageItem ( {messageItem, onChatToChange} ) {
+export default function MessageItem ( {messageItem, onChatToChange, onReplyFlagChange} ) {
 
     const [ modelShow, setModelShow ] = useState(false)
 
@@ -34,10 +34,12 @@ export default function MessageItem ( {messageItem, onChatToChange} ) {
     function comfirmReplied () {
         _fetch({url: '/masterin/replied', payload: {order_no: message.orderNo }}).then(res => {
             setModelShow(false)
-            setMessage({
-                ...message,
-                replyFlag: true
-            })
+            onReplyFlagChange(message.sessionId)
+            // const tempMessage = {
+            //     ...message,
+            //     replyFlag: true
+            // }
+            // setMessage(tempMessage)
         })
     }
 

@@ -5,8 +5,7 @@ import MessageItem from '../messageItem/messageItem'
 import style from './messageList.module.scss'
 import noMessage from '../assets/noMessage.png'
 
-export default function MessageList ({ messageList, onChatToChange }) {
-
+export default function MessageList ({ messageList, onChatToChange, onReplyFlagChange }) {
     return (
         <View className={style.wrapper}>
             {
@@ -17,6 +16,7 @@ export default function MessageList ({ messageList, onChatToChange }) {
                         key={'messageItem' + index}>
                         <MessageItem 
                             messageItem={messageItem}
+                            onReplyFlagChange={onReplyFlagChange}
                             onChatToChange={onChatToChange}></MessageItem>
                     </View>
                 ))
