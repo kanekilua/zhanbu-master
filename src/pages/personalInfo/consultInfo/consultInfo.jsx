@@ -23,20 +23,20 @@ class Consultinfo extends Taro.Component {
     }
 
     //获得公历和农历日期
-    get_Gre_lunner_Calender (birthday) {
-        //birthday = 2019-03-20 11:26:26
-        if(birthday == null){
-            return {Gregorian:'',lunar:''}
-        }
-        let dateArr = birthday.split(' ')[0].split('-')
+    // get_Gre_lunner_Calender (birthday) {
+    //     //birthday = 2019-03-20 11:26:26
+    //     if(birthday == null){
+    //         return {Gregorian:'',lunar:''}
+    //     }
+    //     let dateArr = birthday.split(' ')[0].split('-')
 
-        let Gregorian = `${dateArr[0]}年 ${dateArr[1]}月 ${dateArr[2]}日`
+    //     let Gregorian = `${dateArr[0]}年 ${dateArr[1]}月 ${dateArr[2]}日`
 
-        // calendar.solar2lunar(1987,11,01)
-        let lunnerData = calendar.solar2lunar(dateArr[0],dateArr[1],dateArr[2])
-        let lunar = `${lunnerData.lYear}年 ${lunnerData.lMonth}月 ${lunnerData.lDay}日`
-        return {Gregorian,lunar}
-    }
+    //     // calendar.solar2lunar(1987,11,01)
+    //     let lunnerData = calendar.solar2lunar(dateArr[0],dateArr[1],dateArr[2])
+    //     let lunar = `${lunnerData.lYear}年 ${lunnerData.lMonth}月 ${lunnerData.lDay}日`
+    //     return {Gregorian,lunar}
+    // }
 
     onOpenImage (index) {
         this.setState({index:index, isOpened: true})
@@ -51,7 +51,7 @@ class Consultinfo extends Taro.Component {
     render() {
         let { index, isOpened } = this.state
         let { order : { reserve : { birthday, birth_address, problem_content, hand_face_images } } } = this.props
-        let { Gregorian, lunar } = this.get_Gre_lunner_Calender(birthday)
+        // let { Gregorian, lunar } = this.get_Gre_lunner_Calender(birthday)
         let images = this.splitImages(hand_face_images)
 
 
@@ -65,13 +65,13 @@ class Consultinfo extends Taro.Component {
 
                     <View className={style.formItem}>
                         <View className={style.itemTitle}>出生日期：</View>
-                        <View className={style.itemContent}>公历-{Gregorian}</View>
+                        <View className={style.itemContent}>{birthday}</View>
                     </View>
 
-                    <View className={style.formItem}>
+                    {/* <View className={style.formItem}>
                         <View className={style.itemTitle}></View>
-                        <View className={style.itemContent}>农历-{lunar}</View>
-                    </View>
+                        <View className={style.itemContent}>{birthday}</View>
+                    </View> */}
 
                     <View className={style.formItem}>
                         <View className={style.itemTitle}>出生地点：</View>

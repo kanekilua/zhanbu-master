@@ -22,6 +22,16 @@ class FlashMessage extends Component{
     }
 
     async componentDidShow () {
+        this.handleSessionList()
+    }
+
+    componentDidUpdate (prevProps, prevState) {
+        if(JSON.stringify(prevProps.sessionList) !== JSON.stringify(this.props.sessionList)) {
+            this.handleSessionList()
+        }
+    }
+
+    async handleSessionList () {
         let tempMessageList = await Promise.all(this.props.sessionList.map(async (item, index) => {
             const { id, accountInfo, updateTime, unread, lastMsg: {type, text} } = item
             if(accountInfo) {
@@ -44,24 +54,6 @@ class FlashMessage extends Component{
                 }
             }
         }))
-
-        // let tempMessageList = []
-        // for(let item of this.props.sessionList ){
-        //     const { id, accountInfo, updateTime, unread, lastMsg: {type, text} } = item
-        //     const tempLastMsg = this.handleLastMsg(type, text)
-        //     if(item.accountInfo) {
-        //         tempMessageList.push({
-        //             sessionId: id,
-        //             name : accountInfo.nick,
-        //             time: imsdkUtils.calcTimeHeader(updateTime),
-        //             unread: unread > 0 ? true : false,
-        //             lastMsg: tempLastMsg,
-        //             replyFlag: false,
-        //             orderNo: '123123',
-        //             accountInfo: accountInfo
-        //         })
-        //     }
-        // }
         this.setState({
             messageList: tempMessageList
         })
@@ -90,6 +82,16 @@ class FlashMessage extends Component{
         this.props.CurrentChatTo_Change(chatTo)
     }
 
+    handleReplyFlagChange (id) {
+        let { messageList } = this.state
+        for(let messageItem of messageList )  {
+            if(messageItem.sessionId === id) {
+                messageItem.replyFlag = true
+            }
+        }
+        this.setState({messageList})
+    }
+
     render () {
         const { messageList } = this.state
         return (
@@ -107,7 +109,8 @@ class FlashMessage extends Component{
                 </View>
                 <MessageList 
                     messageList={messageList}
-                    onChatToChange={this.handleCurrentChatToChange.bind(this)}></MessageList>
+                    onChatToChange={this.handleCurrentChatToChange.bind(this)}
+                    onReplyFlagChange={this.handleReplyFlagChange.bind(this)}></MessageList>
             </View>
         )
     }

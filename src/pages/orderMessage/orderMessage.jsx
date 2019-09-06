@@ -203,18 +203,20 @@ class Index extends Taro.Component {
 							</View>
 							{ 
 								unreadMsgList.length > 0 ?
- 								unreadMsgList.map((msgItem, index) => (
-								<View 
-									className={style.orderCattItem}
-									key={'orderCart' + index}>
-									<View className={selectList[index] == 1 ? `${style.radio} ${style.radioChecked}` : `${style.radio} ${style.radioNone}`}  onClick={this.onCheck.bind(this,index)}>
-										<Image className={style.getImage} src={GET}/>
-									</View>
-									<View className={style.redioContentBox}>
-										<OrderCart orderInfo={msgItem.orderInfo}/>
-									</View>
-								</View>
-								))
+ 								unreadMsgList.map((msgItem, index) => {
+									 if(msgItem.orderInfo) {
+										return (<View 
+											className={style.orderCattItem}
+											key={'orderCart' + index}>
+											<View className={selectList[index] == 1 ? `${style.radio} ${style.radioChecked}` : `${style.radio} ${style.radioNone}`}  onClick={this.onCheck.bind(this,index)}>
+												<Image className={style.getImage} src={GET}/>
+											</View>
+											<View className={style.redioContentBox}>
+												<OrderCart orderInfo={msgItem.orderInfo}/>
+											</View>
+										</View>)
+									 }
+								})
 								: <View className={style.noOrderBox}>
 									<Image className={style.noOrder} src={noMessage}/>
 								</View>

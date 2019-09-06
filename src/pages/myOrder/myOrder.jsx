@@ -104,11 +104,17 @@ class MyOrder extends Taro.Component {
         this.init()
     }
 
+    componentDidShow () {
+        this.init()
+    }
+
     init () {
         _fetch({url:'/masterin/reserve_list',payload: null,method: 'POST',autoLogin:true, showToast: false})
         .then(res => {
             if(res) {
-                this._dealReserveList(res.reserve)
+                if(res.reserve && res.reserve.length > 0) {
+                    this._dealReserveList(res.reserve)
+                }
                 this.setState({
                     faq: res.faq
                 })
@@ -211,7 +217,7 @@ class MyOrder extends Taro.Component {
                     </AtTabs>
                     :
                     <View className="faqPanel">
-                        { faq &&
+                        { faq && faq.length > 0 ? 
                             faq.map(item => {
                                 if(item.faq.problem_content && item.faq.user_accid) {
                                     return (
@@ -224,6 +230,9 @@ class MyOrder extends Taro.Component {
                                     )
                                 }
                             })
+                            : <View className={style.noOrderBox}>
+                                <Image className={style.noOrder} src={noOrder}/>
+                            </View>
                         }
                     </View>
                 }

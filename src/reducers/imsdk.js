@@ -24,6 +24,9 @@ const INITIAL_STATE = {
 
 let imsdk = (state = INITIAL_STATE, action) => {
 switch (action.type) {
+  case 'init_data': {
+    return INITIAL_STATE
+  }
   // IM：同步完成
   case 'Sync_Done': {
     return Object.assign({}, state, {
