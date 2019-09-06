@@ -29,6 +29,8 @@
     .bottom{
         margin-top: 20px;
         display: flex;
+        justify-content: space-between;
+        flex-wrap: wrap;
 
         .Icon{
             width: 140px;
@@ -37,10 +39,16 @@
         }
 
         .content{
-            flex-grow: 1;
-            margin-left: 10px;
+            width: 500px;
             font-size: 26px;
             color:rgba(51,51,51,1);
+
+            .question{
+                width: 100%;
+                overflow: hidden;
+                text-overflow:ellipsis;
+                white-space: nowrap;
+            }
 
             .master{
                 font-size: 32px;

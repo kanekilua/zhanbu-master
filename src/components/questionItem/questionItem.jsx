@@ -73,7 +73,7 @@ function QuestionItem (props) {
                     ></View>
                 <View className={style.content}>
                     <View className={style.master}>用户姓名：{name}</View>
-                    <View>提问：{ problem_content ? problem_content : '您还没有提问' }</View>
+                    <View className={style.question}>提问：{ problem_content ? problem_content : '您还没有提问' }</View>
                     <View>订单时间：{_disposeTime(createtime*1000)}</View>
                     <View className={style.price}>￥{total_price}</View>
                 </View>
