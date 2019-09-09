@@ -57,7 +57,7 @@ function  OrderProgressBar (props) {
 function MessageCard (props) {
 
     function _getSex (sex) {
-        return sex === 1 ? '男' : '女'
+        return sex == 1 ? '男' : '女'
     }
 
     let { name, sex, birthday, address, num } = props.Info

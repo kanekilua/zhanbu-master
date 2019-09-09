@@ -32,28 +32,35 @@ class FlashMessage extends Component{
     }
 
     async handleSessionList () {
-        let tempMessageList = await Promise.all(this.props.sessionList.map(async (item, index) => {
+        let tempMessageList = []
+        const { sessionList } = this.props
+        for(let i = 0; i < sessionList.length; ++i) {
+            const item = sessionList[i]
             const { id, accountInfo, updateTime, unread, lastMsg: {type, text} } = item
             if(accountInfo) {
                 const tempLastMsg = this.handleLastMsg(type, text)
                 let replyFlag
                 let orderNo = ''
                 await _fetch({url: '/masterin/order_status', payload: { accid: accountInfo.account }}).then((res) => {
-                    replyFlag = res.replied
-                    orderNo = res.order_no
+                    if(res) {
+                        replyFlag = res.replied
+                        orderNo = res.order_no
+                    }
                 })
-                return {
-                    sessionId: id,
-                    name : accountInfo.nick,
-                    time: imsdkUtils.calcTimeHeader(updateTime),
-                    unread: unread > 0 ? true : false,
-                    lastMsg: tempLastMsg,
-                    replyFlag,
-                    orderNo,
-                    accountInfo: accountInfo
+                if( replyFlag !== undefined && orderNo ) {
+                    tempMessageList.push({
+                        sessionId: id,
+                        name : accountInfo.nick,
+                        time: imsdkUtils.calcTimeHeader(updateTime),
+                        unread: unread > 0 ? true : false,
+                        lastMsg: tempLastMsg,
+                        replyFlag,
+                        orderNo,
+                        accountInfo: accountInfo
+                    })
                 }
             }
-        }))
+        }
         this.setState({
             messageList: tempMessageList
         })

@@ -31,12 +31,13 @@ class Mine extends Taro.Component {
     //退出登录后更新视图
     handleRefresh () {
     //    this.clearMasterInfo()
-    app.store.dispatch({
-        type: 'init_data'
-    })
-    Taro.redirectTo({
-        url: '/pages/login/login'
-    })   
+        app.store.dispatch({
+            type: 'init_data'
+        })
+        app.globalData.nim.disconnect()
+        Taro.redirectTo({
+            url: '/pages/login/login'
+        })
     }
 
     componentDidMount () {

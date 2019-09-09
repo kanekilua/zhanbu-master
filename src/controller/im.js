@@ -171,7 +171,6 @@ export default class IMController {
     console.log('----onUpdateSession---------')
     let tempSession = Object.assign({}, session)
     const account = session.id.split('-')[1]
-    console.log('-------account--------', account)
     const user = await imsdkUtils.getUserInfo(account)
     tempSession['accountInfo'] = user
     try {
@@ -183,7 +182,7 @@ export default class IMController {
     }
     app.store.dispatch({
       type: 'Update_Session',
-      payload: session
+      payload: tempSession
     })
   }
   /**
@@ -369,7 +368,6 @@ export default class IMController {
       session['accountInfo'] = user
       return session
     }))
-    
     app.store.dispatch({
       type: 'Add_SessionList',
       payload: sessionsTmp
@@ -453,7 +451,7 @@ export default class IMController {
   onWillReconnect() {
     console.log(' onWillReconnect')
     console.log('----onWillReconnect---------')
-    imsdkUtils.showToast('text', '重连中，请稍后！', { duration: 3000 })
+    // imsdkUtils.showToast('text', '重连中，请稍后！', { duration: 3000 })
   }
 }
 

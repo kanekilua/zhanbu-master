@@ -35,11 +35,6 @@ export default function MessageItem ( {messageItem, onChatToChange, onReplyFlagC
         _fetch({url: '/masterin/replied', payload: {order_no: message.orderNo }}).then(res => {
             setModelShow(false)
             onReplyFlagChange(message.sessionId)
-            // const tempMessage = {
-            //     ...message,
-            //     replyFlag: true
-            // }
-            // setMessage(tempMessage)
         })
     }
 
