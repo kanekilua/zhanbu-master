@@ -16,16 +16,22 @@ class Mine extends Taro.Component {
                 flash_num: 0
             }
         }
-    } 
+    }
+
     init () {
         const master_data = Taro.getStorageSync('master_data')
         if(master_data) {
             this.setState({master_data})
         }else {
-            Taro.navigateTo({
+            Taro.redirectTo({
                 url: '/pages/login/login'
             })   
         }
+        _fetch({url: '/masterin/get_master_info'}).then ((res) => {
+            this.setState({
+                master_data: res.master_data
+            })
+        }).catch((err) => {Taro.redirectTo({url: '/pages/login/login'})})
     }
 
     //退出登录后更新视图

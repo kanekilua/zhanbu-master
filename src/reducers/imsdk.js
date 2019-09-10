@@ -1,3 +1,5 @@
+import app from '@/utils/appData'
+
 const INITIAL_STATE = {
   isLogin: false, // 是否正在登陆
   isRegister: false, // 是否正在注册
@@ -669,8 +671,10 @@ switch (action.type) {
   // sessionList: 会话列表
   case 'Add_SessionList': {
     let tempState = Object.assign({}, state)
+    console.log('**************nim**************',app.globalData.nim)
     const sessionList = action.payload
-    let tempSessionList = sessionList.concat(state.sessionList)
+    let tempSessionList = app.globalData.nim.mergeSessions(state.sessionList, sessionList) 
+    console.log('**************tempSessionList**************', tempSessionList)
     tempState.sessionList = tempSessionList                                                                                                                                                                                           
     // for()
     // let sessionList = action.payload.sessionList
@@ -694,13 +698,11 @@ switch (action.type) {
     for( i; i < tempSessionList.length; ++i ) {
       if( tempSessionList[i].id === session.id ) {
         session.accountInfo = tempSessionList[i].accountInfo
-        tempSessionList[i] = session
+        tempSessionList.splice(i,1)
         break
       }
     }
-    if(i >= tempSessionList.length) {
-      tempSessionList.unshift(session)
-    }
+    tempSessionList = app.globalData.nim.mergeSessions(tempSessionList, [session])
     tempState.sessionList = tempSessionList
     return Object.assign({}, state, tempState)
   }
