@@ -7,7 +7,16 @@ module.exports = {
   outputRoot: '../zhanbu-master-cordova/www',
   weapp: {},
   h5: {
-    publicPath: './'
+    publicPath: './',
+    staticDirectory: 'static',
+    output: {
+      filename: 'static/js/[name].[hash:8].js',
+      chunkFilename: 'static/js/[name].[chunkhash:8].js'
+    },
+    miniCssExtractPluginOption: {
+      filename: 'static/css/[name].[hash:8].css',
+      chunkFilename: 'static/css/[id].[hash:8].css'
+    }
     /**
      * 如果h5端编译后体积过大，可以使用webpack-bundle-analyzer插件对打包体积进行分析。
      * 参考代码如下：

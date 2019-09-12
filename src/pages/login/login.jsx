@@ -55,7 +55,7 @@ class Login extends Taro.Component {
                 },500)
                 setTimeout(()=>{
                     Taro.redirectTo({
-                        url:'/pages/index/index'
+                        url:'/pages/mine/mine'
                     })
                 },2000)
             })

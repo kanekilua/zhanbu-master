@@ -11,6 +11,7 @@
     "build:h5": "taro build --type h5 ",
     "build:rn": "taro build --type rn",
     "build:ad": "npm run build:h5 && cd ..\\zhanbu-master-cordova && cordova run android",
+    "build:adt": "npm run build:h5 && cd ..\\zhanbu-master-cordova && cordova-hcp build",
     "dev:weapp": "npm run build:weapp -- --watch",
     "dev:swan": "npm run build:swan -- --watch",
     "dev:alipay": "npm run build:alipay -- --watch",
