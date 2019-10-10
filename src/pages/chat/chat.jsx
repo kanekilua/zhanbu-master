@@ -8,6 +8,7 @@ import style from './chat.module.scss'
 import Header from '@/components/header/header'
 import ChatMain from './chatMain/chatMain'
 import IMController from '../../controller/im'
+// import { utils } from '@/utils/utils'
 import imsdkUtils from '@/utils/imsdk'
 // import * as iconBase64Map from '@/utils/imageBase64.js'
 
@@ -31,7 +32,7 @@ class Chat extends Taro.Component {
             chatWrapperMaxHeight: 0,// 聊天界面最大高度
             chatTo: '', //聊天对象account
             chatType: 'p2p', //聊天类型 advanced 高级群聊 normal 讨论组群聊 p2p 点对点聊天
-            loginAccountLogo: '',  // 登录账户对象头像
+            // loginAccountLogo: '',  // 登录账户对象头像
             emojiFlag: false,//emoji键盘标志位
             moreFlag: false, // 更多功能标志
             tipFlag: false, // tip消息标志
@@ -52,15 +53,17 @@ class Chat extends Taro.Component {
         Taro.eventCenter.on('onShowToast', this.handleToastShow.bind(this))
         // 在挂载chat页面时，要先
         if(app.globalData.nim === null) {
-            let userInfo = utils.getUserInfo()
-            // 连接网易云信
-            const {accid, yunxin_token, avatar} = userInfo
-            if(accid !== undefined && yunxin_token !== undefined) {
-                new IMController({
-                    account : accid,
-                    token : yunxin_token,
-                    avatar: avatar
-                })
+            let userInfo = app.getUserInfo()
+            if(userInfo) {
+                // 连接网易云信
+                const {accid, yunxin_token, avatar} = userInfo
+                if(accid !== undefined && yunxin_token !== undefined) {
+                    new IMController({
+                        account : accid,
+                        token : yunxin_token,
+                        avatar: avatar
+                    })
+                }
             }
         }
         this.init()
@@ -71,6 +74,10 @@ class Chat extends Taro.Component {
             this.setState({
                 messageArr: this.props.rawMessageList
             })
+            // const rawMessageList = this.props.rawMessageList
+            // if(rawMessageList.length > 0) {
+            //     this.reCalcAllMessageTime(rawMessageList)
+            // }
         }
     }
 
@@ -85,7 +92,7 @@ class Chat extends Taro.Component {
     init () {
         let chatTo
         if(this.$router.params.chatTo) {
-            chatTo = JSON.parse(this.$router.params.chatTo)
+            chatTo = JSON.parse(decodeURI(this.$router.params.chatTo))
             this.props.CurrentChatTo_Change(chatTo)
         }else {
             chatTo = this.props.currentChatTo
@@ -95,30 +102,32 @@ class Chat extends Taro.Component {
         }
 
         // 获取历史记录
-        app.globalData.nim.getHistoryMsgs({
-            scene: 'p2p',
-            to: chatTo.accid,
-            done: (error, obj) => {
-                if(obj.msgs.length > 0) {
-                    this.props.RawMessageList_Replace_History({
-                        msgs: obj.msgs.reverse(),
-                        sessionId: 'p2p-' + chatTo.accid
-                    })
+        setTimeout(() => {
+            app.globalData.nim.getHistoryMsgs({
+                scene: 'p2p',
+                to: chatTo.accid,
+                done: (error, obj) => {
+                    if(obj.msgs.length > 0) {
+                        this.props.RawMessageList_Replace_History({
+                            msgs: obj.msgs.reverse(),
+                            sessionId: 'p2p-' + chatTo.accid
+                        })
+                    }
                 }
-            }
-        })
+            })
+        }, 1000)
         
         // 从state中获取需要的数据
-        const { defaultUserLogo } = this.state
+        // const { defaultUserLogo } = this.state
         // 从props中获取需要的数据
-        const { userInfo } = this.props
+        // const { userInfo } = this.props
         // 初始化聊天对象
-        let loginAccountLogo = userInfo.avatar || defaultUserLogo
+        // let loginAccountLogo = userInfo.avatar || defaultUserLogo
         let chatWrapperMaxHeight = Taro.getSystemInfoSync().windowHeight - 52 - 35
 
         this.setState({
             chatTo,
-            loginAccountLogo,
+            // loginAccountLogo,
             // iconBase64Map: iconBase64Map,
             chatWrapperMaxHeight,
         })
@@ -216,7 +225,10 @@ class Chat extends Taro.Component {
         let displayTimeHeader = ''
         let lastMessage = messageArr[messageArr.length - 1]
         if (lastMessage) {//拥有上一条消息
-                let delta = time - lastMessage.time
+            // console.log('lastMessage', lastMessage)
+            // console.log('time', time)
+            // console.log('lastMessageTime', lastMessage.time)
+            let delta = time - lastMessage.time
             if (delta > 2 * 60 * 1000) {//两分钟以上
                 displayTimeHeader = imsdkUtils.calcTimeHeader(time)
             }
@@ -289,6 +301,25 @@ class Chat extends Taro.Component {
         })
     }
 
+    handleBackClick (e) {
+        if( this.$router.params.from === 'question' ) {
+            e.stopPropagation()
+            app.navigateTo({
+                url: '/pages/mine/mine'
+            })
+            return
+        }else {
+            if(Taro.getCurrentPages().length == 1){
+                Taro.redirectTo({
+                    url:'/pages/index/index'
+                })
+                return
+            }else {
+                Taro.navigateBack()
+            }
+        }
+    }
+
     refScrollView = (node) => {
         this.scrollView = node
     }
@@ -299,6 +330,7 @@ class Chat extends Taro.Component {
             <View 
                 className={style.chatWrapper}>
                 <Header headerTitle={chatTo.nickname}></Header>
+                <View className={style.backView} onClick={this.handleBackClick.bind(this)}></View>
                 <ChatMain 
                     msgList={messageArr}></ChatMain>
                 <AtToast 

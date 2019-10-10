@@ -41,6 +41,14 @@ let app = {
                 payload: online
             })
         }
+    },
+    getUserInfo: () => {
+        let userInfoStr = Taro.getStorageSync('userInfo')
+        if( userInfoStr ) {
+            return JSON.parse(userInfoStr)
+        }else {
+            return null
+        }
     }
 }
 

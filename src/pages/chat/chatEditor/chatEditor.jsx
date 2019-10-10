@@ -4,8 +4,8 @@ import app from '@/utils/appData'
 import _fetch from '@/utils/fetch'
 
 import { _executeRecord, _stopRecord } from './func'
-// import voiceIcon from './assets/voice.png'
-// import textIcon from './assets/text.png'
+import voiceIcon from './assets/voice.png'
+import textIcon from './assets/text.png'
 // import imageIcon from './assets/image.png'
 import CHAT_EXTENDS from './assets/extends.png'
 import photoIcon from './assets/photo.png'
@@ -249,10 +249,10 @@ class ChatEditor extends Taro.Component {
             <View 
                 className={style.chatEditorWrapper}>
                 <View className={`${style.editorBarWrapper} editorBarWrapper`}>
-                    {/* <Image 
+                    <Image 
                         src={msgType ? textIcon : voiceIcon}
                         className={style.icon}
-                        onClick={this.handleMsgTypeClick.bind(this)}/> */}
+                        onClick={this.handleMsgTypeClick.bind(this)}/>
                     {
                         msgType
                         ? <Input 

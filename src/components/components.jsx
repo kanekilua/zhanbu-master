@@ -60,7 +60,8 @@ function MessageCard (props) {
         return sex == 1 ? '男' : '女'
     }
 
-    let { name, sex, birthday, address, num } = props.Info
+    // type: faq -- 问答, reserve -- 服务
+    let { name, sex, birthday, address, num, type, problem_content } = props.Info
 
     return (
         <View className={style.MessageCardWrapper}>
@@ -80,14 +81,24 @@ function MessageCard (props) {
                 <View className={style.label}>出生地址<Text style="color:#FE0000;">*</Text></View>
                 <View className={style.show}>{address}</View>
             </View>
-            <View className={style.item}>
-                <View className={style.label}>选三个数<Text style="color:#FE0000;">*</Text></View>
-                <View className={style.numShow}>
-                    <View className={style.numBox}>{num.split(',')[0]}</View>
-                    <View className={style.numBox}>{num.split(',')[1]}</View>
-                    <View className={style.numBox}>{num.split(',')[2]}</View>
+            {
+                type && type === 'faq' &&
+                <View className={style.item}>
+                    <View className={style.label}>选三个数<Text style="color:#FE0000;">*</Text></View>
+                    <View className={style.numShow}>
+                        <View className={style.numBox}>{num.split(',')[0]}</View>
+                        <View className={style.numBox}>{num.split(',')[1]}</View>
+                        <View className={style.numBox}>{num.split(',')[2]}</View>
+                    </View>
                 </View>
-            </View>
+            }
+            {
+                type && type === 'reserve' &&
+                <View className={style.item}>
+                    <View className={style.label}>咨询问题<Text style="color:#FE0000;">*</Text></View>
+                    <View className={style.show}>{problem_content}</View>
+                </View>
+            }
         </View>
     )
 }

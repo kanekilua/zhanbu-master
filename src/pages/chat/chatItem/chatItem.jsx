@@ -168,15 +168,15 @@ class ChatItem extends Taro.Component {
         // TODO: props的参数
         // TODO: type, rawMsg, userInfos, myInfo, isHistory
         const { msg, imgs, imgPrevIndex, imgPrevShow } = this.state
-        let text 
+        let text
         if(app.isJson(msg.text)) {
             const tmpText = JSON.parse(msg.text)
             if(tmpText.master_id) {
                 text = tmpText.content
             }else {
-                const { name, sex_data, birthday, birth_address, random_num } = tmpText
+                const { name, sex_data, birthday, birth_address, random_num, problem_content, type } = tmpText
                 text = {
-                    name, sex: sex_data, birthday, address: birth_address, num: random_num
+                    name, sex: sex_data, birthday, address: birth_address, num: random_num, type, problem_content
                 }
             }
         }else {
@@ -208,7 +208,7 @@ class ChatItem extends Taro.Component {
                                     // ? text.master_id
                                     // ? <View className={style.content}>
                                     //     {text.content.split('本人主页')[0]}
-                                    //     <Text className={style.linkText} onClick={()=>{Taro.navigateTo({url:`/pages/masterIntroduction/masterIntroduction?master_id=${text.master_id}`})}}>本人主页</Text>
+                                    //     <Text className={style.linkText} onClick={()=>{app.navigateTo({url:`/pages/masterIntroduction/masterIntroduction?master_id=${text.master_id}`})}}>本人主页</Text>
                                     //     {text.content.split('本人主页')[1]}
                                     // </View>
                                     ? <View className={style.content}><MessageCard Info={text}/></View>

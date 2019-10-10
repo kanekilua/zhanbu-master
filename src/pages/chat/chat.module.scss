@@ -3,4 +3,12 @@
     box-sizing: border-box;
     background-color: #F1F1F1;
     height: 100vh;
+    .backView {
+        position: fixed;
+        width: 100px;
+        height: 132px;
+        top: 0;
+        left: 0;
+        z-index: 999;
+    }
 }
