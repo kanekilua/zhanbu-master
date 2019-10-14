@@ -5,7 +5,7 @@ import imsdkUtils from '@/utils/imsdk'
 import app from '@/utils/appData'
 import _fetch from '@/utils/fetch'
 
-let NIM = require('../plugin/NIM_Web_NIM_v6.2.0')
+let NIM = require('../plugins/NIM_Web_NIM_v6.2.0')
 
 let orderCounter = 1
 // 第一次进去onConnect onBlacklist onMutelist onFriends onMyInfo onUsers onTeams SyncDone onPushEvents

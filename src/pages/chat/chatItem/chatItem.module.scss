@@ -26,6 +26,8 @@
             color:#333;
             background-color: $bgColor;
             border-radius: 10px;
+            word-wrap:break-word;
+            // word-break:break-all;
             .linkText {
                 text-decoration: underline;
                 color: #E0BD9A;
@@ -56,7 +58,20 @@
     $flexDirection : row-reverse;
     $triangleBorderWidth : 8px 0 8px 8px;
     $triangleBorderColor : transparent transparent transparent $bgColor;
-    @include msgItem($bgColor, $flexJustify, $flexDirection, $triangleBorderWidth, $triangleBorderColor)
+    @include msgItem($bgColor, $flexJustify, $flexDirection, $triangleBorderWidth, $triangleBorderColor);
+    .contentAudio {
+        @extend .content;
+        display: flex;
+        justify-content: flex-start;
+        flex-direction: row;
+        align-items: center;
+        width: 130px;
+        .audioIcon {
+            width: 19px;
+            height: 28px;
+            margin-right: 20px;
+        }
+    }
 }
 
 .itemYou {
@@ -65,7 +80,20 @@
     $flexDirection : row;
     $triangleBorderWidth : 8px 8px 8px 0;
     $triangleBorderColor : transparent $bgColor transparent transparent ;
-    @include msgItem($bgColor, $flexJustify, $flexDirection, $triangleBorderWidth, $triangleBorderColor)
+    @include msgItem($bgColor, $flexJustify, $flexDirection, $triangleBorderWidth, $triangleBorderColor);
+    .contentAudio {
+        @extend .content;
+        display: flex;
+        justify-content: flex-start;
+        flex-direction: row-reverse;
+        align-items: center;
+        width: 130px;
+        .audioIcon {
+            width: 19px;
+            height: 28px;
+            margin-left: 20px;
+        }
+    }
 }
 
 .itemTime{
@@ -73,4 +101,4 @@
     font-size: 20px;
     color:#999;
     text-align: center;
-} 
+}

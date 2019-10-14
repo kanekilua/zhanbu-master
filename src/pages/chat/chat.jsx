@@ -2,7 +2,7 @@ import Taro from '@tarojs/taro'
 import { View } from '@tarojs/components'
 import { connect } from '@tarojs/redux'
 import { bindActionCreators } from 'redux'
-import { AtToast } from 'taro-ui'
+// import { AtToast } from 'taro-ui'
 
 import style from './chat.module.scss'
 import Header from '@/components/header/header'
@@ -39,18 +39,18 @@ class Chat extends Taro.Component {
             tipInputValue: '', // tip消息文本框内容
             sendType: 0, //发送消息类型，0 文本 1 语音
             messageArr: [], //[{text, time, sendOrReceive: 'send', displayTimeHeader, nodes: []},{type: 'geo',geo: {lat,lng,title}}]
-            toastOption: {
-                show: false,
-                text: '',
-                icon: ''
-            }
+            // toastOption: {
+            //     show: false,
+            //     text: '',
+            //     icon: ''
+            // }
         }
     }
 
     componentDidMount () {
         Taro.eventCenter.on('onSendTextMsg', this.handleMsgSend.bind(this))
         Taro.eventCenter.on('onSendFile', this.handleFileSend.bind(this))
-        Taro.eventCenter.on('onShowToast', this.handleToastShow.bind(this))
+        // Taro.eventCenter.on('onShowToast', this.handleToastShow.bind(this))
         // 在挂载chat页面时，要先
         if(app.globalData.nim === null) {
             let userInfo = app.getUserInfo()
@@ -84,7 +84,7 @@ class Chat extends Taro.Component {
     componentWillUnmount () {
         Taro.eventCenter.off('onSendTextMsg')
         Taro.eventCenter.off('onSendFile')
-        Taro.eventCenter.off('onShowToast')
+        // Taro.eventCenter.off('onShowToast')
         this.props.CurrentChatTo_Change({})
     }
 
@@ -285,21 +285,21 @@ class Chat extends Taro.Component {
         }
     }
 
-    handleToastShow (option) {
-        this.setState({
-            toastOption : option
-        })
-    }
+    // handleToastShow (option) {
+    //     this.setState({
+    //         toastOption : option
+    //     })
+    // }
 
-    handleToastClose () {
-        this.setState({
-            toastOption : {
-                show: false,
-                text: '',
-                icon: ''
-            }
-        })
-    }
+    // handleToastClose () {
+    //     this.setState({
+    //         toastOption : {
+    //             show: false,
+    //             text: '',
+    //             icon: ''
+    //         }
+    //     })
+    // }
 
     handleBackClick (e) {
         if( this.$router.params.from === 'question' ) {
@@ -325,7 +325,7 @@ class Chat extends Taro.Component {
     }
 
     render() {
-        const { messageArr, chatTo, toastOption } = this.state
+        const { messageArr, chatTo } = this.state
         return (
             <View 
                 className={style.chatWrapper}>
@@ -333,13 +333,13 @@ class Chat extends Taro.Component {
                 <View className={style.backView} onClick={this.handleBackClick.bind(this)}></View>
                 <ChatMain 
                     msgList={messageArr}></ChatMain>
-                <AtToast 
+                {/* <AtToast 
                     isOpened={toastOption.show}
                     text={toastOption.text}
                     icon={toastOption.icon}
                     duration={TOAST_DURATION}
                     onClose={this.handleToastClose.bind(this)}
-                    ></AtToast>
+                    ></AtToast> */}
             </View>
         )
     }

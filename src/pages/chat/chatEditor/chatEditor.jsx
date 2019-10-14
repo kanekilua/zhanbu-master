@@ -1,9 +1,8 @@
 import Taro from '@tarojs/taro'
 import { View, Image, Input, Button } from '@tarojs/components'
-import app from '@/utils/appData'
 import _fetch from '@/utils/fetch'
 
-import { _executeRecord, _stopRecord } from './func'
+import { _executeRecord, _stopRecord, _getRecordFile, _deleteRecordFile } from './func'
 import voiceIcon from './assets/voice.png'
 import textIcon from './assets/text.png'
 // import imageIcon from './assets/image.png'
@@ -23,6 +22,7 @@ class ChatEditor extends Taro.Component {
             isLongPress : false,
             pressStart: 0, // 按钮开始时间
             recordTimer: null, // 录音的时间调度
+            meida: null,
             sendFlag: false
         }
     }
@@ -72,75 +72,54 @@ class ChatEditor extends Taro.Component {
     handleInputTouchStart (e) {
         const pressStart = new Date().getTime()
         const recordTimer = setTimeout(() => {
-            if(app.getEnv() === 0) {
-                const wxRecordPermission = Taro.getStorageSync('wxRecordPermission')
-                window.wx.startRecord({
-                    success: () => {
-                        if( !wxRecordPermission && wxRecordPermission !== 'true' ) {
-                            window.wx.stopRecord()
-                            Taro.setStorageSync('wxRecordPermission', 'true')
-                        }
-                    },
-                    cancel: () => {
-                        Taro.showToast({
-                            title: '用户拒绝授权录音'
-                        })
-                    }
-                })
-            }
+            console.log('startRecord')
+            let src = new Date().getTime() + '.wav'
+            let media = new Media(src)
+            media.startRecord()
+            this.setState({
+                media
+            })
         }, 450)
-        this.setState({ pressStart, recordTimer })
+        this.setState({
+            pressStart, recordTimer
+        })
     }
 
     // 长按结束
     handleInputTouchEnd (e) {
-        const { pressStart, recordTimer } = this.state
+        var self = this
+        const { pressStart, recordTimer, media } = this.state
         const pressEnd = new Date().getTime()
         if( pressEnd - pressStart < 450 ) {
+            console.log('cancelRecord',pressEnd - pressStart)
             clearTimeout(recordTimer)
-
             this.setState({
                 pressStart: 0,
                 recordTimer: null
             })
             return
         }
-        if(app.getEnv() === 0) {
-            window.wx.stopRecord({
-                success: function (res) {
-                    let localId = res.localId
-                    wx.uploadVoice({
-                        localId,
-                        success: function (res) {
-                            let serverId = res.serverId
-                            _fetch({
-                                url: '/app/voice', 
-                                payload: { 
-                                    media_id: serverId
-                                }
-                            }).then((res) => {
-                                app.BlobUrlToBlob('https://alicdnoss.szmonster.com/uploads/voice/llll.mp3').then((res) => {
-                                    this._sendFileMsg({
-                                        type: 'audio',
-                                        blob: res
-                                    })
-                                })
-                            })
-                        }
-                    })
-                }
+        console.log('stopRecord',pressEnd - pressStart)
+        media.stopRecord()
+        if( pressEnd - pressStart > 1500) {
+            _getRecordFile(media.src).then((dataUrl) => {
+                self._sendFileMsg({
+                    blob: self.dataURLtoBlob(dataUrl),
+                    type: 'audio'
+                })
+                media.release()
+                this.setState({
+                    media: null
+                })
+                _deleteRecordFile(media.src)
             })
+        }else {
+            Taro.showToast({
+                title: '录音时间太短',
+                icon: 'none'
+            })
+            _deleteRecordFile(media.src)
         }
-        // this.setState({
-        //     recordClicked : false
-        // })
-        // TODO:根据录音的状态设置isLongPress
-        // if(this.state.isLongPress === true) {
-        //     this.setState({
-        //         isLongPress: false
-        //     })
-        //     _stopRecord()
-        // }
     }
 
     handleExtarMenuShow () {
@@ -150,7 +129,6 @@ class ChatEditor extends Taro.Component {
 
     // handleChooseImage () {
     //     // TODO:从相册选取照片
-        
     // }
 
     handleMenuClick (index) {
@@ -196,19 +174,14 @@ class ChatEditor extends Taro.Component {
 
     cameraSuccess (imageData) {
         let imageFile = this.dataURLtoBlob('data:image/jpeg;base64,' + imageData)
-        // var arr = ('data:image/jpeg;base64,'+imageData).split(','), mime = arr[0].match(/:(.*?);/)[1],
-        //     bstr = atob(arr[1]), n = bstr.length, u8arr = new Uint8Array(n)
-        // while (n--) {
-        //     u8arr[n] = bstr.charCodeAt(n)
-        // }
-        // let imageFile = new Blob([u8arr], { type: mime })
         this._sendFileMsg({
             type: 'image',
             blob: imageFile
         })
     }
 
-    dataURLtoBlob(dataurl) {//将base64转换为Blob
+    // 将base64转换为Blob
+    dataURLtoBlob(dataurl) {
         var arr = dataurl.split(','), mime = arr[0].match(/:(.*?);/)[1],
             bstr = atob(arr[1]), n = bstr.length, u8arr = new Uint8Array(n)
         while (n--) {
@@ -259,8 +232,6 @@ class ChatEditor extends Taro.Component {
                             placeholder="按住说话"
                             className="editorInput1"
                             disabled={true}
-                            catchtouchstart={this.handleInputTouchStart.bind(this)}
-                            catchtouchend={this.handleInputTouchEnd.bind(this)}
                             onTouchStart={this.handleInputTouchStart.bind(this)}
                             onTouchEnd={this.handleInputTouchEnd.bind(this)}/>
                         :  <Input 

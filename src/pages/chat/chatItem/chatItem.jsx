@@ -7,6 +7,12 @@ import { MessageCard } from '@/components/components'
 import app from '@/utils/appData'
 
 import style from './chatItem.module.scss'
+import audio11 from './assets/audio1-1.png'
+import audio1 from './assets/audio1.png'
+import audio22 from './assets/audio2-2.png'
+import audio2 from './assets/audio2.png'
+import audio33 from './assets/audio3-3.png'
+import audio3 from './assets/audio3.png'
 
 import { DEFAULT_AVATAR } from '@/constants/chat'
 import * as actions from '@/actions/imsdk'
@@ -21,7 +27,8 @@ class ChatItem extends Taro.Component {
             imgPrevIndex: 0,
             imgPrevShow: false,
             voicePlayFlag : false,
-            audioContext: null
+            audioContext: null,
+            audioImg: null
         }
     }
 
@@ -74,12 +81,15 @@ class ChatItem extends Taro.Component {
         const { rawMsg, imsdk } = this.props
         const { userInfo } = imsdk
         let item = Object.assign({}, rawMsg)
+        let audioImg = null
         // 标记用户，区分聊天室、普通消息
         if (item.sendOrReceive === 'send') {
             item.avatar = userInfo.avatar !== '' ? userInfo.avatar : DEFAULT_AVATAR
+            audioImg = audio3
         } else {
             const { avatar } = imsdk.currentChatTo
             item.avatar = avatar === '' ? DEFAULT_AVATAR : avatar
+            audioImg = audio33
         }
         if (item.type === 'timeTag') {
           // 标记发送的时间
@@ -131,7 +141,8 @@ class ChatItem extends Taro.Component {
           item.showText = '未知消息类型,请到手机或电脑客户端查看'
         }
         this.setState({
-            msg : item
+            msg : item,
+            audioImg
         })
     }
 
@@ -143,21 +154,54 @@ class ChatItem extends Taro.Component {
 
     // TODO: playAudio 播放语音
     playAudio (url) {
-        const { voicePlayFlag } = this.state
+        const { msg, voicePlayFlag } = this.state
         if(voicePlayFlag) {
-
+            const { audioContext } = this.state
+            audioContext.stop()
+        }else {
+            const audioContext = Taro.createInnerAudioContext()
+            audioContext.src = url
+            audioContext.play()
+            var intervalId = null
+            let audioImgArr
+            if(msg.sendOrReceive === 'send') {
+                audioImgArr = [audio1, audio2, audio3]
+            }else{
+                audioImgArr = [audio11, audio22, audio33]
+            }
+            audioContext.onPlay(() => {
+                var index = 0
+                intervalId = setInterval(() => {
+                    this.setState({
+                        audioImg: audioImgArr[index]
+                    })
+                    if(index === 2) {
+                        index = 0
+                    }else {
+                        index++
+                    }
+                }, 300);
+            })
+            audioContext.onEnded(() => {
+                clearInterval(intervalId)
+                intervalId = null
+                this.setState({
+                    voicePlayFlag: false,
+                    audioImg: audioImgArr[2]
+                })
+            })
+            audioContext.onStop(() => {
+                clearInterval(intervalId)
+                intervalId = null
+                this.setState({
+                    audioImg: audioImgArr[2]
+                })
+            })
+            this.setState({
+                voicePlayFlag: true,
+                audioContext
+            })
         }
-        const audioContext = Taro.createInnerAudioContext()
-        audioContext.src = url
-        audioContext.play()
-        // audioContext.onPlay(() => {
-        // })
-        // audioContext.onEnded(() => {
-        //     wx.hideToast()
-        // })
-        // audioContext.onError((res) => {
-        //     showToast('text', res.errCode)
-        // })
     }
 
     // TODO: canclePlayAudio 取消播放语音
@@ -167,7 +211,7 @@ class ChatItem extends Taro.Component {
         // TODO: 音频对象audio
         // TODO: props的参数
         // TODO: type, rawMsg, userInfos, myInfo, isHistory
-        const { msg, imgs, imgPrevIndex, imgPrevShow } = this.state
+        const { msg, imgs, imgPrevIndex, imgPrevShow, audioImg } = this.state
         let text
         if(app.isJson(msg.text)) {
             const tmpText = JSON.parse(msg.text)
@@ -223,9 +267,12 @@ class ChatItem extends Taro.Component {
                                     ? 
                                     <View
                                         onClick={this.playAudio.bind(this, msg.audio.mp3Url)}
-                                        className={style.audio}>
+                                        className={style.contentAudio}>
                                         {/* <image src={iconBase64Map.iconVoiceWhite} class='image'></image> */}
-                                        <text class='text'>{msg.audio.dur / 1000 << 1 >> 1}''</text>
+                                        <Image src={audioImg} className={style.audioIcon}/>
+                                        <View>
+                                            <text className={style.text}>{msg.audio.dur / 1000 << 1 >> 1}''</text>
+                                        </View>
                                     </View>
                                     : <View></View>}
                             </View>
