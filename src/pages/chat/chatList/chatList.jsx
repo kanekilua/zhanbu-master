@@ -14,6 +14,7 @@ class ChatList extends Taro.Component {
         super(props) 
         this.state = {
             scrollTop : 0,
+            currAudioPlay: null // 当前正在播放的音频对象
             // isFullImgShow 查看聊天图片的大图
             // msgLoadedTimer 消息加载的时间调度
         }
@@ -47,11 +48,16 @@ class ChatList extends Taro.Component {
         }
     }
 
+    handleCurrAudioPlayChange (currAudioPlay) {
+        this.setState({currAudioPlay})
+    }
+
     refScrollView = (node) => {
         this.scrollView = node
     }
 
     render() {
+        const { currAudioPlay } = this.state
         const { msgList, showEditorExtra } = this.props
         return (
             <ScrollView 
@@ -63,7 +69,9 @@ class ChatList extends Taro.Component {
                 {msgList.map((msg,index) => (
                     <ChatItem
                         key={index}
-                        rawMsg={msg}></ChatItem>
+                        rawMsg={msg}
+                        currAudioPlay={currAudioPlay}
+                        onCurrAudioPlayChange={this.handleCurrAudioPlayChange.bind(this)}></ChatItem>
                 ))}
             </ScrollView>
         )

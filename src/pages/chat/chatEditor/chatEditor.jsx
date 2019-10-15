@@ -1,5 +1,6 @@
 import Taro from '@tarojs/taro'
 import { View, Image, Input, Button } from '@tarojs/components'
+import { AtToast } from "taro-ui"
 import _fetch from '@/utils/fetch'
 
 import { _executeRecord, _stopRecord, _getRecordFile, _deleteRecordFile } from './func'
@@ -9,6 +10,9 @@ import textIcon from './assets/text.png'
 import CHAT_EXTENDS from './assets/extends.png'
 import photoIcon from './assets/photo.png'
 import cameraIcon from './assets/camera.png'
+import mic from './assets/mic.png'
+import revert from './assets/revert.png'
+import tip from './assets/tip.png'
 
 import style from './chatEditor.module.scss'
 import './chatEditor.scss'
@@ -19,11 +23,12 @@ class ChatEditor extends Taro.Component {
         this.state = {
             msgType : 0, // 0-文字 1-语音
             msgToSent : '',
-            isLongPress : false,
             pressStart: 0, // 按钮开始时间
             recordTimer: null, // 录音的时间调度
-            meida: null,
-            sendFlag: false
+            isLongPress : false,
+            audioCancel: false,
+            startY: 0,
+            audioTip: false
         }
     }
 
@@ -81,50 +86,87 @@ class ChatEditor extends Taro.Component {
             })
         }, 450)
         this.setState({
-            pressStart, recordTimer
+            pressStart, recordTimer,
+            isLongPress: true,
+            startY: e.touches[0].pageY
         })
+    }
+
+    // 长按滑动
+    handleInputTouchMove (e) {
+        const { startY } = this.state
+        if(startY - e.touches[0].pageY > 80) {
+            this.setState({
+                audioCancel: true
+            })
+        }else {
+            this.setState({
+                audioCancel: false
+            })
+        }
     }
 
     // 长按结束
     handleInputTouchEnd (e) {
         var self = this
-        const { pressStart, recordTimer, media } = this.state
+        const { pressStart, recordTimer, media, audioCancel } = this.state
         const pressEnd = new Date().getTime()
         if( pressEnd - pressStart < 450 ) {
             console.log('cancelRecord',pressEnd - pressStart)
             clearTimeout(recordTimer)
-            this.setState({
-                pressStart: 0,
-                recordTimer: null
-            })
-            return
-        }
-        console.log('stopRecord',pressEnd - pressStart)
-        media.stopRecord()
-        if( pressEnd - pressStart > 1500) {
-            _getRecordFile(media.src).then((dataUrl) => {
-                self._sendFileMsg({
-                    blob: self.dataURLtoBlob(dataUrl),
-                    type: 'audio'
-                })
-                media.release()
+            if(!audioCancel) {
                 this.setState({
-                    media: null
+                    audioTip: true
+                })
+            }
+        }else {
+            console.log('stopRecord',pressEnd - pressStart)
+            media.stopRecord()
+            if( pressEnd - pressStart > 1500) {
+                if(audioCancel) {
+                    media.release()
+                    this.setState({
+                        media: null
+                    })
+                    _deleteRecordFile(media.src)
+                }else {
+                    _getRecordFile(media.src).then((dataUrl) => {
+                        self._sendFileMsg({
+                            blob: self.dataURLtoBlob(dataUrl),
+                            type: 'audio'
+                        })
+                        media.release()
+                        this.setState({
+                            media: null
+                        })
+                        _deleteRecordFile(media.src)
+                    })
+                }
+            }else {
+                this.setState({
+                    audioTip: true
                 })
                 _deleteRecordFile(media.src)
-            })
-        }else {
-            Taro.showToast({
-                title: '录音时间太短',
-                icon: 'none'
-            })
-            _deleteRecordFile(media.src)
+            }
         }
+        this.setState({
+            pressStart: 0,
+            recordTimer: null,
+            isLongPress: false,
+            audioCancel: false,
+            startY: 0
+        })
     }
 
     handleExtarMenuShow () {
         const tempShow = this.props.showEditorExtra
         this.props.onEditorExtarChange(!tempShow)
+    }
+
+    handleAudioTipClose () {
+        this.setState({
+           audioTip: false
+        })
     }
 
     // handleChooseImage () {
@@ -200,7 +242,7 @@ class ChatEditor extends Taro.Component {
     }
 
     render() {
-        const { msgType, msgToSent } = this.state
+        const { msgType, msgToSent, isLongPress, audioCancel, audioTip } = this.state
         const { showEditorExtra } = this.props
         const menus = [
             {
@@ -229,10 +271,11 @@ class ChatEditor extends Taro.Component {
                     {
                         msgType
                         ? <Input 
-                            placeholder="按住说话"
+                            placeholder={isLongPress ? "松开结束" :"按住说话" }
                             className="editorInput1"
                             disabled={true}
                             onTouchStart={this.handleInputTouchStart.bind(this)}
+                            onTouchMove={this.handleInputTouchMove.bind(this)}
                             onTouchEnd={this.handleInputTouchEnd.bind(this)}/>
                         :  <Input 
                             onInput={this.handleInput.bind(this)}
@@ -275,6 +318,17 @@ class ChatEditor extends Taro.Component {
                         </View>
                     ))}
                 </View>
+                <AtToast 
+                    isOpened={isLongPress} 
+                    text={ audioCancel ? "松开取消" : "上滑取消" }
+                    image={ audioCancel ? revert : mic } 
+                    duration={ 0 }></AtToast>
+                <AtToast 
+                    isOpened={audioTip}
+                    text="录音时间太短"
+                    image={ tip }
+                    duration={ 1000 }
+                    onClose={ this.handleAudioTipClose.bind(this)}></AtToast>
             </View>
         )
     }

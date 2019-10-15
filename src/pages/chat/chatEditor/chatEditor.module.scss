@@ -55,4 +55,17 @@
             }
         }
     }
+    :global {
+        .toast-body-content__img-item {
+            width: 80px;
+            height: 80px;
+        }
+        .at-toast .toast-body {
+            background-color: rgba(0,0,0,0.4);
+        }
+        .taro-img__mode-scaletofill {
+            width: auto;
+            height: 100%;
+        }
+    }
 }

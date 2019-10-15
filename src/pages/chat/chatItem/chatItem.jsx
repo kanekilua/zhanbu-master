@@ -155,10 +155,14 @@ class ChatItem extends Taro.Component {
     // TODO: playAudio 播放语音
     playAudio (url) {
         const { msg, voicePlayFlag } = this.state
+        const { currAudioPlay } = this.props
         if(voicePlayFlag) {
             const { audioContext } = this.state
             audioContext.stop()
         }else {
+            if(currAudioPlay) {
+                currAudioPlay.stop()
+            }
             const audioContext = Taro.createInnerAudioContext()
             audioContext.src = url
             audioContext.play()
@@ -180,7 +184,8 @@ class ChatItem extends Taro.Component {
                     }else {
                         index++
                     }
-                }, 300);
+                }, 300)
+                this.props.onCurrAudioPlayChange(audioContext)
             })
             audioContext.onEnded(() => {
                 clearInterval(intervalId)
@@ -189,13 +194,16 @@ class ChatItem extends Taro.Component {
                     voicePlayFlag: false,
                     audioImg: audioImgArr[2]
                 })
+                this.props.onCurrAudioPlayChange(null)
             })
             audioContext.onStop(() => {
                 clearInterval(intervalId)
                 intervalId = null
                 this.setState({
+                    voicePlayFlag: false,
                     audioImg: audioImgArr[2]
                 })
+                this.props.onCurrAudioPlayChange(null)
             })
             this.setState({
                 voicePlayFlag: true,
