@@ -28,7 +28,8 @@ class ChatItem extends Taro.Component {
             imgPrevShow: false,
             voicePlayFlag : false,
             audioContext: null,
-            audioImg: null
+            audioImg: null,
+            touchTime: undefined
         }
     }
 
@@ -212,6 +213,26 @@ class ChatItem extends Taro.Component {
         }
     }
 
+    handleItemTouchStart (text) {
+        if(typeof(text) != 'string') {
+            this.setState({
+                touchTime: new Date().getTime()
+            })
+        }
+    }
+
+    handleItemTouchEnd (text) {
+        const { touchTime } = this.state
+        if( touchTime ) {
+            const now = new Date().getTime()
+            if(now - touchTime > 500) {
+                console.log(text.order_no)
+                //TODO：修改输入款的值
+                Taro.eventCenter.trigger('msgToSendPlus', text.order_no)
+            }
+        }
+    }
+
     // TODO: canclePlayAudio 取消播放语音
 
     // TODO: canclePlayAudio 停止播放语音
@@ -225,17 +246,22 @@ class ChatItem extends Taro.Component {
             const tmpText = JSON.parse(msg.text)
             if(tmpText.master_id) {
                 text = tmpText.content
+            }else if(tmpText.type && tmpText.type !== 'faq') {
+                text = tmpText
             }else {
-                const { name, sex_data, birthday, birth_address, random_num, problem_content, type } = tmpText
+                const { name, sex_data, birthday, birth_address, random_num, problem_content, type, order_no } = tmpText
                 text = {
-                    name, sex: sex_data, birthday, address: birth_address, num: random_num, type, problem_content
+                    name, sex: sex_data, birthday, address: birth_address, num: random_num, type, problem_content, order_no
                 }
             }
         }else {
             text = msg.text
         }
         return (
-            <View className={style.chatItemWrapper}>
+            <View 
+                className={style.chatItemWrapper}
+                onTouchStart={this.handleItemTouchStart.bind(this, text)}
+                onTouchEnd={this.handleItemTouchEnd.bind(this, text)}>
                 {msg.displayTimeHeader !== '' && <View className={style.timeHeader}>{msg.displayTimeHeader}</View>}
                 <View className={" " 
                     + (msg.sendOrReceive === 'send' ? style.itemMe : '') + " " 
@@ -257,13 +283,16 @@ class ChatItem extends Taro.Component {
                                 <View className={style.triangleBorder}></View>
                                 {msg.type === 'text' 
                                     ? typeof(text) != 'string'
-                                    // ? text.master_id
-                                    // ? <View className={style.content}>
-                                    //     {text.content.split('本人主页')[0]}
-                                    //     <Text className={style.linkText} onClick={()=>{app.navigateTo({url:`/pages/masterIntroduction/masterIntroduction?master_id=${text.master_id}`})}}>本人主页</Text>
-                                    //     {text.content.split('本人主页')[1]}
-                                    // </View>
-                                    ? <View className={style.content}><MessageCard Info={text}/></View>
+                                    // msg是文本消息，且text类型不是string
+                                    ? text.type === 'orderComplete'
+                                    // text对象类型是masterCard
+                                    ? <View className={style.content}>
+                                        <View>您好，本次咨询已经结束，请点击下方按钮对本次服务进行评价。</View>
+                                        <View>去评论>></View>
+                                    </View>
+                                    // text无对象类型
+                                    : <View className={style.content}><MessageCard Info={text}/></View>
+                                    // msg是文本消息，且text类型是string
                                     : <View className={style.content}>{text}</View>
                                     : msg.type === 'image'
                                     ? <Image 

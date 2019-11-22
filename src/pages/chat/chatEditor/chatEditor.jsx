@@ -32,11 +32,37 @@ class ChatEditor extends Taro.Component {
         }
     }
 
+    componentDidMount () {
+        Taro.eventCenter.on('msgToSendPlus', this.handleMsgToSendPlus.bind(this))
+    }
+
+    componentWillUnmount () {
+        Taro.eventCenter.off('msgToSendPlus')
+    }
+    // 长按订单在msgToSent尾部追加订单号
+    handleMsgToSendPlus (order_no) {
+        const { msgToSent } = this.state
+        this.setState ({
+            msgToSent: msgToSent + order_no
+        })
+    }   
+
     _sendTextMsg () {
         // TODO: 判断ID是否有效
         // TODO: 校验发送信息格式
         let msgToSent = this.state.msgToSent.trim()
-        // TODO: 判断是机器人
+        if(msgToSent.indexOf('#') === 0) {
+            // 结束订单指令
+            if(msgToSent.indexOf('#end') === 0) {
+                let order_no = msgToSent.split('#end')[1].trim()
+                _fetch({url: '/order/complete', payload: { order_no }}).then(_ => {
+                    this.setState({
+                        msgToSent: ''
+                    })
+                })
+                return
+            }
+        }
         Taro.eventCenter.trigger('onSendTextMsg',msgToSent)
         // 清空输入框
         this.setState({
