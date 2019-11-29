@@ -6,6 +6,7 @@ import { bindActionCreators } from 'redux'
 
 import style from './chat.module.scss'
 import Header from '@/components/header/header'
+import Loading from '@/components/loading/loading'
 import ChatMain from './chatMain/chatMain'
 import IMController from '../../controller/im'
 // import { utils } from '@/utils/utils'
@@ -44,6 +45,8 @@ class Chat extends Taro.Component {
             //     text: '',
             //     icon: ''
             // }
+            
+            loadingOpen: false
         }
     }
 
@@ -90,6 +93,7 @@ class Chat extends Taro.Component {
 
     // 初始化
     init () {
+        this.setState({loadingOpen: true})
         let chatTo
         if(this.$router.params.chatTo) {
             chatTo = JSON.parse(decodeURI(this.$router.params.chatTo))
@@ -107,6 +111,7 @@ class Chat extends Taro.Component {
                 scene: 'p2p',
                 to: chatTo.accid,
                 done: (error, obj) => {
+                    this.setState({loadingOpen: false})
                     if(obj.msgs.length > 0) {
                         this.props.RawMessageList_Replace_History({
                             msgs: obj.msgs.reverse(),
@@ -333,6 +338,7 @@ class Chat extends Taro.Component {
                 <View className={style.backView} onClick={this.handleBackClick.bind(this)}></View>
                 <ChatMain 
                     msgList={messageArr}></ChatMain>
+                <Loading isOpened={this.state.loadingOpen} text='loading...'/>
                 {/* <AtToast 
                     isOpened={toastOption.show}
                     text={toastOption.text}
