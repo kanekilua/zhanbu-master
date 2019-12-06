@@ -103,13 +103,19 @@ class ChatEditor extends Taro.Component {
     handleInputTouchStart (e) {
         const pressStart = new Date().getTime()
         const recordTimer = setTimeout(() => {
-            console.log('startRecord')
-            let src = new Date().getTime() + '.wav'
-            let media = new Media(src)
-            media.startRecord()
-            this.setState({
-                media
-            })
+            const recordPermission = Taro.getStorageSync('recordPermission')
+            if(recordPermission) {
+                console.log('startRecord')
+                let src = new Date().getTime() + '.wav'
+                let media = new Media(src)
+                media.startRecord()
+                this.setState({
+                    media
+                })
+            }else {
+                clearTimeout(recordTimer)
+                Taro.setStorageSync('recordPermission', 'true')
+            }
         }, 450)
         this.setState({
             pressStart, recordTimer,
