@@ -8,4 +8,4 @@ export const DOMAIN = 'https://develop.szmonster.com'
 export const API_BASEURL = DOMAIN + '/api'
 
 // oss图片服务器的baseurl
-export const OSS_BASEURL = 'http://alicdn.szmonster.com/statics/zhanbu2.0'
+export const OSS_BASEURL = 'http://alicdnoss.szmonster.com/statics/zhanbu2.0'
